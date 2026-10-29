@@ -1,0 +1,3472 @@
+{
+  "users": [
+    {
+      "id": "U-001",
+      "name": "Librarian Satoru",
+      "displayName": "Hyden",
+      "birthDate": "2000-01-01",
+      "gender": "Female",
+      "email": "librarian@email.com",
+      "username": "LibrarianSatoru123",
+      "avatar": "src/assets/default.webp"
+    }
+  ],
+  "books": [
+    {
+      "id": "BK-0001",
+      "title": "Jujutsu Kaisen, Vol. 1",
+      "author": "Gege Akutami",
+      "isbn": "M1231",
+      "callNumber": "B-1242",
+      "publicationYear": 2018,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Action",
+        "Supernatural"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204001",
+      "nfcStatus": "Linked",
+      "cover": "src/assets/Jujutsu_kaisen.jpg",
+      "synopsis": "Jujutsu Kaisen follows high schooler Yuji Itadori, who joins a secret society of sorcerers after swallowing a cursed finger and becoming the host to Ryomen Sukuna, the \"King of Curses.\" Monsters called \"Curses\" are born from human negativity, and only Jujutsu Sorcerers can fight them. To protect his friends, Yuji must hunt down and eat all 20 of Sukuna's rotting fingers so the sorcerers can eventually execute Yuji and destroy the curse forever. He trains at Tokyo Jujutsu High under Satoru Gojo, the world's strongest sorcerer, alongside classmates Megumi and Nobara. However, evil curses and ancient sorcerers plot to seal Gojo away and resurrect Sukuna, leading to a massive, brutal magical war.",
+      "dateAdded": "2026-08-07",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0002",
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "isbn": "9780743273565",
+      "callNumber": "B-1249",
+      "publicationYear": 1925,
+      "placeOfPublication": "New York, USA",
+      "genre": [
+        "Fiction",
+        "Classic"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204038",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg?default=false",
+      "synopsis": "A story of wealth, love and illusion in Jazz Age America, told through narrator Nick Carraway.",
+      "dateAdded": "2026-09-27",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0003",
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "isbn": "9780061120084",
+      "callNumber": "B-1252",
+      "publicationYear": 1960,
+      "placeOfPublication": "Philadelphia, USA",
+      "genre": [
+        "Classic",
+        "Fiction"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204075",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg?default=false",
+      "synopsis": "Scout Finch recounts her father's defense of a Black man falsely accused in a racially divided Alabama town.",
+      "dateAdded": "2026-09-07",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0004",
+      "title": "1984",
+      "author": "George Orwell",
+      "isbn": "9780451524935",
+      "callNumber": "B-1255",
+      "publicationYear": 1949,
+      "placeOfPublication": "London, United Kingdom",
+      "genre": [
+        "Dystopian",
+        "Fiction"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204112",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg?default=false",
+      "synopsis": "Winston Smith struggles against total surveillance and propaganda in a totalitarian state.",
+      "dateAdded": "2026-09-05",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0005",
+      "title": "Moby Dick",
+      "author": "Herman Melville",
+      "isbn": "9781503280786",
+      "callNumber": "B-1258",
+      "publicationYear": 1851,
+      "placeOfPublication": "New York, USA",
+      "genre": [
+        "Adventure",
+        "Classic"
+      ],
+      "borrowable": false,
+      "status": "Archived",
+      "tagId": "tagID-204149",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9781503280786-L.jpg?default=false",
+      "synopsis": "Captain Ahab's obsessive hunt for the white whale that took his leg.",
+      "dateAdded": "2026-01-22",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0006",
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "isbn": "9789710798193",
+      "callNumber": "B-1261",
+      "publicationYear": 1813,
+      "placeOfPublication": "London, United Kingdom",
+      "genre": [
+        "Classic",
+        "Romance"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204186",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg?default=false",
+      "synopsis": "Elizabeth Bennet and Mr. Darcy navigate manners, class and first impressions.",
+      "dateAdded": "2026-10-02",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0007",
+      "title": "Introduction to React",
+      "author": "Sarah Mitchell",
+      "isbn": "9789713319081",
+      "callNumber": "B-1264",
+      "publicationYear": 2021,
+      "placeOfPublication": "California, USA",
+      "genre": [
+        "Technology",
+        "Programming"
+      ],
+      "borrowable": true,
+      "status": "Overdue",
+      "tagId": "tagID-204223",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789713319081-L.jpg?default=false",
+      "synopsis": "A beginner-friendly guide to building user interfaces with React components, props and state.",
+      "dateAdded": "2026-09-04",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0008",
+      "title": "Chainsaw Man, Vol. 5",
+      "author": "Tatsuki Fujimoto",
+      "isbn": "9789714520592",
+      "callNumber": "B-1267",
+      "publicationYear": 2020,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Action"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204260",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789714520592-L.jpg?default=false",
+      "synopsis": "Denji and the Public Safety devil hunters face their next deadly foe.",
+      "dateAdded": "2026-09-15",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0009",
+      "title": "Attack on Titan, Vol. 34",
+      "author": "Hajime Isayama",
+      "isbn": "9789719728375",
+      "callNumber": "B-1270",
+      "publicationYear": 2021,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Action",
+        "Fantasy"
+      ],
+      "borrowable": true,
+      "status": "Overdue",
+      "tagId": "tagID-204297",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789719728375-L.jpg?default=false",
+      "synopsis": "The final volume of the series, as Eren's plan reaches its climax.",
+      "dateAdded": "2026-09-18",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0010",
+      "title": "Demon Slayer, Vol. 12",
+      "author": "Koyoharu Gotouge",
+      "isbn": "9789719298410",
+      "callNumber": "B-1273",
+      "publicationYear": 2018,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Action",
+        "Fantasy"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204334",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789719298410-L.jpg?default=false",
+      "synopsis": "Tanjiro and his companions continue their fight against demons.",
+      "dateAdded": "2026-10-09",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0011",
+      "title": "Spy × Family, Vol. 2",
+      "author": "Tatsuya Endo",
+      "isbn": "9789716229486",
+      "callNumber": "B-1276",
+      "publicationYear": 2019,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Comedy"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204371",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789716229486-L.jpg?default=false",
+      "synopsis": "Loid, Yor and Anya keep up their fake family while hiding their secrets.",
+      "dateAdded": "2026-10-01",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0012",
+      "title": "Noli Me Tangere",
+      "author": "José Rizal",
+      "isbn": "9789716628364",
+      "callNumber": "B-1279",
+      "publicationYear": 1887,
+      "placeOfPublication": "Berlin, Germany",
+      "genre": [
+        "Filipino Literature",
+        "Classic"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204408",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789716628364-L.jpg?default=false",
+      "synopsis": "Crisostomo Ibarra returns to the Philippines and confronts the abuses of colonial society.",
+      "dateAdded": "2026-03-02",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0013",
+      "title": "El Filibusterismo",
+      "author": "José Rizal",
+      "isbn": "9789710161058",
+      "callNumber": "B-1282",
+      "publicationYear": 1891,
+      "placeOfPublication": "Ghent, Belgium",
+      "genre": [
+        "Filipino Literature",
+        "Classic"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204445",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789710161058-L.jpg?default=false",
+      "synopsis": "The sequel to Noli Me Tangere follows Simoun's plot for revenge and reform.",
+      "dateAdded": "2026-01-08",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0014",
+      "title": "Florante at Laura",
+      "author": "Francisco Balagtas",
+      "isbn": "9789715008754",
+      "callNumber": "B-1285",
+      "publicationYear": 1838,
+      "placeOfPublication": "Manila, Philippines",
+      "genre": [
+        "Filipino Literature",
+        "Poetry"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204482",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789715008754-L.jpg?default=false",
+      "synopsis": "A classic Tagalog narrative poem of love, betrayal and loyalty.",
+      "dateAdded": "2026-02-27",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0015",
+      "title": "Dekada '70",
+      "author": "Lualhati Bautista",
+      "isbn": "9789714751774",
+      "callNumber": "B-1288",
+      "publicationYear": 1983,
+      "placeOfPublication": "Quezon City, Philippines",
+      "genre": [
+        "Filipino Literature",
+        "Fiction"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204519",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789714751774-L.jpg?default=false",
+      "synopsis": "A mother's awakening during the Martial Law years.",
+      "dateAdded": "2026-02-27",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0016",
+      "title": "Smaller and Smaller Circles",
+      "author": "F. H. Batacan",
+      "isbn": "9789719922988",
+      "callNumber": "B-1291",
+      "publicationYear": 2002,
+      "placeOfPublication": "Quezon City, Philippines",
+      "genre": [
+        "Filipino Literature",
+        "Mystery"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204556",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789719922988-L.jpg?default=false",
+      "synopsis": "Two Jesuit priests investigate a series of murders of poor boys in Manila.",
+      "dateAdded": "2026-03-03",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0017",
+      "title": "Lord of the Flies",
+      "author": "William Golding",
+      "isbn": "9789713695796",
+      "callNumber": "B-1294",
+      "publicationYear": 1954,
+      "placeOfPublication": "London, United Kingdom",
+      "genre": [
+        "Fiction",
+        "Classic"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204593",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780399501487-L.jpg?default=false",
+      "synopsis": "A group of boys stranded on an island descend into savagery.",
+      "dateAdded": "2026-02-15",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0018",
+      "title": "The Hobbit",
+      "author": "J. R. R. Tolkien",
+      "isbn": "9789713186034",
+      "callNumber": "B-1297",
+      "publicationYear": 1937,
+      "placeOfPublication": "London, United Kingdom",
+      "genre": [
+        "Fantasy",
+        "Adventure"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204630",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg?default=false",
+      "synopsis": "Bilbo Baggins joins a company of dwarves to reclaim their treasure from a dragon.",
+      "dateAdded": "2026-02-15",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0019",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "author": "J. K. Rowling",
+      "isbn": "9789712080739",
+      "callNumber": "B-1300",
+      "publicationYear": 1997,
+      "placeOfPublication": "London, United Kingdom",
+      "genre": [
+        "Fantasy",
+        "Young Adult"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204667",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780590353427-L.jpg?default=false",
+      "synopsis": "An orphan discovers he is a wizard and begins his first year at Hogwarts.",
+      "dateAdded": "2026-01-31",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0020",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "isbn": "9789717028385",
+      "callNumber": "B-1303",
+      "publicationYear": 2018,
+      "placeOfPublication": "New York, USA",
+      "genre": [
+        "Self-Help",
+        "Nonfiction"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204704",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg?default=false",
+      "synopsis": "A practical framework for building good habits and breaking bad ones.",
+      "dateAdded": "2026-03-06",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0021",
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "isbn": "9789712226465",
+      "callNumber": "B-1306",
+      "publicationYear": 2008,
+      "placeOfPublication": "New Jersey, USA",
+      "genre": [
+        "Technology",
+        "Programming"
+      ],
+      "borrowable": true,
+      "status": "Borrowed",
+      "tagId": "tagID-204741",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg?default=false",
+      "synopsis": "A handbook of agile software craftsmanship and writing readable code.",
+      "dateAdded": "2026-01-06",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0022",
+      "title": "Introduction to Algorithms, 3rd Edition",
+      "author": "Thomas H. Cormen et al.",
+      "isbn": "9789718616420",
+      "callNumber": "B-1309",
+      "publicationYear": 2009,
+      "placeOfPublication": "Massachusetts, USA",
+      "genre": [
+        "Technology",
+        "Textbook"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204778",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg?default=false",
+      "synopsis": "A comprehensive textbook covering a broad range of algorithms in depth.",
+      "dateAdded": "2026-02-15",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0023",
+      "title": "Calculus: Early Transcendentals, 8th Edition",
+      "author": "James Stewart",
+      "isbn": "9789715247764",
+      "callNumber": "B-1312",
+      "publicationYear": 2015,
+      "placeOfPublication": "Boston, USA",
+      "genre": [
+        "Mathematics",
+        "Textbook"
+      ],
+      "borrowable": true,
+      "status": "Overdue",
+      "tagId": "tagID-204815",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9781285741550-L.jpg?default=false",
+      "synopsis": "A standard college calculus textbook covering limits, derivatives and integrals.",
+      "dateAdded": "2026-02-16",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0024",
+      "title": "One Piece, Vol. 1",
+      "author": "Eiichiro Oda",
+      "isbn": "9789714725874",
+      "callNumber": "B-1315",
+      "publicationYear": 1997,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Adventure"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204852",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9781569319017-L.jpg?default=false",
+      "synopsis": "Monkey D. Luffy sets out to become the King of the Pirates.",
+      "dateAdded": "2026-02-20",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0025",
+      "title": "Naruto, Vol. 1",
+      "author": "Masashi Kishimoto",
+      "isbn": "9789717188416",
+      "callNumber": "B-1318",
+      "publicationYear": 1999,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Action"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204889",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9781569319000-L.jpg?default=false",
+      "synopsis": "Young ninja Naruto Uzumaki dreams of becoming Hokage.",
+      "dateAdded": "2026-02-19",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0026",
+      "title": "Death Note, Vol. 1",
+      "author": "Tsugumi Ohba",
+      "isbn": "9789713301758",
+      "callNumber": "B-1321",
+      "publicationYear": 2004,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Thriller"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204926",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9781421501680-L.jpg?default=false",
+      "synopsis": "A student finds a notebook that can kill anyone whose name is written in it.",
+      "dateAdded": "2026-02-21",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0027",
+      "title": "Slam Dunk, Vol. 1",
+      "author": "Takehiko Inoue",
+      "isbn": "9789716820522",
+      "callNumber": "B-1324",
+      "publicationYear": 1991,
+      "placeOfPublication": "Japan",
+      "genre": [
+        "Manga",
+        "Sports"
+      ],
+      "borrowable": true,
+      "status": "Available",
+      "tagId": "tagID-204963",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789716820522-L.jpg?default=false",
+      "synopsis": "Hanamichi Sakuragi joins the Shohoku basketball team to impress a girl.",
+      "dateAdded": "2026-02-03",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0028",
+      "title": "The Catcher in the Rye",
+      "author": "J. D. Salinger",
+      "isbn": "9789715898317",
+      "callNumber": "B-1327",
+      "publicationYear": 1951,
+      "placeOfPublication": "Boston, USA",
+      "genre": [
+        "Fiction",
+        "Classic"
+      ],
+      "borrowable": false,
+      "status": "Archived",
+      "tagId": "tagID-205000",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg?default=false",
+      "synopsis": "Holden Caulfield wanders New York City after being expelled from prep school.",
+      "dateAdded": "2026-02-25",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0029",
+      "title": "Merriam-Webster's Collegiate Dictionary, 11th Edition",
+      "author": "Merriam-Webster",
+      "isbn": "9789719489399",
+      "callNumber": "B-1330",
+      "publicationYear": 2003,
+      "placeOfPublication": "Massachusetts, USA",
+      "genre": [
+        "Reference"
+      ],
+      "borrowable": false,
+      "status": "Available",
+      "tagId": "tagID-205037",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9780877798095-L.jpg?default=false",
+      "synopsis": "A general-purpose English dictionary for in-library use.",
+      "dateAdded": "2026-01-05",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    },
+    {
+      "id": "BK-0030",
+      "title": "Atlas of the World, 12th Edition",
+      "author": "National Geographic",
+      "isbn": "9789714948211",
+      "callNumber": "B-1333",
+      "publicationYear": 2019,
+      "placeOfPublication": "Washington, D.C., USA",
+      "genre": [
+        "Reference"
+      ],
+      "borrowable": false,
+      "status": "Available",
+      "tagId": "tagID-205074",
+      "nfcStatus": "Linked",
+      "cover": "https://covers.openlibrary.org/b/isbn/9789714948211-L.jpg?default=false",
+      "synopsis": "A world atlas for in-library use.",
+      "dateAdded": "2026-01-05",
+      "coverFallback": "src/assets/Jujutsu_kaisen.jpg"
+    }
+  ],
+  "patrons": [
+    {
+      "id": "PT-0001",
+      "studentNumber": "2022-51875",
+      "name": "Baisa, Ivan Philip Pagatpat",
+      "firstName": "Ivan Philip",
+      "middleName": "Pagatpat",
+      "lastName": "Baisa",
+      "birthDate": "2001-04-20",
+      "email": "ivanisthegoat6767@gmail.com",
+      "contactNo": "09336069666",
+      "dateRegistered": "01/12/2026",
+      "tagId": "tagID-203192",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0002",
+      "studentNumber": "2025-85047",
+      "name": "Dela Cruz, Juan Miguel Santos",
+      "firstName": "Juan Miguel",
+      "middleName": "Santos",
+      "lastName": "Dela Cruz",
+      "birthDate": "2007-10-15",
+      "email": "juan.delacruz@gmail.com",
+      "contactNo": "09919337510",
+      "dateRegistered": "01/14/2026",
+      "tagId": "tagID-203229",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0003",
+      "studentNumber": "2022-24514",
+      "name": "Delos Santos, Maria Clara Reyes",
+      "firstName": "Maria Clara",
+      "middleName": "Reyes",
+      "lastName": "Delos Santos",
+      "birthDate": "2004-02-15",
+      "email": "maria.delossantos@gmail.com",
+      "contactNo": "09270042527",
+      "dateRegistered": "01/19/2026",
+      "tagId": "tagID-203266",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0004",
+      "studentNumber": "2024-37554",
+      "name": "Ibarra, Crisostomo Magsalin",
+      "firstName": "Crisostomo",
+      "middleName": "Magsalin",
+      "lastName": "Ibarra",
+      "birthDate": "2006-05-12",
+      "email": "crisostomo.ibarra@gmail.com",
+      "contactNo": "09178225646",
+      "dateRegistered": "01/26/2026",
+      "tagId": "tagID-203303",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0005",
+      "studentNumber": "2022-54616",
+      "name": "Del Rosario, Maria Luisa Bautista",
+      "firstName": "Maria Luisa",
+      "middleName": "Bautista",
+      "lastName": "Del Rosario",
+      "birthDate": "2001-09-18",
+      "email": "maria.delrosario@gmail.com",
+      "contactNo": "09336314012",
+      "dateRegistered": "02/02/2026",
+      "tagId": "tagID-203340",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0006",
+      "studentNumber": "2025-28466",
+      "name": "Santos, John Albert Mercado",
+      "firstName": "John Albert",
+      "middleName": "Mercado",
+      "lastName": "Santos",
+      "birthDate": "2004-01-28",
+      "email": "john.santos@gmail.com",
+      "contactNo": "09284825159",
+      "dateRegistered": "02/09/2026",
+      "tagId": "tagID-203377",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0007",
+      "studentNumber": "2024-70433",
+      "name": "Alcantara, Blessie Joy Villanueva",
+      "firstName": "Blessie Joy",
+      "middleName": "Villanueva",
+      "lastName": "Alcantara",
+      "birthDate": "2006-02-13",
+      "email": "blessie.alcantara@gmail.com",
+      "contactNo": "09986188185",
+      "dateRegistered": "02/16/2026",
+      "tagId": "tagID-203414",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0008",
+      "studentNumber": "2025-25263",
+      "name": "Reyes, Angelica Mae Dizon",
+      "firstName": "Angelica Mae",
+      "middleName": "Dizon",
+      "lastName": "Reyes",
+      "birthDate": "2006-09-26",
+      "email": "angelica.reyes@gmail.com",
+      "contactNo": "09919302111",
+      "dateRegistered": "02/23/2026",
+      "tagId": "tagID-203451",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0009",
+      "studentNumber": "2025-78767",
+      "name": "Garcia, Mark Anthony Pascual",
+      "firstName": "Mark Anthony",
+      "middleName": "Pascual",
+      "lastName": "Garcia",
+      "birthDate": "2004-07-19",
+      "email": "mark.garcia@gmail.com",
+      "contactNo": "09918238128",
+      "dateRegistered": "03/02/2026",
+      "tagId": "tagID-203488",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0010",
+      "studentNumber": "2022-85434",
+      "name": "Mendoza, Kristine Joy Aquino",
+      "firstName": "Kristine Joy",
+      "middleName": "Aquino",
+      "lastName": "Mendoza",
+      "birthDate": "2003-03-27",
+      "email": "kristine.mendoza@gmail.com",
+      "contactNo": "09558605863",
+      "dateRegistered": "03/09/2026",
+      "tagId": "tagID-203525",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0011",
+      "studentNumber": "2022-91567",
+      "name": "Villanueva, Jericho Ramos",
+      "firstName": "Jericho",
+      "middleName": "Ramos",
+      "lastName": "Villanueva",
+      "birthDate": "2006-08-05",
+      "email": "jericho.villanueva@gmail.com",
+      "contactNo": "09178778116",
+      "dateRegistered": "03/16/2026",
+      "tagId": "tagID-203562",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0012",
+      "studentNumber": "2022-92138",
+      "name": "Bautista, Katrina Louise Cruz",
+      "firstName": "Katrina Louise",
+      "middleName": "Cruz",
+      "lastName": "Bautista",
+      "birthDate": "2007-11-16",
+      "email": "katrina.bautista@gmail.com",
+      "contactNo": "09553840762",
+      "dateRegistered": "03/30/2026",
+      "tagId": "tagID-203599",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0013",
+      "studentNumber": "2024-83373",
+      "name": "Aquino, Paolo Gabriel Soriano",
+      "firstName": "Paolo Gabriel",
+      "middleName": "Soriano",
+      "lastName": "Aquino",
+      "birthDate": "2006-11-10",
+      "email": "paolo.aquino@gmail.com",
+      "contactNo": "09989154190",
+      "dateRegistered": "04/13/2026",
+      "tagId": "tagID-203636",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0014",
+      "studentNumber": "2025-62684",
+      "name": "Manalo, Jasmine Nicole Torres",
+      "firstName": "Jasmine Nicole",
+      "middleName": "Torres",
+      "lastName": "Manalo",
+      "birthDate": "2006-04-10",
+      "email": "jasmine.manalo@gmail.com",
+      "contactNo": "09668420478",
+      "dateRegistered": "04/27/2026",
+      "tagId": "tagID-203673",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0015",
+      "studentNumber": "2022-29640",
+      "name": "Pascual, Carlo Emmanuel Dimaculangan",
+      "firstName": "Carlo Emmanuel",
+      "middleName": "Dimaculangan",
+      "lastName": "Pascual",
+      "birthDate": "2007-09-16",
+      "email": "carlo.pascual@gmail.com",
+      "contactNo": "09280155640",
+      "dateRegistered": "05/11/2026",
+      "tagId": "tagID-203710",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0016",
+      "studentNumber": "2024-73644",
+      "name": "Navarro, Rhea Camille Lim",
+      "firstName": "Rhea Camille",
+      "middleName": "Lim",
+      "lastName": "Navarro",
+      "birthDate": "2007-09-25",
+      "email": "rhea.navarro@gmail.com",
+      "contactNo": "09333352718",
+      "dateRegistered": "06/01/2026",
+      "tagId": "tagID-203747",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0017",
+      "studentNumber": "2022-48019",
+      "name": "Castillo, Joshua Daniel Flores",
+      "firstName": "Joshua Daniel",
+      "middleName": "Flores",
+      "lastName": "Castillo",
+      "birthDate": "2005-08-26",
+      "email": "joshua.castillo@gmail.com",
+      "contactNo": "09557285161",
+      "dateRegistered": "06/15/2026",
+      "tagId": "tagID-203784",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0018",
+      "studentNumber": "2024-69365",
+      "name": "Domingo, Althea Marie Salazar",
+      "firstName": "Althea Marie",
+      "middleName": "Salazar",
+      "lastName": "Domingo",
+      "birthDate": "2002-07-27",
+      "email": "althea.domingo@gmail.com",
+      "contactNo": "09187355987",
+      "dateRegistered": "07/06/2026",
+      "tagId": "tagID-203821",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0019",
+      "studentNumber": "2022-95006",
+      "name": "Ramos, Enrique Luis Gonzales",
+      "firstName": "Enrique Luis",
+      "middleName": "Gonzales",
+      "lastName": "Ramos",
+      "birthDate": "2004-08-12",
+      "email": "enrique.ramos@gmail.com",
+      "contactNo": "09988038740",
+      "dateRegistered": "08/03/2026",
+      "tagId": "tagID-203858",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    },
+    {
+      "id": "PT-0020",
+      "studentNumber": "2025-29183",
+      "name": "Tolentino, Sofia Isabel Macaraeg",
+      "firstName": "Sofia Isabel",
+      "middleName": "Macaraeg",
+      "lastName": "Tolentino",
+      "birthDate": "2007-01-03",
+      "email": "sofia.tolentino@gmail.com",
+      "contactNo": "09183264621",
+      "dateRegistered": "09/07/2026",
+      "tagId": "tagID-203895",
+      "nfcStatus": "Linked",
+      "avatar": "src/assets/default.webp",
+      "status": "Active"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "TX-0001",
+      "bookId": "BK-0021",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-01-13",
+      "dueDate": "2026-01-27",
+      "returnedDate": "2026-01-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0002",
+      "bookId": "BK-0013",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-02-01",
+      "dueDate": "2026-02-15",
+      "returnedDate": "2026-02-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0003",
+      "bookId": "BK-0005",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-02-10",
+      "dueDate": "2026-02-24",
+      "returnedDate": "2026-03-01",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0004",
+      "bookId": "BK-0027",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-02-16",
+      "dueDate": "2026-03-02",
+      "returnedDate": "2026-02-28",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0005",
+      "bookId": "BK-0021",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-02-17",
+      "dueDate": "2026-03-03",
+      "returnedDate": "2026-02-21",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0006",
+      "bookId": "BK-0019",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-02-19",
+      "dueDate": "2026-03-05",
+      "returnedDate": "2026-02-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0007",
+      "bookId": "BK-0024",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-02-25",
+      "dueDate": "2026-03-11",
+      "returnedDate": "2026-03-10",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0008",
+      "bookId": "BK-0013",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-02-26",
+      "dueDate": "2026-03-12",
+      "returnedDate": "2026-03-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0009",
+      "bookId": "BK-0018",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-02-27",
+      "dueDate": "2026-03-13",
+      "returnedDate": "2026-03-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0010",
+      "bookId": "BK-0023",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-02-28",
+      "dueDate": "2026-03-14",
+      "returnedDate": "2026-03-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0011",
+      "bookId": "BK-0026",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-02-28",
+      "dueDate": "2026-03-14",
+      "returnedDate": "2026-03-04",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0012",
+      "bookId": "BK-0022",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-03-03",
+      "dueDate": "2026-03-17",
+      "returnedDate": "2026-03-13",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0013",
+      "bookId": "BK-0017",
+      "patronId": "PT-0009",
+      "borrowedDate": "2026-03-03",
+      "dueDate": "2026-03-17",
+      "returnedDate": "2026-03-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0014",
+      "bookId": "BK-0016",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-03-04",
+      "dueDate": "2026-03-18",
+      "returnedDate": "2026-03-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0015",
+      "bookId": "BK-0014",
+      "patronId": "PT-0009",
+      "borrowedDate": "2026-03-05",
+      "dueDate": "2026-03-19",
+      "returnedDate": "2026-03-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0016",
+      "bookId": "BK-0015",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-03-08",
+      "dueDate": "2026-03-22",
+      "returnedDate": "2026-03-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0017",
+      "bookId": "BK-0025",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-03-08",
+      "dueDate": "2026-03-22",
+      "returnedDate": "2026-03-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0018",
+      "bookId": "BK-0005",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-03-11",
+      "dueDate": "2026-03-25",
+      "returnedDate": "2026-03-15",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0019",
+      "bookId": "BK-0028",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-03-16",
+      "dueDate": "2026-03-30",
+      "returnedDate": "2026-04-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0020",
+      "bookId": "BK-0024",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-03-16",
+      "dueDate": "2026-03-30",
+      "returnedDate": "2026-03-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0021",
+      "bookId": "BK-0025",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-03-19",
+      "dueDate": "2026-04-02",
+      "returnedDate": "2026-04-02",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0022",
+      "bookId": "BK-0021",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-03-20",
+      "dueDate": "2026-04-03",
+      "returnedDate": "2026-03-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0023",
+      "bookId": "BK-0019",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-03-24",
+      "dueDate": "2026-04-07",
+      "returnedDate": "2026-04-07",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0024",
+      "bookId": "BK-0012",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-03-24",
+      "dueDate": "2026-04-07",
+      "returnedDate": "2026-04-04",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0025",
+      "bookId": "BK-0022",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-03-26",
+      "dueDate": "2026-04-09",
+      "returnedDate": "2026-04-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0026",
+      "bookId": "BK-0020",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-03-28",
+      "dueDate": "2026-04-11",
+      "returnedDate": "2026-04-08",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0027",
+      "bookId": "BK-0015",
+      "patronId": "PT-0009",
+      "borrowedDate": "2026-03-30",
+      "dueDate": "2026-04-13",
+      "returnedDate": "2026-04-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0028",
+      "bookId": "BK-0026",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-03-31",
+      "dueDate": "2026-04-14",
+      "returnedDate": "2026-04-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0029",
+      "bookId": "BK-0018",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-03-31",
+      "dueDate": "2026-04-14",
+      "returnedDate": "2026-04-08",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0030",
+      "bookId": "BK-0021",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-04-01",
+      "dueDate": "2026-04-15",
+      "returnedDate": "2026-04-07",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0031",
+      "bookId": "BK-0013",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-04-02",
+      "dueDate": "2026-04-16",
+      "returnedDate": "2026-04-15",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0032",
+      "bookId": "BK-0017",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-04-02",
+      "dueDate": "2026-04-16",
+      "returnedDate": "2026-04-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0033",
+      "bookId": "BK-0005",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-04-02",
+      "dueDate": "2026-04-16",
+      "returnedDate": "2026-04-21",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0034",
+      "bookId": "BK-0027",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-04-03",
+      "dueDate": "2026-04-17",
+      "returnedDate": "2026-04-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0035",
+      "bookId": "BK-0023",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-04-10",
+      "dueDate": "2026-04-24",
+      "returnedDate": "2026-04-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0036",
+      "bookId": "BK-0016",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-04-10",
+      "dueDate": "2026-04-24",
+      "returnedDate": "2026-04-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0037",
+      "bookId": "BK-0025",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-04-17",
+      "dueDate": "2026-05-01",
+      "returnedDate": "2026-04-22",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0038",
+      "bookId": "BK-0021",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-04-18",
+      "dueDate": "2026-05-02",
+      "returnedDate": "2026-04-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0039",
+      "bookId": "BK-0014",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-04-18",
+      "dueDate": "2026-05-02",
+      "returnedDate": "2026-05-01",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0040",
+      "bookId": "BK-0024",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-04-18",
+      "dueDate": "2026-05-02",
+      "returnedDate": "2026-04-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0041",
+      "bookId": "BK-0013",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-04-20",
+      "dueDate": "2026-05-04",
+      "returnedDate": "2026-04-25",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0042",
+      "bookId": "BK-0017",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-04-20",
+      "dueDate": "2026-05-04",
+      "returnedDate": "2026-04-25",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0043",
+      "bookId": "BK-0026",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-04-22",
+      "dueDate": "2026-05-06",
+      "returnedDate": "2026-05-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0044",
+      "bookId": "BK-0019",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-04-25",
+      "dueDate": "2026-05-09",
+      "returnedDate": "2026-04-29",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0045",
+      "bookId": "BK-0020",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-04-26",
+      "dueDate": "2026-05-10",
+      "returnedDate": "2026-05-04",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0046",
+      "bookId": "BK-0028",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-05-01",
+      "dueDate": "2026-05-15",
+      "returnedDate": "2026-05-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0047",
+      "bookId": "BK-0022",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-05-03",
+      "dueDate": "2026-05-17",
+      "returnedDate": "2026-05-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0048",
+      "bookId": "BK-0025",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-05-03",
+      "dueDate": "2026-05-17",
+      "returnedDate": "2026-05-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0049",
+      "bookId": "BK-0024",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-05-06",
+      "dueDate": "2026-05-20",
+      "returnedDate": "2026-05-26",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0050",
+      "bookId": "BK-0021",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-05-07",
+      "dueDate": "2026-05-21",
+      "returnedDate": "2026-05-16",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0051",
+      "bookId": "BK-0023",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-05-08",
+      "dueDate": "2026-05-22",
+      "returnedDate": "2026-05-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0052",
+      "bookId": "BK-0012",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-05-08",
+      "dueDate": "2026-05-22",
+      "returnedDate": "2026-05-15",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0053",
+      "bookId": "BK-0015",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-05-09",
+      "dueDate": "2026-05-23",
+      "returnedDate": "2026-05-22",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0054",
+      "bookId": "BK-0018",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-05-09",
+      "dueDate": "2026-05-23",
+      "returnedDate": "2026-05-21",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0055",
+      "bookId": "BK-0016",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-05-11",
+      "dueDate": "2026-05-25",
+      "returnedDate": "2026-06-03",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0056",
+      "bookId": "BK-0019",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-05-12",
+      "dueDate": "2026-05-26",
+      "returnedDate": "2026-06-03",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0057",
+      "bookId": "BK-0013",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-05-13",
+      "dueDate": "2026-05-27",
+      "returnedDate": "2026-05-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0058",
+      "bookId": "BK-0027",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-05-13",
+      "dueDate": "2026-05-27",
+      "returnedDate": "2026-05-26",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0059",
+      "bookId": "BK-0028",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-05-14",
+      "dueDate": "2026-05-28",
+      "returnedDate": "2026-05-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0060",
+      "bookId": "BK-0026",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-05-16",
+      "dueDate": "2026-05-30",
+      "returnedDate": "2026-06-06",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0061",
+      "bookId": "BK-0005",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-05-26",
+      "dueDate": "2026-06-09",
+      "returnedDate": "2026-05-30",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0062",
+      "bookId": "BK-0018",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-05-28",
+      "dueDate": "2026-06-11",
+      "returnedDate": "2026-06-01",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0063",
+      "bookId": "BK-0017",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-05-28",
+      "dueDate": "2026-06-11",
+      "returnedDate": "2026-06-10",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0064",
+      "bookId": "BK-0014",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-05-30",
+      "dueDate": "2026-06-13",
+      "returnedDate": "2026-06-02",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0065",
+      "bookId": "BK-0022",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-05-31",
+      "dueDate": "2026-06-14",
+      "returnedDate": "2026-06-03",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0066",
+      "bookId": "BK-0012",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-05-31",
+      "dueDate": "2026-06-14",
+      "returnedDate": "2026-06-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0067",
+      "bookId": "BK-0023",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-06-04",
+      "dueDate": "2026-06-18",
+      "returnedDate": "2026-06-10",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0068",
+      "bookId": "BK-0005",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-06-04",
+      "dueDate": "2026-06-18",
+      "returnedDate": "2026-06-08",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0069",
+      "bookId": "BK-0015",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-06-05",
+      "dueDate": "2026-06-19",
+      "returnedDate": "2026-06-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0070",
+      "bookId": "BK-0021",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-06-06",
+      "dueDate": "2026-06-20",
+      "returnedDate": "2026-06-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0071",
+      "bookId": "BK-0013",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-06-06",
+      "dueDate": "2026-06-20",
+      "returnedDate": "2026-06-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0072",
+      "bookId": "BK-0020",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-06-07",
+      "dueDate": "2026-06-21",
+      "returnedDate": "2026-06-12",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0073",
+      "bookId": "BK-0028",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-06-09",
+      "dueDate": "2026-06-23",
+      "returnedDate": "2026-06-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0074",
+      "bookId": "BK-0019",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-06-12",
+      "dueDate": "2026-06-26",
+      "returnedDate": "2026-06-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0075",
+      "bookId": "BK-0025",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-06-14",
+      "dueDate": "2026-06-28",
+      "returnedDate": "2026-06-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0076",
+      "bookId": "BK-0024",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-06-14",
+      "dueDate": "2026-06-28",
+      "returnedDate": "2026-06-28",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0077",
+      "bookId": "BK-0027",
+      "patronId": "PT-0015",
+      "borrowedDate": "2026-06-14",
+      "dueDate": "2026-06-28",
+      "returnedDate": "2026-06-25",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0078",
+      "bookId": "BK-0018",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-06-21",
+      "dueDate": "2026-07-05",
+      "returnedDate": "2026-06-28",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0079",
+      "bookId": "BK-0005",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-06-23",
+      "dueDate": "2026-07-07",
+      "returnedDate": "2026-07-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0080",
+      "bookId": "BK-0020",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-06-25",
+      "dueDate": "2026-07-09",
+      "returnedDate": "2026-07-02",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0081",
+      "bookId": "BK-0021",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-06-25",
+      "dueDate": "2026-07-09",
+      "returnedDate": "2026-07-04",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0082",
+      "bookId": "BK-0015",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-06-27",
+      "dueDate": "2026-07-11",
+      "returnedDate": "2026-06-30",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0083",
+      "bookId": "BK-0023",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-06-28",
+      "dueDate": "2026-07-12",
+      "returnedDate": "2026-07-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0084",
+      "bookId": "BK-0026",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-06-28",
+      "dueDate": "2026-07-12",
+      "returnedDate": "2026-07-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0085",
+      "bookId": "BK-0016",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-06-29",
+      "dueDate": "2026-07-13",
+      "returnedDate": "2026-07-10",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0086",
+      "bookId": "BK-0025",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-07-01",
+      "dueDate": "2026-07-15",
+      "returnedDate": "2026-07-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0087",
+      "bookId": "BK-0013",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-07-03",
+      "dueDate": "2026-07-17",
+      "returnedDate": "2026-07-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0088",
+      "bookId": "BK-0014",
+      "patronId": "PT-0016",
+      "borrowedDate": "2026-07-03",
+      "dueDate": "2026-07-17",
+      "returnedDate": "2026-07-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0089",
+      "bookId": "BK-0019",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-07-04",
+      "dueDate": "2026-07-18",
+      "returnedDate": "2026-07-27",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0090",
+      "bookId": "BK-0022",
+      "patronId": "PT-0017",
+      "borrowedDate": "2026-07-05",
+      "dueDate": "2026-07-19",
+      "returnedDate": "2026-07-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0091",
+      "bookId": "BK-0017",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-07-05",
+      "dueDate": "2026-07-19",
+      "returnedDate": "2026-07-13",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0092",
+      "bookId": "BK-0018",
+      "patronId": "PT-0018",
+      "borrowedDate": "2026-07-08",
+      "dueDate": "2026-07-22",
+      "returnedDate": "2026-07-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0093",
+      "bookId": "BK-0021",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-07-14",
+      "dueDate": "2026-07-28",
+      "returnedDate": "2026-07-25",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0094",
+      "bookId": "BK-0014",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-07-15",
+      "dueDate": "2026-07-29",
+      "returnedDate": "2026-08-07",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0095",
+      "bookId": "BK-0020",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-07-17",
+      "dueDate": "2026-07-31",
+      "returnedDate": "2026-07-29",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0096",
+      "bookId": "BK-0012",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-07-17",
+      "dueDate": "2026-07-31",
+      "returnedDate": "2026-07-31",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0097",
+      "bookId": "BK-0016",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-07-17",
+      "dueDate": "2026-07-31",
+      "returnedDate": "2026-07-26",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0098",
+      "bookId": "BK-0028",
+      "patronId": "PT-0015",
+      "borrowedDate": "2026-07-22",
+      "dueDate": "2026-08-05",
+      "returnedDate": "2026-08-15",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0099",
+      "bookId": "BK-0027",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-07-25",
+      "dueDate": "2026-08-08",
+      "returnedDate": "2026-08-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0100",
+      "bookId": "BK-0025",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-07-27",
+      "dueDate": "2026-08-10",
+      "returnedDate": "2026-08-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0101",
+      "bookId": "BK-0024",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-07-27",
+      "dueDate": "2026-08-10",
+      "returnedDate": "2026-08-01",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0102",
+      "bookId": "BK-0017",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-07-29",
+      "dueDate": "2026-08-12",
+      "returnedDate": "2026-08-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0103",
+      "bookId": "BK-0023",
+      "patronId": "PT-0017",
+      "borrowedDate": "2026-07-30",
+      "dueDate": "2026-08-13",
+      "returnedDate": "2026-08-06",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0104",
+      "bookId": "BK-0015",
+      "patronId": "PT-0015",
+      "borrowedDate": "2026-07-31",
+      "dueDate": "2026-08-14",
+      "returnedDate": "2026-08-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0105",
+      "bookId": "BK-0018",
+      "patronId": "PT-0017",
+      "borrowedDate": "2026-08-03",
+      "dueDate": "2026-08-17",
+      "returnedDate": "2026-08-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0106",
+      "bookId": "BK-0005",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-08-08",
+      "dueDate": "2026-08-22",
+      "returnedDate": "2026-08-20",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0107",
+      "bookId": "BK-0019",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-08-09",
+      "dueDate": "2026-08-23",
+      "returnedDate": "2026-08-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0108",
+      "bookId": "BK-0022",
+      "patronId": "PT-0016",
+      "borrowedDate": "2026-08-14",
+      "dueDate": "2026-08-28",
+      "returnedDate": "2026-08-21",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0109",
+      "bookId": "BK-0026",
+      "patronId": "PT-0016",
+      "borrowedDate": "2026-08-14",
+      "dueDate": "2026-08-28",
+      "returnedDate": "2026-08-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0110",
+      "bookId": "BK-0012",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-08-14",
+      "dueDate": "2026-08-28",
+      "returnedDate": "2026-08-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0111",
+      "bookId": "BK-0023",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-08-15",
+      "dueDate": "2026-08-29",
+      "returnedDate": "2026-08-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0112",
+      "bookId": "BK-0016",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-08-17",
+      "dueDate": "2026-08-31",
+      "returnedDate": "2026-08-20",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0113",
+      "bookId": "BK-0013",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-08-19",
+      "dueDate": "2026-09-02",
+      "returnedDate": "2026-08-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0114",
+      "bookId": "BK-0001",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-08-20",
+      "dueDate": "2026-09-03",
+      "returnedDate": "2026-09-02",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0115",
+      "bookId": "BK-0028",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-08-23",
+      "dueDate": "2026-09-06",
+      "returnedDate": "2026-08-31",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0116",
+      "bookId": "BK-0025",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-08-24",
+      "dueDate": "2026-09-07",
+      "returnedDate": "2026-09-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0117",
+      "bookId": "BK-0024",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-08-26",
+      "dueDate": "2026-09-09",
+      "returnedDate": "2026-09-06",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0118",
+      "bookId": "BK-0020",
+      "patronId": "PT-0016",
+      "borrowedDate": "2026-08-29",
+      "dueDate": "2026-09-12",
+      "returnedDate": "2026-09-08",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0119",
+      "bookId": "BK-0021",
+      "patronId": "PT-0013",
+      "borrowedDate": "2026-08-29",
+      "dueDate": "2026-09-12",
+      "returnedDate": "2026-09-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0120",
+      "bookId": "BK-0013",
+      "patronId": "PT-0016",
+      "borrowedDate": "2026-08-29",
+      "dueDate": "2026-09-12",
+      "returnedDate": "2026-09-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0121",
+      "bookId": "BK-0016",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-08-30",
+      "dueDate": "2026-09-13",
+      "returnedDate": "2026-09-18",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0122",
+      "bookId": "BK-0017",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-09-02",
+      "dueDate": "2026-09-16",
+      "returnedDate": "2026-09-07",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0123",
+      "bookId": "BK-0018",
+      "patronId": "PT-0015",
+      "borrowedDate": "2026-09-03",
+      "dueDate": "2026-09-17",
+      "returnedDate": "2026-09-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0124",
+      "bookId": "BK-0001",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-09-04",
+      "dueDate": "2026-09-18",
+      "returnedDate": "2026-09-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0125",
+      "bookId": "BK-0019",
+      "patronId": "PT-0011",
+      "borrowedDate": "2026-09-05",
+      "dueDate": "2026-09-19",
+      "returnedDate": "2026-09-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0126",
+      "bookId": "BK-0027",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-09-05",
+      "dueDate": "2026-09-19",
+      "returnedDate": "2026-09-08",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0127",
+      "bookId": "BK-0026",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-09-07",
+      "dueDate": "2026-09-21",
+      "returnedDate": "2026-09-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0128",
+      "bookId": "BK-0015",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-09-10",
+      "dueDate": "2026-09-24",
+      "returnedDate": "2026-09-23",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0129",
+      "bookId": "BK-0014",
+      "patronId": "PT-0012",
+      "borrowedDate": "2026-09-10",
+      "dueDate": "2026-09-24",
+      "returnedDate": "2026-09-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0130",
+      "bookId": "BK-0007",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-09-10",
+      "dueDate": "2026-09-24",
+      "returnedDate": "2026-09-24",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0131",
+      "bookId": "BK-0022",
+      "patronId": "PT-0020",
+      "borrowedDate": "2026-09-14",
+      "dueDate": "2026-09-28",
+      "returnedDate": "2026-09-25",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0132",
+      "bookId": "BK-0004",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-09-15",
+      "dueDate": "2026-09-29",
+      "returnedDate": "2026-10-02",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0133",
+      "bookId": "BK-0012",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-09-16",
+      "dueDate": "2026-09-30",
+      "returnedDate": "2026-09-28",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0134",
+      "bookId": "BK-0023",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-09-17",
+      "dueDate": "2026-10-01",
+      "returnedDate": "2026-09-29",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0135",
+      "bookId": "BK-0001",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-09-19",
+      "dueDate": "2026-10-03",
+      "returnedDate": "2026-10-04",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0136",
+      "bookId": "BK-0024",
+      "patronId": "PT-0019",
+      "borrowedDate": "2026-09-20",
+      "dueDate": "2026-10-04",
+      "returnedDate": "2026-09-28",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0137",
+      "bookId": "BK-0017",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-09-22",
+      "dueDate": "2026-10-06",
+      "returnedDate": "2026-10-06",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0138",
+      "bookId": "BK-0020",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-09-23",
+      "dueDate": "2026-10-07",
+      "returnedDate": "2026-09-29",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0139",
+      "bookId": "BK-0003",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-09-25",
+      "dueDate": "2026-10-09",
+      "returnedDate": "2026-10-09",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0140",
+      "bookId": "BK-0007",
+      "patronId": "PT-0004",
+      "borrowedDate": "2026-09-25",
+      "dueDate": "2026-10-09",
+      "returnedDate": null,
+      "status": "Overdue"
+    },
+    {
+      "id": "TX-0141",
+      "bookId": "BK-0013",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-09-27",
+      "dueDate": "2026-10-11",
+      "returnedDate": "2026-10-05",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0142",
+      "bookId": "BK-0009",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-09-28",
+      "dueDate": "2026-10-12",
+      "returnedDate": null,
+      "status": "Overdue"
+    },
+    {
+      "id": "TX-0143",
+      "bookId": "BK-0023",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-09-30",
+      "dueDate": "2026-10-14",
+      "returnedDate": null,
+      "status": "Overdue"
+    },
+    {
+      "id": "TX-0144",
+      "bookId": "BK-0015",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-09-30",
+      "dueDate": "2026-10-14",
+      "returnedDate": "2026-10-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0145",
+      "bookId": "BK-0008",
+      "patronId": "PT-0005",
+      "borrowedDate": "2026-10-01",
+      "dueDate": "2026-10-15",
+      "returnedDate": "2026-10-12",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0146",
+      "bookId": "BK-0027",
+      "patronId": "PT-0017",
+      "borrowedDate": "2026-10-01",
+      "dueDate": "2026-10-15",
+      "returnedDate": "2026-10-12",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0147",
+      "bookId": "BK-0021",
+      "patronId": "PT-0010",
+      "borrowedDate": "2026-10-04",
+      "dueDate": "2026-10-18",
+      "returnedDate": "2026-10-14",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0148",
+      "bookId": "BK-0026",
+      "patronId": "PT-0006",
+      "borrowedDate": "2026-10-04",
+      "dueDate": "2026-10-18",
+      "returnedDate": "2026-10-20",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0149",
+      "bookId": "BK-0016",
+      "patronId": "PT-0008",
+      "borrowedDate": "2026-10-04",
+      "dueDate": "2026-10-18",
+      "returnedDate": "2026-10-13",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0150",
+      "bookId": "BK-0002",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-10-05",
+      "dueDate": "2026-10-19",
+      "returnedDate": "2026-10-16",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0151",
+      "bookId": "BK-0001",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-10-05",
+      "dueDate": "2026-10-19",
+      "returnedDate": "2026-10-11",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0152",
+      "bookId": "BK-0024",
+      "patronId": "PT-0015",
+      "borrowedDate": "2026-10-05",
+      "dueDate": "2026-10-19",
+      "returnedDate": "2026-10-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0153",
+      "bookId": "BK-0025",
+      "patronId": "PT-0017",
+      "borrowedDate": "2026-10-06",
+      "dueDate": "2026-10-20",
+      "returnedDate": "2026-10-17",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0154",
+      "bookId": "BK-0018",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-10-10",
+      "dueDate": "2026-10-24",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0155",
+      "bookId": "BK-0012",
+      "patronId": "PT-0020",
+      "borrowedDate": "2026-10-10",
+      "dueDate": "2026-10-24",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0156",
+      "bookId": "BK-0006",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-10-10",
+      "dueDate": "2026-10-24",
+      "returnedDate": "2026-10-12",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0157",
+      "bookId": "BK-0003",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-10-12",
+      "dueDate": "2026-10-26",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0158",
+      "bookId": "BK-0019",
+      "patronId": "PT-0019",
+      "borrowedDate": "2026-10-15",
+      "dueDate": "2026-10-29",
+      "returnedDate": "2026-10-19",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0159",
+      "bookId": "BK-0001",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-10-15",
+      "dueDate": "2026-10-29",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0160",
+      "bookId": "BK-0002",
+      "patronId": "PT-0002",
+      "borrowedDate": "2026-10-16",
+      "dueDate": "2026-10-30",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0161",
+      "bookId": "BK-0011",
+      "patronId": "PT-0007",
+      "borrowedDate": "2026-10-16",
+      "dueDate": "2026-10-30",
+      "returnedDate": "2026-10-20",
+      "status": "Returned"
+    },
+    {
+      "id": "TX-0162",
+      "bookId": "BK-0010",
+      "patronId": "PT-0001",
+      "borrowedDate": "2026-10-17",
+      "dueDate": "2026-10-31",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0163",
+      "bookId": "BK-0021",
+      "patronId": "PT-0003",
+      "borrowedDate": "2026-10-21",
+      "dueDate": "2026-11-04",
+      "returnedDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": "TX-0164",
+      "bookId": "BK-0020",
+      "patronId": "PT-0014",
+      "borrowedDate": "2026-10-22",
+      "dueDate": "2026-11-05",
+      "returnedDate": null,
+      "status": "Borrowed"
+    }
+  ],
+  "violations": [
+    {
+      "id": "VIO-001",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0002",
+      "bookId": "BK-0013",
+      "type": "Overdue return of book",
+      "description": "El Filibusterismo kept past 14 days",
+      "dateRecorded": "2026-02-18"
+    },
+    {
+      "id": "VIO-002",
+      "patronId": "PT-0003",
+      "transactionId": "TX-0003",
+      "bookId": "BK-0005",
+      "type": "Overdue return of book",
+      "description": "Moby Dick kept past 14 days",
+      "dateRecorded": "2026-03-01"
+    },
+    {
+      "id": "VIO-003",
+      "patronId": "PT-0009",
+      "transactionId": "TX-0013",
+      "bookId": "BK-0017",
+      "type": "Overdue return of book",
+      "description": "Lord of the Flies kept past 14 days",
+      "dateRecorded": "2026-03-23"
+    },
+    {
+      "id": "VIO-004",
+      "patronId": "PT-0006",
+      "transactionId": "TX-0019",
+      "bookId": "BK-0028",
+      "type": "Overdue return of book",
+      "description": "The Catcher in the Rye kept past 14 days",
+      "dateRecorded": "2026-04-09"
+    },
+    {
+      "id": "VIO-005",
+      "patronId": "PT-0004",
+      "transactionId": "TX-0025",
+      "bookId": "BK-0022",
+      "type": "Overdue return of book",
+      "description": "Introduction to Algorithms, 3rd Edition kept past 14 days",
+      "dateRecorded": "2026-04-17"
+    },
+    {
+      "id": "VIO-006",
+      "patronId": "PT-0007",
+      "transactionId": "TX-0033",
+      "bookId": "BK-0005",
+      "type": "Overdue return of book",
+      "description": "Moby Dick kept past 14 days",
+      "dateRecorded": "2026-04-21"
+    },
+    {
+      "id": "VIO-007",
+      "patronId": "PT-0007",
+      "transactionId": "TX-0048",
+      "bookId": "BK-0025",
+      "type": "Overdue return of book",
+      "description": "Naruto, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-05-19"
+    },
+    {
+      "id": "VIO-008",
+      "patronId": "PT-0010",
+      "transactionId": "TX-0051",
+      "bookId": "BK-0023",
+      "type": "Overdue return of book",
+      "description": "Calculus: Early Transcendentals, 8th Edition kept past 14 days",
+      "dateRecorded": "2026-05-24"
+    },
+    {
+      "id": "VIO-009",
+      "patronId": "PT-0003",
+      "transactionId": "TX-0049",
+      "bookId": "BK-0024",
+      "type": "Overdue return of book",
+      "description": "One Piece, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-05-26"
+    },
+    {
+      "id": "VIO-010",
+      "patronId": "PT-0014",
+      "transactionId": "TX-0055",
+      "bookId": "BK-0016",
+      "type": "Overdue return of book",
+      "description": "Smaller and Smaller Circles kept past 14 days",
+      "dateRecorded": "2026-06-03"
+    },
+    {
+      "id": "VIO-011",
+      "patronId": "PT-0005",
+      "transactionId": "TX-0056",
+      "bookId": "BK-0019",
+      "type": "Overdue return of book",
+      "description": "Harry Potter and the Philosopher's Stone kept past 14 days",
+      "dateRecorded": "2026-06-03"
+    },
+    {
+      "id": "VIO-012",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0060",
+      "bookId": "BK-0026",
+      "type": "Overdue return of book",
+      "description": "Death Note, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-06-06"
+    },
+    {
+      "id": "VIO-013",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0073",
+      "bookId": "BK-0028",
+      "type": "Overdue return of book",
+      "description": "The Catcher in the Rye kept past 14 days",
+      "dateRecorded": "2026-06-24"
+    },
+    {
+      "id": "VIO-014",
+      "patronId": "PT-0006",
+      "transactionId": "TX-0084",
+      "bookId": "BK-0026",
+      "type": "Overdue return of book",
+      "description": "Death Note, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-07-17"
+    },
+    {
+      "id": "VIO-015",
+      "patronId": "PT-0008",
+      "transactionId": "TX-0093",
+      "bookId": "BK-0021",
+      "type": "Damaged book",
+      "description": "Torn pages in Clean Code",
+      "dateRecorded": "2026-07-25"
+    },
+    {
+      "id": "VIO-016",
+      "patronId": "PT-0004",
+      "transactionId": "TX-0089",
+      "bookId": "BK-0019",
+      "type": "Overdue return of book",
+      "description": "Harry Potter and the Philosopher's Stone kept past 14 days",
+      "dateRecorded": "2026-07-27"
+    },
+    {
+      "id": "VIO-017",
+      "patronId": "PT-0005",
+      "transactionId": "TX-0094",
+      "bookId": "BK-0014",
+      "type": "Overdue return of book",
+      "description": "Florante at Laura kept past 14 days",
+      "dateRecorded": "2026-08-07"
+    },
+    {
+      "id": "VIO-018",
+      "patronId": "PT-0015",
+      "transactionId": "TX-0098",
+      "bookId": "BK-0028",
+      "type": "Overdue return of book",
+      "description": "The Catcher in the Rye kept past 14 days",
+      "dateRecorded": "2026-08-15"
+    },
+    {
+      "id": "VIO-019",
+      "patronId": "PT-0015",
+      "transactionId": "TX-0104",
+      "bookId": "BK-0015",
+      "type": "Overdue return of book",
+      "description": "Dekada '70 kept past 14 days",
+      "dateRecorded": "2026-08-23"
+    },
+    {
+      "id": "VIO-020",
+      "patronId": "PT-0013",
+      "transactionId": "TX-0116",
+      "bookId": "BK-0025",
+      "type": "Overdue return of book",
+      "description": "Naruto, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-09-11"
+    },
+    {
+      "id": "VIO-021",
+      "patronId": "PT-0013",
+      "transactionId": "TX-0119",
+      "bookId": "BK-0021",
+      "type": "Overdue return of book",
+      "description": "Clean Code kept past 14 days",
+      "dateRecorded": "2026-09-18"
+    },
+    {
+      "id": "VIO-022",
+      "patronId": "PT-0012",
+      "transactionId": "TX-0121",
+      "bookId": "BK-0016",
+      "type": "Overdue return of book",
+      "description": "Smaller and Smaller Circles kept past 14 days",
+      "dateRecorded": "2026-09-18"
+    },
+    {
+      "id": "VIO-023",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0130",
+      "bookId": "BK-0007",
+      "type": "Damaged book",
+      "description": "Torn pages in Introduction to React",
+      "dateRecorded": "2026-09-24"
+    },
+    {
+      "id": "VIO-024",
+      "patronId": "PT-0019",
+      "transactionId": "TX-0136",
+      "bookId": "BK-0024",
+      "type": "Damaged book",
+      "description": "Torn pages in One Piece, Vol. 1",
+      "dateRecorded": "2026-09-28"
+    },
+    {
+      "id": "VIO-025",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0132",
+      "bookId": "BK-0004",
+      "type": "Overdue return of book",
+      "description": "1984 kept past 14 days",
+      "dateRecorded": "2026-10-02"
+    },
+    {
+      "id": "VIO-026",
+      "patronId": "PT-0001",
+      "transactionId": "TX-0135",
+      "bookId": "BK-0001",
+      "type": "Overdue return of book",
+      "description": "Jujutsu Kaisen, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-10-04"
+    },
+    {
+      "id": "VIO-027",
+      "patronId": "PT-0004",
+      "transactionId": "TX-0140",
+      "bookId": "BK-0007",
+      "type": "Overdue return of book",
+      "description": "Introduction to React kept past 14 days",
+      "dateRecorded": "2026-10-10"
+    },
+    {
+      "id": "VIO-028",
+      "patronId": "PT-0006",
+      "transactionId": "TX-0142",
+      "bookId": "BK-0009",
+      "type": "Overdue return of book",
+      "description": "Attack on Titan, Vol. 34 kept past 14 days",
+      "dateRecorded": "2026-10-13"
+    },
+    {
+      "id": "VIO-029",
+      "patronId": "PT-0006",
+      "transactionId": "TX-0143",
+      "bookId": "BK-0023",
+      "type": "Overdue return of book",
+      "description": "Calculus: Early Transcendentals, 8th Edition kept past 14 days",
+      "dateRecorded": "2026-10-15"
+    },
+    {
+      "id": "VIO-030",
+      "patronId": "PT-0006",
+      "transactionId": "TX-0148",
+      "bookId": "BK-0026",
+      "type": "Overdue return of book",
+      "description": "Death Note, Vol. 1 kept past 14 days",
+      "dateRecorded": "2026-10-20"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "bookId": "BK-0001",
+      "patronId": "PT-0002",
+      "patronName": "Dela Cruz, Juan Miguel Santos",
+      "rating": 5,
+      "date": "2026-10-08",
+      "comment": "Fast-paced and beautifully drawn. The fight scenes are some of the best I have read in a manga."
+    },
+    {
+      "id": 2,
+      "bookId": "BK-0001",
+      "patronId": "PT-0003",
+      "patronName": "Delos Santos, Maria Clara Reyes",
+      "rating": 4,
+      "date": "2026-10-12",
+      "comment": "Great world-building and likeable characters. The first volume sets everything up really well."
+    },
+    {
+      "id": 3,
+      "bookId": "BK-0001",
+      "patronId": "PT-0004",
+      "patronName": "Ibarra, Crisostomo Magsalin",
+      "rating": 3,
+      "date": "2026-09-30",
+      "comment": "Enjoyable, but I wish the pacing slowed down a little to explain the curse system."
+    },
+    {
+      "id": 4,
+      "bookId": "BK-0015",
+      "patronId": "PT-0006",
+      "patronName": "Santos, John Albert Mercado",
+      "rating": 3,
+      "date": "2026-03-19",
+      "comment": "Decent read, but it did not fully live up to the hype."
+    },
+    {
+      "id": 5,
+      "bookId": "BK-0017",
+      "patronId": "PT-0009",
+      "patronName": "Garcia, Mark Anthony Pascual",
+      "rating": 3,
+      "date": "2026-03-29",
+      "comment": "It was okay. Some parts were great, others dragged."
+    },
+    {
+      "id": 6,
+      "bookId": "BK-0021",
+      "patronId": "PT-0002",
+      "patronName": "Dela Cruz, Juan Miguel Santos",
+      "rating": 4,
+      "date": "2026-04-01",
+      "comment": "Enjoyable and well written. Would read again."
+    },
+    {
+      "id": 7,
+      "bookId": "BK-0017",
+      "patronId": "PT-0003",
+      "patronName": "Delos Santos, Maria Clara Reyes",
+      "rating": 5,
+      "date": "2026-04-07",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 8,
+      "bookId": "BK-0005",
+      "patronId": "PT-0007",
+      "patronName": "Alcantara, Blessie Joy Villanueva",
+      "rating": 5,
+      "date": "2026-04-25",
+      "comment": "Loved every page. Highly recommended!"
+    },
+    {
+      "id": 9,
+      "bookId": "BK-0023",
+      "patronId": "PT-0010",
+      "patronName": "Mendoza, Kristine Joy Aquino",
+      "rating": 4,
+      "date": "2026-04-27",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 10,
+      "bookId": "BK-0014",
+      "patronId": "PT-0010",
+      "patronName": "Mendoza, Kristine Joy Aquino",
+      "rating": 2,
+      "date": "2026-05-08",
+      "comment": "Not quite for me, but others may enjoy it more."
+    },
+    {
+      "id": 11,
+      "bookId": "BK-0020",
+      "patronId": "PT-0001",
+      "patronName": "Baisa, Ivan Philip Pagatpat",
+      "rating": 5,
+      "date": "2026-05-14",
+      "comment": "Loved every page. Highly recommended!"
+    },
+    {
+      "id": 12,
+      "bookId": "BK-0028",
+      "patronId": "PT-0003",
+      "patronName": "Delos Santos, Maria Clara Reyes",
+      "rating": 5,
+      "date": "2026-05-18",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 13,
+      "bookId": "BK-0022",
+      "patronId": "PT-0007",
+      "patronName": "Alcantara, Blessie Joy Villanueva",
+      "rating": 3,
+      "date": "2026-05-18",
+      "comment": "It was okay. Some parts were great, others dragged."
+    },
+    {
+      "id": 14,
+      "bookId": "BK-0012",
+      "patronId": "PT-0014",
+      "patronName": "Manalo, Jasmine Nicole Torres",
+      "rating": 5,
+      "date": "2026-05-23",
+      "comment": "A fantastic read that I could not put down."
+    },
+    {
+      "id": 15,
+      "bookId": "BK-0018",
+      "patronId": "PT-0006",
+      "patronName": "Santos, John Albert Mercado",
+      "rating": 5,
+      "date": "2026-05-27",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 16,
+      "bookId": "BK-0005",
+      "patronId": "PT-0004",
+      "patronName": "Ibarra, Crisostomo Magsalin",
+      "rating": 5,
+      "date": "2026-06-01",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 17,
+      "bookId": "BK-0016",
+      "patronId": "PT-0014",
+      "patronName": "Manalo, Jasmine Nicole Torres",
+      "rating": 4,
+      "date": "2026-06-05",
+      "comment": "Very good overall, with only a few slow parts."
+    },
+    {
+      "id": 18,
+      "bookId": "BK-0019",
+      "patronId": "PT-0005",
+      "patronName": "Del Rosario, Maria Luisa Bautista",
+      "rating": 4,
+      "date": "2026-06-11",
+      "comment": "Enjoyable and well written. Would read again."
+    },
+    {
+      "id": 19,
+      "bookId": "BK-0021",
+      "patronId": "PT-0005",
+      "patronName": "Del Rosario, Maria Luisa Bautista",
+      "rating": 5,
+      "date": "2026-06-23",
+      "comment": "Loved every page. Highly recommended!"
+    },
+    {
+      "id": 20,
+      "bookId": "BK-0020",
+      "patronId": "PT-0005",
+      "patronName": "Del Rosario, Maria Luisa Bautista",
+      "rating": 5,
+      "date": "2026-07-05",
+      "comment": "A fantastic read that I could not put down."
+    },
+    {
+      "id": 21,
+      "bookId": "BK-0026",
+      "patronId": "PT-0006",
+      "patronName": "Santos, John Albert Mercado",
+      "rating": 4,
+      "date": "2026-07-17",
+      "comment": "Very good overall, with only a few slow parts."
+    },
+    {
+      "id": 22,
+      "bookId": "BK-0019",
+      "patronId": "PT-0004",
+      "patronName": "Ibarra, Crisostomo Magsalin",
+      "rating": 4,
+      "date": "2026-07-29",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 23,
+      "bookId": "BK-0021",
+      "patronId": "PT-0008",
+      "patronName": "Reyes, Angelica Mae Dizon",
+      "rating": 5,
+      "date": "2026-08-02",
+      "comment": "A fantastic read that I could not put down."
+    },
+    {
+      "id": 24,
+      "bookId": "BK-0014",
+      "patronId": "PT-0005",
+      "patronName": "Del Rosario, Maria Luisa Bautista",
+      "rating": 3,
+      "date": "2026-08-07",
+      "comment": "Decent read, but it did not fully live up to the hype."
+    },
+    {
+      "id": 25,
+      "bookId": "BK-0025",
+      "patronId": "PT-0014",
+      "patronName": "Manalo, Jasmine Nicole Torres",
+      "rating": 5,
+      "date": "2026-08-10",
+      "comment": "A fantastic read that I could not put down."
+    },
+    {
+      "id": 26,
+      "bookId": "BK-0023",
+      "patronId": "PT-0012",
+      "patronName": "Bautista, Katrina Louise Cruz",
+      "rating": 4,
+      "date": "2026-08-26",
+      "comment": "Very good overall, with only a few slow parts."
+    },
+    {
+      "id": 27,
+      "bookId": "BK-0019",
+      "patronId": "PT-0013",
+      "patronName": "Aquino, Paolo Gabriel Soriano",
+      "rating": 4,
+      "date": "2026-08-28",
+      "comment": "Enjoyable and well written. Would read again."
+    },
+    {
+      "id": 28,
+      "bookId": "BK-0013",
+      "patronId": "PT-0008",
+      "patronName": "Reyes, Angelica Mae Dizon",
+      "rating": 2,
+      "date": "2026-08-30",
+      "comment": "Not quite for me, but others may enjoy it more."
+    },
+    {
+      "id": 29,
+      "bookId": "BK-0024",
+      "patronId": "PT-0001",
+      "patronName": "Baisa, Ivan Philip Pagatpat",
+      "rating": 5,
+      "date": "2026-09-12",
+      "comment": "Loved every page. Highly recommended!"
+    },
+    {
+      "id": 30,
+      "bookId": "BK-0014",
+      "patronId": "PT-0012",
+      "patronName": "Bautista, Katrina Louise Cruz",
+      "rating": 4,
+      "date": "2026-09-19",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 31,
+      "bookId": "BK-0022",
+      "patronId": "PT-0020",
+      "patronName": "Tolentino, Sofia Isabel Macaraeg",
+      "rating": 5,
+      "date": "2026-10-01",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 32,
+      "bookId": "BK-0017",
+      "patronId": "PT-0004",
+      "patronName": "Ibarra, Crisostomo Magsalin",
+      "rating": 5,
+      "date": "2026-10-06",
+      "comment": "One of the best books I have borrowed from this library."
+    },
+    {
+      "id": 33,
+      "bookId": "BK-0015",
+      "patronId": "PT-0010",
+      "patronName": "Mendoza, Kristine Joy Aquino",
+      "rating": 4,
+      "date": "2026-10-19",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 34,
+      "bookId": "BK-0008",
+      "patronId": "PT-0005",
+      "patronName": "Del Rosario, Maria Luisa Bautista",
+      "rating": 4,
+      "date": "2026-10-21",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 35,
+      "bookId": "BK-0002",
+      "patronId": "PT-0001",
+      "patronName": "Baisa, Ivan Philip Pagatpat",
+      "rating": 4,
+      "date": "2026-10-22",
+      "comment": "A solid read that I would recommend to friends."
+    },
+    {
+      "id": 36,
+      "bookId": "BK-0019",
+      "patronId": "PT-0019",
+      "patronName": "Ramos, Enrique Luis Gonzales",
+      "rating": 4,
+      "date": "2026-10-23",
+      "comment": "A solid read that I would recommend to friends."
+    }
+  ],
+  "nfcTags": [
+    {
+      "tagId": "tagID-204001",
+      "type": "book",
+      "refId": "BK-0001",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204038",
+      "type": "book",
+      "refId": "BK-0002",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204075",
+      "type": "book",
+      "refId": "BK-0003",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204112",
+      "type": "book",
+      "refId": "BK-0004",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204149",
+      "type": "book",
+      "refId": "BK-0005",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204186",
+      "type": "book",
+      "refId": "BK-0006",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204223",
+      "type": "book",
+      "refId": "BK-0007",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204260",
+      "type": "book",
+      "refId": "BK-0008",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204297",
+      "type": "book",
+      "refId": "BK-0009",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204334",
+      "type": "book",
+      "refId": "BK-0010",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204371",
+      "type": "book",
+      "refId": "BK-0011",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204408",
+      "type": "book",
+      "refId": "BK-0012",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204445",
+      "type": "book",
+      "refId": "BK-0013",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204482",
+      "type": "book",
+      "refId": "BK-0014",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204519",
+      "type": "book",
+      "refId": "BK-0015",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204556",
+      "type": "book",
+      "refId": "BK-0016",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204593",
+      "type": "book",
+      "refId": "BK-0017",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204630",
+      "type": "book",
+      "refId": "BK-0018",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204667",
+      "type": "book",
+      "refId": "BK-0019",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204704",
+      "type": "book",
+      "refId": "BK-0020",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204741",
+      "type": "book",
+      "refId": "BK-0021",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204778",
+      "type": "book",
+      "refId": "BK-0022",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204815",
+      "type": "book",
+      "refId": "BK-0023",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204852",
+      "type": "book",
+      "refId": "BK-0024",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204889",
+      "type": "book",
+      "refId": "BK-0025",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204926",
+      "type": "book",
+      "refId": "BK-0026",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-204963",
+      "type": "book",
+      "refId": "BK-0027",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-205000",
+      "type": "book",
+      "refId": "BK-0028",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-205037",
+      "type": "book",
+      "refId": "BK-0029",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-205074",
+      "type": "book",
+      "refId": "BK-0030",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203192",
+      "type": "patron",
+      "refId": "PT-0001",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203229",
+      "type": "patron",
+      "refId": "PT-0002",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203266",
+      "type": "patron",
+      "refId": "PT-0003",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203303",
+      "type": "patron",
+      "refId": "PT-0004",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203340",
+      "type": "patron",
+      "refId": "PT-0005",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203377",
+      "type": "patron",
+      "refId": "PT-0006",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203414",
+      "type": "patron",
+      "refId": "PT-0007",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203451",
+      "type": "patron",
+      "refId": "PT-0008",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203488",
+      "type": "patron",
+      "refId": "PT-0009",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203525",
+      "type": "patron",
+      "refId": "PT-0010",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203562",
+      "type": "patron",
+      "refId": "PT-0011",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203599",
+      "type": "patron",
+      "refId": "PT-0012",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203636",
+      "type": "patron",
+      "refId": "PT-0013",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203673",
+      "type": "patron",
+      "refId": "PT-0014",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203710",
+      "type": "patron",
+      "refId": "PT-0015",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203747",
+      "type": "patron",
+      "refId": "PT-0016",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203784",
+      "type": "patron",
+      "refId": "PT-0017",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203821",
+      "type": "patron",
+      "refId": "PT-0018",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203858",
+      "type": "patron",
+      "refId": "PT-0019",
+      "status": "Linked"
+    },
+    {
+      "tagId": "tagID-203895",
+      "type": "patron",
+      "refId": "PT-0020",
+      "status": "Linked"
+    }
+  ],
+  "dashboard": {
+    "widgets": [
+      {
+        "title": "Total Books",
+        "value": "30",
+        "icon": "FiBook"
+      },
+      {
+        "title": "Available Books",
+        "value": "17",
+        "icon": "PiBooks"
+      },
+      {
+        "title": "Borrowed",
+        "value": "8",
+        "icon": "FiBookmark"
+      },
+      {
+        "title": "Overdue Books",
+        "value": "3",
+        "icon": "FiAlertCircle"
+      },
+      {
+        "title": "Patrons",
+        "value": "20",
+        "icon": "FiUsers"
+      }
+    ],
+    "inventory": {
+      "total": 30,
+      "statuses": [
+        {
+          "label": "Returned",
+          "count": 17,
+          "percentage": 56
+        },
+        {
+          "label": "Borrowed",
+          "count": 8,
+          "percentage": 27
+        },
+        {
+          "label": "Archived",
+          "count": 2,
+          "percentage": 7
+        },
+        {
+          "label": "Overdue",
+          "count": 3,
+          "percentage": 10
+        }
+      ]
+    },
+    "recentTransactionIds": [
+      "TX-0164",
+      "TX-0163",
+      "TX-0162",
+      "TX-0161",
+      "TX-0160"
+    ]
+  },
+  "circulationByMonth": [
+    {
+      "month": "Jan",
+      "borrows": 1,
+      "returns": 1
+    },
+    {
+      "month": "Feb",
+      "borrows": 10,
+      "returns": 4
+    },
+    {
+      "month": "Mar",
+      "borrows": 18,
+      "returns": 15
+    },
+    {
+      "month": "Apr",
+      "borrows": 16,
+      "returns": 22
+    },
+    {
+      "month": "May",
+      "borrows": 21,
+      "returns": 16
+    },
+    {
+      "month": "Jun",
+      "borrows": 19,
+      "returns": 21
+    },
+    {
+      "month": "Jul",
+      "borrows": 19,
+      "returns": 17
+    },
+    {
+      "month": "Aug",
+      "borrows": 17,
+      "returns": 18
+    },
+    {
+      "month": "Sep",
+      "borrows": 23,
+      "returns": 21
+    },
+    {
+      "month": "Oct",
+      "borrows": 20,
+      "returns": 18
+    }
+  ],
+  "borrowingRecordIds": [
+    "TX-0164",
+    "TX-0163",
+    "TX-0162",
+    "TX-0161",
+    "TX-0160",
+    "TX-0159",
+    "TX-0158",
+    "TX-0157",
+    "TX-0156",
+    "TX-0155"
+  ]
+}

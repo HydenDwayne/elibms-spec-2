@@ -10,6 +10,7 @@ import BookTable from "../components/BookTable";
 import { useState } from "react";
 
 import data from "../data/dummy_data.json";
+import { applyBookOverride } from "../lib/bookActions";
 
 const Dashbboard = () => {
 const iconMap = {
@@ -21,7 +22,7 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const books = data.books.map((b) => ({
+const books = data.books.map(applyBookOverride).map((b) => ({
   ...b,
   genre: b.genre.join(", "),
   borrowable: b.borrowable ? "Yes" : "No",

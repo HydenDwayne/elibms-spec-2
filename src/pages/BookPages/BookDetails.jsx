@@ -13,12 +13,21 @@ import { FaStar } from "react-icons/fa";
 import StarRating from "../../components/StarRating";
 
 import data from "../../data/dummy_data.json";
+import {
+  applyBookOverride,
+  archiveBook,
+  unarchiveBook,
+  setBookStatus,
+} from "../../lib/bookActions";
 
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const book = data.books.find((b) => b.id === bookId);
+  const [book, setBook] = useState(() =>
+    applyBookOverride(data.books.find((b) => b.id === bookId)),
+  );
+  const [notice, setNotice] = useState("");
   const borrowingHistory = data.transactions
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
@@ -40,8 +49,23 @@ const BookDetails = () => {
 
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
 
+  const isArchived = book.status === "Archived";
+
   const handleArchiveConfirm = (actionType) => {
-    navigate("/");
+    const result =
+      actionType === "unarchive" ? unarchiveBook(book) : archiveBook(book);
+    setNotice(result.message);
+    if (result.ok) {
+      setBook(applyBookOverride(data.books.find((b) => b.id === bookId)));
+    }
+  };
+
+  const handleStatusChange = (status) => {
+    const result = setBookStatus(book, status);
+    setNotice(result.message);
+    if (result.ok) {
+      setBook(applyBookOverride(data.books.find((b) => b.id === bookId)));
+    }
   };
 
   return (
@@ -62,7 +86,11 @@ const BookDetails = () => {
         </p>
         <div className="pr-10">
           <p>Availability Status</p>
-          <BookAvailabilityStatus />
+          <BookAvailabilityStatus
+            key={book.status}
+            status={book.status}
+            onChange={handleStatusChange}
+          />
         </div>
       </div>
 
@@ -81,6 +109,11 @@ const BookDetails = () => {
             </div>
             <div className="ml-4">
               <p className="text-lg font-bold">Book Title: {book.title}</p>
+              {isArchived && (
+                <span className="mb-2 inline-block rounded-full border border-[#A35139] px-3 py-0.5 text-xs text-[#A35139]">
+                  Archived
+                </span>
+              )}
               <p className="mb-4 font-semibold">Author: {book.author}</p>
               <div className="text-sm">
                 <p>ISBN: {book.isbn}</p>
@@ -142,16 +175,19 @@ const BookDetails = () => {
         hover:shadow-md
         active:translate-y-0"
           >
-            {"Archive Book"}
+            {isArchived ? "Unarchive Book" : "Archive Book"}
           </button>
           <ArchiveBook
             isOpen={isArchiveModalOpen}
             onClose={() => setIsArchiveModalOpen(false)}
             onConfirm={handleArchiveConfirm}
-            patronName={bookId}
-            action="archive"
+            bookTitle={book.title}
+            action={isArchived ? "unarchive" : "archive"}
           />
         </div>
+        {notice && (
+          <p className="col-span-2 pt-3 text-sm text-[#53657A]">{notice}</p>
+        )}
         <div className="col-span-2 mt-5">
           <p>Recent Transactions</p>
           <BorrowingHistoryTable transactions={borrowingHistory} />

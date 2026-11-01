@@ -6,11 +6,11 @@ import {
   FiArrowDownLeft 
 } from "react-icons/fi";
 
-export default function BookAvailabilityStatus() {
+export default function BookAvailabilityStatus({ status = "Available", onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   
   // 1. Add state to hold the currently selected status text label
-  const [selectedStatus, setSelectedStatus] = useState("Available");
+  const [selectedStatus, setSelectedStatus] = useState(status);
   
   const dropdownRef = useRef(null);
 
@@ -30,6 +30,7 @@ export default function BookAvailabilityStatus() {
     setIsOpen(false);
     setSelectedStatus(labelText); // Set the button text to the chosen option
     console.log(`Triggered action: ${actionType}`);
+    if (onChange) onChange(labelText);
   };
 
   return (

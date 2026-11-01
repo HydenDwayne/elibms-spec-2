@@ -2,7 +2,7 @@ function ArchiveBook({
   isOpen,
   onClose,
   onConfirm,
-  patronName = "",
+  bookTitle = "",
   action = "archive",
 }) {
   if (!isOpen) return null;
@@ -16,7 +16,7 @@ function ArchiveBook({
     onClose();
   };
 
-  const isUnsuspending = action === "archived";
+  const isUnarchiving = action === "unarchive";
 
   return (
     <div
@@ -40,14 +40,14 @@ function ArchiveBook({
         <h2
           id="confirmation-title"
           className="absolute left-[9%] top-[35px] bg-gradient-to-r from-[#1C3147] to-[#4D739B] bg-clip-text text-[26px] font-bold leading-none text-transparent">
-          {isUnsuspending ? "Unarchive Book" : "Archive Book"}
+          {isUnarchiving ? "Unarchive Book" : "Archive Book"}
         </h2>
 
         <div className="absolute left-1/2 top-[105px] w-[330px] max-w-[82%] -translate-x-1/2">
           <p className="text-center text-[14px] leading-relaxed text-[#53657A]">
             Are you sure you want to {action}{" "}
             <span className="bg-gradient-to-r from-[#1C3147] to-[#4D739B] bg-clip-text font-semibold text-transparent">
-              {patronName}
+              {bookTitle}
             </span>
             ?
           </p>
@@ -74,8 +74,3 @@ function ArchiveBook({
 }
 
 export default ArchiveBook;
-
-
-
-
-

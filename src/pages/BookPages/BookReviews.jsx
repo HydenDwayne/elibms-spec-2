@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import coverFallback from "../../assets/book_default.jpg";
 import StarRating from "../../components/StarRating";
 import ReviewCard from "../../components/ReviewCard";
 import RemoveReviewConfirmationModal from "../../components/RemoveReviewConfirmationModal";
-
+import { ref, onValue } from "firebase/database";
+import { db } from "../../lib/firebase";
 import data from "../../data/dummy_data.json";
 
 const gradientText =
@@ -35,7 +36,21 @@ const BookReviews = () => {
   const { bookId } = useParams();
 
   // Placeholder data -- replace with the selected book / patrons / reviews from your backend.
-  const book = data.books.find((b) => b.id === bookId);
+  const dummyBook = data.books.find((b) => b.id === bookId);
+  const [dbBook, setDbBook] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (dummyBook) return;
+    const unsubscribe = onValue(ref(db, `books/${bookId}`), (snap) => {
+      setDbBook(snap.exists() ? { id: bookId, ...snap.val() } : null);
+      setLoaded(true);
+    });
+    return unsubscribe;
+  }, [bookId, dummyBook]);
+
+  const book = dummyBook ?? dbBook;
+  const loading = !dummyBook && !loaded;
   const patrons = data.patrons;
   const [reviews, setReviews] = useState(
     data.reviews.filter((r) => r.bookId === bookId),
@@ -114,6 +129,9 @@ const BookReviews = () => {
     setReviewToRemove(null);
   };
 
+  if (loading) return <p className="px-15 pt-10">Loading...</p>;
+  if (!book) return <p className="px-15 pt-10">Book not found.</p>;
+
   return (
     <div className="h-full w-full overflow-y-auto px-15 pt-10 pb-10">
       <button
@@ -147,7 +165,7 @@ const BookReviews = () => {
               <p>Call Number: {book.callNumber}</p>
               <p>Publication Year: {book.publicationYear}</p>
               <p>Place of Publication: {book.placeOfPublication}</p>
-              <p>Genre: {book.genre.join(", ")}</p>
+              <p>Genre: {Array.isArray(book.genre) ? book.genre.join(", ") : ""}</p>
             </div>
           </div>
         </div>

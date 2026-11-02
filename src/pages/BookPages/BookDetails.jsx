@@ -7,10 +7,12 @@ import SecondaryButton from "../../components/SecondaryButton";
 import BorrowingHistoryTable from "../../components/BorrowingHistoryTable";
 import BookStatus from "../../components/BookNFCStatus";
 import coverFallback from "../../assets/book_default.jpg";
-import { useState } from "react";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { FaStar } from "react-icons/fa";
 import StarRating from "../../components/StarRating";
+import { useState, useEffect } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../../lib/firebase";
 
 import data from "../../data/dummy_data.json";
 
@@ -18,7 +20,32 @@ const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const book = data.books.find((b) => b.id === bookId);
+  const dummyBook = data.books.find((b) => b.id === bookId);
+  const [dbBook, setDbBook] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const [coverData, setCoverData] = useState("");
+
+  useEffect(() => {
+    if (dummyBook) return;
+    const unsubscribe = onValue(ref(db, `books/${bookId}`), (snap) => {
+      setDbBook(snap.exists() ? { id: bookId, ...snap.val() } : null);
+      setLoaded(true);
+    });
+    return unsubscribe;
+  }, [bookId, dummyBook]);
+
+  const book = dummyBook ?? dbBook;
+  const loading = !dummyBook && !loaded;
+
+  useEffect(() => {
+    if (!book || !book.hasCover) return;
+    const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
+      setCoverData(snap.exists() ? snap.val() : "");
+    });
+    return unsubscribe;
+  }, [bookId, book]);
+
   const borrowingHistory = data.transactions
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
@@ -39,6 +66,9 @@ const BookDetails = () => {
   };
 
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+
+  if (loading) return <p className="px-15 pt-10">Loading...</p>;
+  if (!book) return <p className="px-15 pt-10">Book not found.</p>;
 
   const handleArchiveConfirm = (actionType) => {
     navigate("/");
@@ -71,7 +101,7 @@ const BookDetails = () => {
           <div className="flex flex-row">
             <div className=" w-35 h-50 flex justify-center">
               <img
-                src={book.cover || coverFallback}
+                src={coverData || book.cover || coverFallback}
                 alt={book.title}
                 onError={(e) => {
                   e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too
@@ -87,7 +117,7 @@ const BookDetails = () => {
                 <p>Call Number: {book.callNumber}</p>
                 <p>Publication Year: {book.publicationYear}</p>
                 <p>Place of Publication: {book.placeOfPublication}</p>
-                <p>Genre: {book.genre.join(", ")}</p>
+                <p>Genre: {Array.isArray(book.genre) ? book.genre.join(", ") : ""}</p>
                 <p>Borrowable: {book.borrowable ? "Yes" : "No"}</p>
               </div>
             </div>

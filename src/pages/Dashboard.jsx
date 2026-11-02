@@ -7,7 +7,9 @@ import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../lib/firebase";
 
 import data from "../data/dummy_data.json";
 
@@ -21,11 +23,21 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const books = data.books.map((b) => ({
+const [dbBooks, setDbBooks] = useState([]);
+ useEffect(() => {
+  const unsubscribe = onValue(ref(db, "books"), (snap) => {
+    const val = snap.val() ?? {};
+    setDbBooks(Object.entries(val).map(([id, b]) => ({ id, ...b })));
+  });
+  return unsubscribe;
+}, []);
+
+const books = [...data.books, ...dbBooks].map((b) => ({
   ...b,
-  genre: b.genre.join(", "),
+  genre: Array.isArray(b.genre) ? b.genre.join(", ") : "",
   borrowable: b.borrowable ? "Yes" : "No",
 }));
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   return (

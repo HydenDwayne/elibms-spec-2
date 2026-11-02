@@ -4,12 +4,13 @@ import PatronTable from "../../components/PatronTable";
 import { useState } from "react";
 
 import data from "../../data/dummy_data.json";
+import { applyPatronOverride } from "../../lib/patronActions";
 
 const PatronsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
 
-  const patrons = data.patrons.map((p) => ({
+  const patrons = data.patrons.map(applyPatronOverride).map((p) => ({
   ...p,
   idNumber: p.id,
   violations: data.violations.filter((v) => v.patronId === p.id).length,

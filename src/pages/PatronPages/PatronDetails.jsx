@@ -13,12 +13,21 @@ import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
 
 import data from "../../data/dummy_data.json";
+import {
+  applyPatronOverride,
+  suspendPatron,
+  liftSuspension,
+} from "../../lib/patronActions";
 
 const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
-  const patron = data.patrons.find((p) => p.id === patronId);
+  const [patron, setPatron] = useState(() =>
+    applyPatronOverride(data.patrons.find((p) => p.id === patronId)),
+  );
+  const [notice, setNotice] = useState("");
   const patronName = patron.name;
+  const isSuspended = patron.status === "Suspended";
   const transactions = data.transactions
     .filter((t) => t.patronId === patronId)
     .map((t) => ({
@@ -56,7 +65,12 @@ const PatronDetails = () => {
     navigate("/patrons");
   };
   const handleArchiveConfirm = (actionType) => {
-    navigate("/patrons");
+    const result =
+      actionType === "unsuspend" ? liftSuspension(patron) : suspendPatron(patron);
+    setNotice(result.message);
+    if (result.ok) {
+      setPatron(applyPatronOverride(data.patrons.find((p) => p.id === patronId)));
+    }
   };
 
   return (
@@ -97,6 +111,11 @@ const PatronDetails = () => {
               <p className="text-xl font-bold mb-5">
                 {patron.name}
               </p>
+              {isSuspended && (
+                <span className="mb-2 inline-block rounded-full border border-[#A35139] px-3 py-0.5 text-xs text-[#A35139]">
+                  Suspended
+                </span>
+              )}
               <div className="text-sm">
                 <p>Email: {patron.email}</p>
                 <p>Contact No.: {patron.contactNo}</p>
@@ -151,9 +170,12 @@ const PatronDetails = () => {
         hover:shadow-md
         active:translate-y-0"
           >
-            {"Archive Patron"}
+            {isSuspended ? "Lift Suspension" : "Suspend Patron"}
           </button>
         </div>
+        {notice && (
+          <p className="col-span-2 pt-3 text-sm text-[#53657A]">{notice}</p>
+        )}
         <div className="col-span-2 mt-5">
           <p>Recent Transactions</p>
           <PatronBorrowingHistoryTable transactions={transactions} />
@@ -165,7 +187,7 @@ const PatronDetails = () => {
         onClose={() => setIsArchiveModalOpen(false)}
         onConfirm={handleArchiveConfirm}
         patronName={patronName}
-        action="suspend"
+        action={isSuspended ? "unsuspend" : "suspend"}
       />
       <ViolationModal
         isOpen={isViolationModalOpen}

@@ -45,7 +45,8 @@ function ArchivePatron({
 
         <div className="absolute left-1/2 top-[105px] w-[330px] max-w-[82%] -translate-x-1/2">
           <p className="text-center text-[14px] leading-relaxed text-[#53657A]">
-            Are you sure you want to {action}{" "}
+            Are you sure you want to{" "}
+            {isUnsuspending ? "lift the suspension of" : "suspend"}{" "}
             <span className="bg-gradient-to-r from-[#1C3147] to-[#4D739B] bg-clip-text font-semibold text-transparent">
               {patronName}
             </span>
@@ -74,8 +75,3 @@ function ArchivePatron({
 }
 
 export default ArchivePatron;
-
-
-
-
-

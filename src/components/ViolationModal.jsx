@@ -6,16 +6,20 @@ function ViolationModal({ isOpen, onClose, onConfirm }) {
 
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!violation) {
       setError("Please choose the appropriate violation");
       return;
     }
-
     setError("");
-    onConfirm(violation);
-    setViolation("");
-    onClose();
+
+    try {
+      await onConfirm(violation);
+      setViolation("");
+      onClose();
+    } catch {
+      setError("Failed to save. Please try again.");
+    }
   };
 
   const handleClose = () => {
@@ -53,7 +57,7 @@ function ViolationModal({ isOpen, onClose, onConfirm }) {
               setError("");
             }}
             className="h-[35px] w-full appearance-auto rounded-[4px] border border-[#53657a] bg-white px-[9px] text-[11px] text-[#53657a] outline-none focus:border-[#4d739b]">
-            <option value="">Overdue return of book</option>
+            <option value="" disabled>Select a violation</option>
             <option value="Overdue return of book">Overdue return of book</option>
             <option value="Lost book">Lost book</option>
             <option value="Damaged book">Damaged book</option>

@@ -8,9 +8,11 @@ import Violations from "../../components/Violation";
 import ViolationModal from "../../components/ViolationModal";
 import BookStatus from "../../components/BookNFCStatus";
 import pfp from "../../assets/default.webp";
-import { useState } from "react";
 import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
+import { useState, useEffect } from "react";
+import { ref, push, set, update, onValue, query, orderByChild, equalTo, serverTimestamp } from "firebase/database";
+import { db, auth } from "../../lib/firebase";
 
 import data from "../../data/dummy_data.json";
 
@@ -26,9 +28,20 @@ const PatronDetails = () => {
       returnedDate: t.returnedDate ?? "—",
       book: data.books.find((b) => b.id === t.bookId),
     }));
-  const [violationsList, setViolationsList] = useState(
-    data.violations.filter((v) => v.patronId === patronId),
-  );
+  const [violationsList, setViolationsList] = useState([]);
+
+  useEffect(() => {
+    const q = query(ref(db, "violations"), orderByChild("patronId"), equalTo(patronId));
+    const unsubscribe = onValue(q, (snap) => {
+      const data = snap.val() ?? {};
+      setViolationsList(
+        Object.entries(data)
+          .map(([id, v]) => ({ id, ...v }))
+          .filter((v) => v.status === "active"),
+      );
+    });
+    return unsubscribe;
+  }, [patronId]);
 
   // 3. Initialize modal visibility state
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
@@ -39,17 +52,36 @@ const PatronDetails = () => {
     setIsViolationModalOpen(true);
   };
 
-  const handleViolationConfirm = (violation) => {
-    const newViolation = {
-      id: Date.now(),
+  const handleViolationConfirm = async (violation) => {
+  try {
+    await set(push(ref(db, "violations")), {
+      patronId,
       type: violation,
       description: "",
-    };
-    setViolationsList((prev) => [...prev, newViolation]);
+      transactionId: null,
+      bookId: null,
+      status: "active",
+      createdAt: serverTimestamp(),
+      createdBy: auth.currentUser?.uid ?? null,
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add violation.");
+    throw err;
+    }
   };
 
-  const handleRemoveViolation = (id) => {
-    setViolationsList(violationsList.filter((v) => v.id !== id));
+  const handleRemoveViolation = async (id) => {
+  try {
+    await update(ref(db, `violations/${id}`), {
+      status: "removed",
+      removedAt: serverTimestamp(),
+      removedBy: auth.currentUser?.uid ?? null,
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Failed to remove violation.");
+    }
   };
 
   const handleClick = () => {

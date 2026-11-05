@@ -13,6 +13,7 @@ import ArchivePatron from "../../components/ArchivePatron";
 import { useState, useEffect } from "react";
 import { ref, push, set, update, onValue, query, orderByChild, equalTo, serverTimestamp } from "firebase/database";
 import { db, auth } from "../../lib/firebase";
+import toast from "react-hot-toast";
 
 import data from "../../data/dummy_data.json";
 
@@ -52,35 +53,37 @@ const PatronDetails = () => {
     setIsViolationModalOpen(true);
   };
 
-  const handleViolationConfirm = async (violation) => {
-  try {
-    await set(push(ref(db, "violations")), {
-      patronId,
-      type: violation,
-      description: "",
-      transactionId: null,
-      bookId: null,
-      status: "active",
-      createdAt: serverTimestamp(),
-      createdBy: auth.currentUser?.uid ?? null,
-    });
-  } catch (err) {
-    console.error(err);
-    alert("Failed to add violation.");
-    throw err;
+  const handleViolationConfirm = async (violation, description) => {
+    try {
+      await set(push(ref(db, "violations")), {
+        patronId,
+        type: violation,
+        description: description.trim(),
+        transactionId: null,
+        bookId: null,
+        status: "active",
+        createdAt: serverTimestamp(),
+        createdBy: auth.currentUser?.uid ?? null,
+      });
+      toast.success("Violation added successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add violation.");
+      throw err; // keeps the modal open so they can retry
     }
   };
 
   const handleRemoveViolation = async (id) => {
-  try {
-    await update(ref(db, `violations/${id}`), {
-      status: "removed",
-      removedAt: serverTimestamp(),
-      removedBy: auth.currentUser?.uid ?? null,
-    });
-  } catch (err) {
-    console.error(err);
-    alert("Failed to remove violation.");
+    try {
+      await update(ref(db, `violations/${id}`), {
+        status: "removed",
+        removedAt: serverTimestamp(),
+        removedBy: auth.currentUser?.uid ?? null,
+      });
+      toast.success("Violation removed successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to remove violation.");
     }
   };
 

@@ -1,24 +1,18 @@
 import { ref, update, onValue, serverTimestamp } from "firebase/database";
 import { db, auth } from "./firebase";
 
-const bookRef = (bookId) => ref(db, `books/${bookId}`);
-
 export const canArchiveBook = (book) =>
   book.status !== "Borrowed" && book.status !== "Overdue";
 
-export const applyBookOverride = (book, override) => {
-  if (!book || !override) return book;
-  return {
-    ...book,
-    status: override.status ?? book.status,
-    borrowable: override.borrowable ?? book.borrowable,
-    previousStatus: override.previousStatus ?? null,
-    previousBorrowable: override.previousBorrowable ?? null,
-  };
+const updateBook = (book, fields) => {
+  if (book.key === undefined || book.key === null) {
+    return Promise.reject(new Error("Book was not found in the database."));
+  }
+  return update(ref(db, `books/${book.key}`), fields);
 };
 
 export const archiveBook = (book) =>
-  update(bookRef(book.id), {
+  updateBook(book, {
     status: "Archived",
     borrowable: false,
     previousStatus: book.status ?? "Available",
@@ -28,7 +22,7 @@ export const archiveBook = (book) =>
   });
 
 export const unarchiveBook = (book) =>
-  update(bookRef(book.id), {
+  updateBook(book, {
     status: book.previousStatus || "Available",
     borrowable: book.previousBorrowable ?? true,
     previousStatus: null,
@@ -38,7 +32,7 @@ export const unarchiveBook = (book) =>
   });
 
 export const setBookStatus = (book, status) =>
-  update(bookRef(book.id), {
+  updateBook(book, {
     status,
     borrowable:
       book.status === "Archived"
@@ -50,16 +44,14 @@ export const setBookStatus = (book, status) =>
     statusChangedBy: auth.currentUser?.uid ?? null,
   });
 
-export const listenToBook = (bookId, callback) =>
-  onValue(
-    bookRef(bookId),
-    (snap) => callback(snap.val()),
-    (err) => console.error(err),
-  );
-
-export const listenToBookOverrides = (callback) =>
+export const listenToBooks = (callback) =>
   onValue(
     ref(db, "books"),
-    (snap) => callback(snap.val() ?? {}),
+    (snap) => {
+      const books = Object.entries(snap.val() ?? {})
+        .filter(([, book]) => book && book.id && book.title)
+        .map(([key, book]) => ({ ...book, key }));
+      callback(books);
+    },
     (err) => console.error(err),
   );

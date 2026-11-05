@@ -10,7 +10,7 @@ import BookTable from "../components/BookTable";
 import { useState, useEffect } from "react";
 
 import data from "../data/dummy_data.json";
-import { applyBookOverride, listenToBookOverrides } from "../lib/bookActions";
+import { listenToBooks } from "../lib/bookActions";
 
 const Dashbboard = () => {
 const iconMap = {
@@ -22,13 +22,13 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const [overrides, setOverrides] = useState({});
+const [rtdbBooks, setRtdbBooks] = useState(null);
 
-useEffect(() => listenToBookOverrides(setOverrides), []);
+useEffect(() => listenToBooks(setRtdbBooks), []);
 
-const books = data.books.map((b) => applyBookOverride(b, overrides[b.id])).map((b) => ({
+const books = (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((b) => ({
   ...b,
-  genre: b.genre.join(", "),
+  genre: (b.genre ?? []).join(", "),
   borrowable: b.borrowable ? "Yes" : "No",
 }));
   const [searchTerm, setSearchTerm] = useState("");

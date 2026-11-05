@@ -16,24 +16,24 @@ import StarRating from "../../components/StarRating";
 
 import data from "../../data/dummy_data.json";
 import {
-  applyBookOverride,
   archiveBook,
   unarchiveBook,
   setBookStatus,
   canArchiveBook,
-  listenToBook,
+  listenToBooks,
 } from "../../lib/bookActions";
 
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const baseBook = data.books.find((b) => b.id === bookId);
-  const [override, setOverride] = useState(null);
-  const book = applyBookOverride(baseBook, override);
+  const [rtdbBooks, setRtdbBooks] = useState(null);
+  const book =
+    (rtdbBooks ?? []).find((b) => b.id === bookId) ??
+    data.books.find((b) => b.id === bookId);
   const [pendingStatus, setPendingStatus] = useState(null);
 
-  useEffect(() => listenToBook(bookId, setOverride), [bookId]);
+  useEffect(() => listenToBooks(setRtdbBooks), []);
   const borrowingHistory = data.transactions
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
@@ -146,7 +146,7 @@ const BookDetails = () => {
                 <p>Call Number: {book.callNumber}</p>
                 <p>Publication Year: {book.publicationYear}</p>
                 <p>Place of Publication: {book.placeOfPublication}</p>
-                <p>Genre: {book.genre.join(", ")}</p>
+                <p>Genre: {(book.genre ?? []).join(", ")}</p>
                 <p>Borrowable: {book.borrowable ? "Yes" : "No"}</p>
               </div>
             </div>

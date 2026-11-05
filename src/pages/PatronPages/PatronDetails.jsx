@@ -13,11 +13,12 @@ import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
 
 import data from "../../data/dummy_data.json";
+import { usePatrons } from "../../store/patronStore";
 
 const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
-  const patron = data.patrons.find((p) => p.id === patronId);
+  const patron = usePatrons().find((p) => p.id === patronId);
   const patronName = patron.name;
   const transactions = data.transactions
     .filter((t) => t.patronId === patronId)

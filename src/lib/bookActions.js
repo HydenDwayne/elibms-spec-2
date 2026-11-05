@@ -1,70 +1,65 @@
-const BOOK_KEY = "elibms.bookOverrides";
+import { ref, update, onValue, serverTimestamp } from "firebase/database";
+import { db, auth } from "./firebase";
 
-const readOverrides = () => {
-  try {
-    return JSON.parse(localStorage.getItem(BOOK_KEY)) || {};
-  } catch {
-    return {};
-  }
+const bookRef = (bookId) => ref(db, `books/${bookId}`);
+
+export const canArchiveBook = (book) =>
+  book.status !== "Borrowed" && book.status !== "Overdue";
+
+export const applyBookOverride = (book, override) => {
+  if (!book || !override) return book;
+  return {
+    ...book,
+    status: override.status ?? book.status,
+    borrowable: override.borrowable ?? book.borrowable,
+    previousStatus: override.previousStatus ?? null,
+    previousBorrowable: override.previousBorrowable ?? null,
+  };
 };
 
-const saveOverride = (id, fields) => {
-  const all = readOverrides();
-  all[id] = { ...(all[id] || {}), ...fields };
-  try {
-    localStorage.setItem(BOOK_KEY, JSON.stringify(all));
-  } catch {
-    return;
-  }
-};
-
-export const applyBookOverride = (book) => {
-  if (!book) return book;
-  return { ...book, ...(readOverrides()[book.id] || {}) };
-};
-
-export const archiveBook = (book) => {
-  if (book.status === "Archived") {
-    return { ok: false, message: "Book is already archived." };
-  }
-  if (book.status === "Borrowed" || book.status === "Overdue") {
-    return {
-      ok: false,
-      message: "Cannot archive a book that is currently borrowed.",
-    };
-  }
-  saveOverride(book.id, {
+export const archiveBook = (book) =>
+  update(bookRef(book.id), {
     status: "Archived",
-    previousStatus: book.status,
     borrowable: false,
-    previousBorrowable: book.borrowable,
+    previousStatus: book.status ?? "Available",
+    previousBorrowable: book.borrowable ?? true,
+    archivedAt: serverTimestamp(),
+    archivedBy: auth.currentUser?.uid ?? null,
   });
-  return { ok: true, message: "Book archived." };
-};
 
-export const unarchiveBook = (book) => {
-  if (book.status !== "Archived") {
-    return { ok: false, message: "Book is not archived." };
-  }
-  saveOverride(book.id, {
+export const unarchiveBook = (book) =>
+  update(bookRef(book.id), {
     status: book.previousStatus || "Available",
     borrowable: book.previousBorrowable ?? true,
     previousStatus: null,
     previousBorrowable: null,
+    unarchivedAt: serverTimestamp(),
+    unarchivedBy: auth.currentUser?.uid ?? null,
   });
-  return { ok: true, message: "Book restored." };
-};
 
-export const setBookStatus = (book, status) => {
-  if (book.status === status) {
-    return { ok: false, message: "Status is already " + status + "." };
-  }
-  const wasArchived = book.status === "Archived";
-  saveOverride(book.id, {
+export const setBookStatus = (book, status) =>
+  update(bookRef(book.id), {
     status,
-    borrowable: wasArchived ? (book.previousBorrowable ?? true) : book.borrowable,
+    borrowable:
+      book.status === "Archived"
+        ? (book.previousBorrowable ?? true)
+        : (book.borrowable ?? true),
     previousStatus: null,
     previousBorrowable: null,
+    statusChangedAt: serverTimestamp(),
+    statusChangedBy: auth.currentUser?.uid ?? null,
   });
-  return { ok: true, message: "Status changed to " + status + "." };
-};
+
+export const listenToBook = (bookId, callback) =>
+  onValue(
+    bookRef(bookId),
+    (snap) => callback(snap.val()),
+    (err) => console.error(err),
+  );
+
+export const listenToBookOverrides = (callback) =>
+  onValue(
+    ref(db, "books"),
+    (snap) => callback(snap.val() ?? {}),
+    (err) => console.error(err),
+  );

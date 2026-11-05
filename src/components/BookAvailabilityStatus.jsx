@@ -28,7 +28,7 @@ export default function BookAvailabilityStatus({ status = "Available", onChange 
   // 2. Accept the visible label text to update the button interface frame
   const handleAction = (actionType, labelText) => {
     setIsOpen(false);
-    setSelectedStatus(labelText); // Set the button text to the chosen option
+    if (!onChange) setSelectedStatus(labelText); // Set the button text to the chosen option
     console.log(`Triggered action: ${actionType}`);
     if (onChange) onChange(labelText);
   };
@@ -58,7 +58,7 @@ export default function BookAvailabilityStatus({ status = "Available", onChange 
           focus:outline-none"
       >
         {/* 3. Display the selected item text state */}
-        <span>{selectedStatus}</span>
+        <span>{onChange ? status : selectedStatus}</span>
         <FiChevronDown 
           className={`text-sm transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} 
         />

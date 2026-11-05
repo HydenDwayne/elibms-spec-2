@@ -7,10 +7,10 @@ import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import data from "../data/dummy_data.json";
-import { applyBookOverride } from "../lib/bookActions";
+import { applyBookOverride, listenToBookOverrides } from "../lib/bookActions";
 
 const Dashbboard = () => {
 const iconMap = {
@@ -22,7 +22,11 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const books = data.books.map(applyBookOverride).map((b) => ({
+const [overrides, setOverrides] = useState({});
+
+useEffect(() => listenToBookOverrides(setOverrides), []);
+
+const books = data.books.map((b) => applyBookOverride(b, overrides[b.id])).map((b) => ({
   ...b,
   genre: b.genre.join(", "),
   borrowable: b.borrowable ? "Yes" : "No",

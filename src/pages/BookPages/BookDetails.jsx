@@ -2,12 +2,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import BookAvailabilityStatus from "../../components/BookAvailabilityStatus";
 import ArchiveBook from "../../components/ArchiveBook";
+import ChangeBookStatus from "../../components/ChangeBookStatus";
 import MainButton from "../../components/MainButton";
 import SecondaryButton from "../../components/SecondaryButton";
 import BorrowingHistoryTable from "../../components/BorrowingHistoryTable";
 import BookStatus from "../../components/BookNFCStatus";
 import coverFallback from "../../assets/book_default.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { FaStar } from "react-icons/fa";
 import StarRating from "../../components/StarRating";
@@ -18,16 +20,20 @@ import {
   archiveBook,
   unarchiveBook,
   setBookStatus,
+  canArchiveBook,
+  listenToBook,
 } from "../../lib/bookActions";
 
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const [book, setBook] = useState(() =>
-    applyBookOverride(data.books.find((b) => b.id === bookId)),
-  );
-  const [notice, setNotice] = useState("");
+  const baseBook = data.books.find((b) => b.id === bookId);
+  const [override, setOverride] = useState(null);
+  const book = applyBookOverride(baseBook, override);
+  const [pendingStatus, setPendingStatus] = useState(null);
+
+  useEffect(() => listenToBook(bookId, setOverride), [bookId]);
   const borrowingHistory = data.transactions
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
@@ -51,20 +57,41 @@ const BookDetails = () => {
 
   const isArchived = book.status === "Archived";
 
-  const handleArchiveConfirm = (actionType) => {
-    const result =
-      actionType === "unarchive" ? unarchiveBook(book) : archiveBook(book);
-    setNotice(result.message);
-    if (result.ok) {
-      setBook(applyBookOverride(data.books.find((b) => b.id === bookId)));
+  const handleArchiveConfirm = async (actionType) => {
+    const isUnarchiving = actionType === "unarchive";
+
+    if (!isUnarchiving && !canArchiveBook(book)) {
+      toast.error("Cannot archive a book that is currently borrowed.");
+      return;
+    }
+
+    try {
+      if (isUnarchiving) {
+        await unarchiveBook(book);
+        toast.success("Book unarchived successfully.");
+      } else {
+        await archiveBook(book);
+        toast.success("Book archived successfully.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        isUnarchiving ? "Failed to unarchive book." : "Failed to archive book.",
+      );
     }
   };
 
-  const handleStatusChange = (status) => {
-    const result = setBookStatus(book, status);
-    setNotice(result.message);
-    if (result.ok) {
-      setBook(applyBookOverride(data.books.find((b) => b.id === bookId)));
+  const handleStatusRequest = (status) => {
+    if (status !== book.status) setPendingStatus(status);
+  };
+
+  const handleStatusConfirm = async (status) => {
+    try {
+      await setBookStatus(book, status);
+      toast.success(`Book status changed to ${status}.`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to change book status.");
     }
   };
 
@@ -87,9 +114,8 @@ const BookDetails = () => {
         <div className="pr-10">
           <p>Availability Status</p>
           <BookAvailabilityStatus
-            key={book.status}
             status={book.status}
-            onChange={handleStatusChange}
+            onChange={handleStatusRequest}
           />
         </div>
       </div>
@@ -184,10 +210,15 @@ const BookDetails = () => {
             bookTitle={book.title}
             action={isArchived ? "unarchive" : "archive"}
           />
+          <ChangeBookStatus
+            isOpen={pendingStatus !== null}
+            onClose={() => setPendingStatus(null)}
+            onConfirm={handleStatusConfirm}
+            bookTitle={book.title}
+            currentStatus={book.status}
+            newStatus={pendingStatus ?? ""}
+          />
         </div>
-        {notice && (
-          <p className="col-span-2 pt-3 text-sm text-[#53657A]">{notice}</p>
-        )}
         <div className="col-span-2 mt-5">
           <p>Recent Transactions</p>
           <BorrowingHistoryTable transactions={borrowingHistory} />

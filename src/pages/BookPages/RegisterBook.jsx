@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import FormInput from "../../components/FormInput";
+import FormSelect from "../../components/FormSelect";
 import SecondaryButton from "../../components/SecondaryButton";
 import BookStatus from "../../components/BookNFCStatus";
 import { LuUpload, LuNfc } from "react-icons/lu";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { useState, useRef } from "react";
-import { ref, push, update, get, serverTimestamp } from "firebase/database";
+import { ref, update, get, runTransaction } from "firebase/database";
 import { db, auth } from "../../lib/firebase";
+import toast from "react-hot-toast";
 
 const resizeImage = (file, maxSize = 400, quality = 0.8) =>
   new Promise((resolve, reject) => {
@@ -32,6 +34,28 @@ const resizeImage = (file, maxSize = 400, quality = 0.8) =>
     img.src = url;
   });
 
+  const currentYear = new Date().getFullYear();
+  const yearOptions = [];
+  for (let y = currentYear; y >= 1800; y--) {
+    yearOptions.push(String(y));
+  }
+
+  const getNextKey = (value) => {
+    let next = 0;
+    if (value) {
+      Object.keys(value).forEach((key) => {
+        if (Number(key) >= next) {
+          next = Number(key) + 1;
+        }
+      });
+    }
+    return next;
+  };
+
+  const addOne = (current) => {
+    return (current || 31) + 1;
+  };
+
 const RegisterBook = () => {
   const navigate = useNavigate();
   const [isbn, setIsbn] = useState("");
@@ -42,27 +66,18 @@ const RegisterBook = () => {
   const [publicationYear, setPublicationYear] = useState("");
   const [publicationPlace, setPublicationPlace] = useState("");
   const [genre, setGenre] = useState("");
+  const [errors, setErrors] = useState({});
 
   const fileRef = useRef(null);
   const [coverFile, setCoverFile] = useState(null);
-  const [coverPreview, setCoverPreview] = useState("");
 
   const handleCoverChange = (e) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    if (!file.type.startsWith("image/")) return setError("Please choose an image file.");
-    if (file.size > 5 * 1024 * 1024) return setError("Image must be under 5 MB.");
-    if (coverPreview) URL.revokeObjectURL(coverPreview);
-    setError("");
+    if (!file.type.startsWith("image/")) return toast.error("Please choose an image file.");
+    if (file.size > 5 * 1024 * 1024) return toast.error("Image must be under 5 MB.");
     setCoverFile(file);
-    setCoverPreview(URL.createObjectURL(file));
-  };
-
-  const handleRemoveCover = () => {
-    if (coverPreview) URL.revokeObjectURL(coverPreview);
-    setCoverFile(null);
-    setCoverPreview("");
   };
 
   const [borrowable, setBorrowable] = useState([]);
@@ -79,6 +94,8 @@ const RegisterBook = () => {
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
 
+    setErrors({ ...errors, borrowable: false });
+
     if (checked) {
       setActiveField(value);
       setBorrowable([value]);
@@ -91,45 +108,82 @@ const RegisterBook = () => {
   const handleSave = async () => {
     setError("");
 
-    const trimmedTag = tagId.trim();
+    const trimmedTag = "tagID-" + tagId;
+    const fullCallNumber = "B-" + callNumber;
     const year = Number(publicationYear);
 
-    if (!title.trim() || !author.trim() || !isbn.trim() || !callNumber.trim()) {
-      setError("Title, author, ISBN and call number are required.");
-      return;
-    }
-    if (!Number.isInteger(year) || year < 1000 || year > new Date().getFullYear()) {
-      setError("Enter a valid 4-digit publication year.");
-      return;
-    }
-    if (borrowable.length === 0) {
-      setError("Please choose whether the book is borrowable.");
-      return;
-    }
-    if (!trimmedTag || /[.$#[\]/]/.test(trimmedTag)) {
-      setError("Enter a valid tag ID (no . $ # [ ] /).");
-      return;
-    }
+    const newErrors = {};                                   
+      if (!isbn.trim()) {                                     
+        newErrors.isbn = true;                                
+      }                                                       
+      if (!title.trim()) {                                    
+        newErrors.title = true;                               
+      }     
+      if (!author.trim()) {
+        newErrors.author = true;
+      }
+      if (callNumber.length !== 4) {
+        newErrors.callNumber = true;
+      }
+      if (!synopsis.trim()) {
+        newErrors.synopsis = true;
+      }
+      if (!genre.trim()) {
+        newErrors.genre = true;
+      } 
+      if (!publicationYear) {
+        newErrors.publicationYear = true;
+      }   
+      if (borrowable.length === 0) {
+        newErrors.borrowable = true;
+      }
+      if (tagId.length !== 6) {
+        newErrors.tagId = true;
+      }  
+      if (Object.keys(newErrors).length > 0) {                
+        setErrors(newErrors);                                 
+        toast.error("Please fill in the highlighted fields.");
+        return;                                               
+      }                                                       
+     
+    setErrors({});                                          
 
     setIsSaving(true);
     try {
-      const tagSnap = await get(ref(db, `nfcTags/${trimmedTag}`));
-      if (tagSnap.exists()) {
-        setError("This tag is already linked to another item.");
-        return;
+      const tagsSnap = await get(ref(db, "nfcTags"));
+      const tagsValue = tagsSnap.exists() ? tagsSnap.val() : null;
+
+      let tagExists = false;
+      if (tagsValue) {
+        Object.values(tagsValue).forEach((tag) => {
+        if (tag && tag.tagId === trimmedTag) {
+          tagExists = true;
+        }
+        });
       }
 
-      // (a) NEW: shrink the chosen image into a small text string (null if none chosen)
+      if (tagExists) {
+        setErrors({ tagId: true });
+        toast.error("This tag is already linked to another item.");
+        return;
+      }
+  
       const coverData = coverFile ? await resizeImage(coverFile) : null;
 
-      const key = push(ref(db, "books")).key;
+      const counterResult = await runTransaction(ref(db, "counters/books"), addOne);
+      const nextNumber = counterResult.snapshot.val() - 1;
+
+      const newId = "BK-" + String(nextNumber).padStart(4, "0");
+      const bookKey = nextNumber - 1;
+      const tagKey = getNextKey(tagsValue);
 
       await update(ref(db), {
-        [`books/${key}`]: {
+        [`books/${bookKey}`]: {
+          id: newId,
           title: title.trim(),
           author: author.trim(),
           isbn: isbn.trim(),
-          callNumber: callNumber.trim(),
+          callNumber: fullCallNumber,
           publicationYear: year,
           placeOfPublication: publicationPlace.trim(),
           genre: genre.split(",").map((g) => g.trim()).filter(Boolean),
@@ -137,27 +191,26 @@ const RegisterBook = () => {
           status: "Available",
           tagId: trimmedTag,
           nfcStatus: "Linked",
-          // (b) CHANGED: no more bookCover text input, plus a hasCover flag
           cover: `https://covers.openlibrary.org/b/isbn/${isbn.trim()}-L.jpg?default=false`,
-          hasCover: Boolean(coverData),
+          coverFallback: "src/assets/book_default.jpg",
           synopsis: synopsis.trim(),
           dateAdded: new Date().toISOString().slice(0, 10),
-          createdAt: serverTimestamp(),
-          createdBy: auth.currentUser?.uid ?? null,
+          hasCover: Boolean(coverData),
         },
-        // (c) NEW: save the image under its own path (only if one was chosen)
-        ...(coverData && { [`bookCovers/${key}`]: coverData }),
-        [`nfcTags/${trimmedTag}`]: {
-          type: "book",
-          refId: key,
-          status: "Linked",
-        },
-      });
+      ...(coverData && { [`bookCovers/${newId}`]: coverData }),
+      [`nfcTags/${tagKey}`]: {
+        tagId: trimmedTag,
+        type: "book",
+        refId: newId,
+        status: "Linked",
+      },
+    })
 
+      toast.success("Book registered successfully (" + newId + ")");
       navigate("/books");
     } catch (err) {
       console.error(err);
-      setError("Failed to save the book. Please try again.");
+      toast.error("Failed to save the book. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -185,48 +238,78 @@ const RegisterBook = () => {
             label="ISBN"
             length="w-full"
             value={isbn}
-            onChange={setIsbn}
+            onChange={(value) => {                   
+              setIsbn(value);                       
+              setErrors({ ...errors, isbn: false });
+            }}                                       
             placeholder=""
+            numbersOnly={true}
+            error={errors.isbn}
           />
           <FormInput
             label="Call No."
             length="w-full"
             value={callNumber}
-            onChange={setCallNumber}
-            placeholder=""
+            onChange={(value) => {
+              setCallNumber(value);
+              setErrors({ ...errors, callNumber: false });
+            }}
+            error={errors.callNumber}
+            numbersOnly={true}
+            maxLength={4}
+            prefix="B-"
+            placeholder="1242"
           />
         </div>
         <FormInput
           label="Author"
           length="w-full"
           value={author}
-          onChange={setAuthor}
+          onChange={(value) => {                   
+            setAuthor(value);                        
+            setErrors({ ...errors, author: false }); 
+          }}                                       
           placeholder=""
+          error={errors.author}
         />
         <FormInput
           label="Title"
           length="w-full"
           value={title}
-          onChange={setTitle}
+          onChange={(value) => {
+            setTitle(value);
+            setErrors({ ...errors, title: false });
+          }}
           placeholder=""
+          error={errors.title}
         />
         <FormInput
           label="Synopsis"
           length="w-full"
           value={synopsis}
-          onChange={setSynopsis}
+          onChange={(value) => {
+            setSynopsis(value);
+            setErrors({ ...errors, synopsis: false });
+          }}
           placeholder=""
+          error={errors.synopsis}
         />
 
         {/* Sub-grid for Publication Year and Genre */}
         <div className="grid grid-cols-2 gap-x-4">
           <div className="grid grid-cols-2 gap-x-4">
-            <FormInput
+            <FormSelect
               label="Publication Year"
-              length="w-full"
               value={publicationYear}
-              onChange={setPublicationYear}
-              placeholder=""
+              onChange={(value) => {
+                setPublicationYear(value);
+                setErrors({ ...errors, publicationYear: false });
+              }}
+              options={yearOptions}
+              placeholder="Select year"
+              numbersOnly={true}
+              maxLength={4}
+              error={errors.publicationYear}
             />
             <FormInput
               label="Place of Publication"
@@ -240,14 +323,18 @@ const RegisterBook = () => {
             label="Genre"
             length="w-full"
             value={genre}
-            onChange={setGenre}
+            onChange={(value) => {
+              setGenre(value);
+              setErrors({ ...errors, genre: false });
+            }}
             placeholder=""
+            error={errors.genre}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-x-4">
           <div className="grid grid-rows-2 items-center text-sm text-[#545F71] self-end pb-2">
-            <p className="mb-1 text-sm text-[#545F71]">Borrowable</p>
+            <p className={`mb-1 text-sm ${errors.borrowable ? "text-red-500" : "text-[#545F71]"}`}>Borrowable</p>
             {/* Checkbox 1 */}
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
@@ -259,7 +346,7 @@ const RegisterBook = () => {
                   activeField === "yes"
                 }
                 onChange={handleCheckboxChange}
-                className="w-4 h-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
+                className={`w-4 h-4 rounded text-blue-600 ${errors.borrowable ? "outline outline-1 outline-red-500" : ""}`}
               />
               Yes
             </label>
@@ -275,7 +362,7 @@ const RegisterBook = () => {
                   activeField === "no"
                 }
                 onChange={handleCheckboxChange}
-                className="w-4 h-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
+                className={`w-4 h-4 rounded text-blue-600 ${errors.borrowable ? "outline outline-1 outline-red-500" : ""}`}
               />
               No
             </label>
@@ -283,22 +370,25 @@ const RegisterBook = () => {
           <div className="relative w-full">
             <p className="mb-1 text-sm text-[#545F71]">Upload Book Cover</p>
             <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleCoverChange} />
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              className="flex h-9 w-full items-center justify-between rounded-sm border border-[#545F71] bg-white px-3 text-xs text-[#53657a]"
-            >
-              <span className="truncate">{coverFile ? coverFile.name : "Select image..."}</span>
-              <LuUpload size={16} className="text-gray-400" />
-            </button>
-            {coverPreview && (
-              <div className="mt-2 flex items-center gap-3">
-                <img src={coverPreview} alt="cover preview" className="h-20 rounded-sm object-cover" />
-                <button type="button" onClick={handleRemoveCover} className="text-xs text-red-600 underline">
-                  Remove
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="flex h-9 w-full items-center justify-between rounded-sm border border-[#545F71] bg-white px-3 text-xs text-[#53657a]">
+                <span className="truncate">{coverFile ? coverFile.name : "Select image..."}</span>
+                <LuUpload size={16} className="text-gray-400" />
+              </button>
+
+              {coverFile && (
+                <button
+                  type="button"
+                  onClick={() => setCoverFile(null)}
+                  className="text-lg leading-none text-[#545F71] hover:text-[#A35139]">
+                  ×
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -310,8 +400,15 @@ const RegisterBook = () => {
         <FormInput
           label="Tag ID (temporary)"
           value={tagId}
-          onChange={setTagId}
-          placeholder="e.g. tagID-204100"
+          onChange={(value) => {                   
+            setTagId(value);                        
+            setErrors({ ...errors, tagId: false }); 
+          }}                                       
+          error={errors.tagId}
+          numbersOnly={true}
+          maxLength={6}
+          prefix="tagID-"
+          placeholder="204100"
         />
       </div>
       <div className="grid grid-cols-2 gap-x-25">

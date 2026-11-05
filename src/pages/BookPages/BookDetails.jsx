@@ -28,8 +28,16 @@ const BookDetails = () => {
 
   useEffect(() => {
     if (dummyBook) return;
-    const unsubscribe = onValue(ref(db, `books/${bookId}`), (snap) => {
-      setDbBook(snap.exists() ? { id: bookId, ...snap.val() } : null);
+    const unsubscribe = onValue(ref(db, "books"), (snap) => {
+      let found = null;
+      if (snap.exists()) {
+        Object.values(snap.val()).forEach((b) => {
+          if (b && b.id === bookId) {
+            found = b;
+          }
+        });
+      }
+      setDbBook(found);
       setLoaded(true);
     });
     return unsubscribe;

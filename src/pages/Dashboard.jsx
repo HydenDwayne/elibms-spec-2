@@ -32,7 +32,7 @@ const [dbBooks, setDbBooks] = useState([]);
   return unsubscribe;
 }, []);
 
-const books = [...data.books, ...dbBooks].map((b) => ({
+const books = dbBooks.map((b) => ({
   ...b,
   genre: Array.isArray(b.genre) ? b.genre.join(", ") : "",
   borrowable: b.borrowable ? "Yes" : "No",

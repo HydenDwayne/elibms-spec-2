@@ -11,7 +11,7 @@ import pfp from "../../assets/default.webp";
 import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
 import { useState, useEffect } from "react";
-import { ref, push, set, update, onValue, query, orderByChild, equalTo, serverTimestamp } from "firebase/database";
+import { ref, push, set, remove, onValue, query, orderByChild, equalTo, runTransaction } from "firebase/database";
 import { db, auth } from "../../lib/firebase";
 import toast from "react-hot-toast";
 
@@ -34,11 +34,11 @@ const PatronDetails = () => {
   useEffect(() => {
     const q = query(ref(db, "violations"), orderByChild("patronId"), equalTo(patronId));
     const unsubscribe = onValue(q, (snap) => {
-      const data = snap.val() ?? {};
+      const val = snap.val() ?? {};
       setViolationsList(
-        Object.entries(data)
-          .map(([id, v]) => ({ id, ...v }))
-          .filter((v) => v.status === "active"),
+        Object.entries(val)
+        .map(([key, v]) => ({ ...v, id: v.id ?? key, key }))
+        .filter((v) => v.status !== "removed"),
       );
     });
     return unsubscribe;
@@ -55,31 +55,37 @@ const PatronDetails = () => {
 
   const handleViolationConfirm = async (violation, description) => {
     try {
-      await set(push(ref(db, "violations")), {
+      const result = await runTransaction(
+        ref(db, "counters/violations"),
+        (current) => (current ?? 30) + 1,
+      );
+    
+      if (!result.committed) throw new Error("Counter update failed");
+
+      const n = result.snapshot.val();                      
+      const id = `VIO-${String(n).padStart(3, "0")}`;      
+
+      await set(ref(db, `violations/${n - 1}`), {
+        id,
         patronId,
+        transactionId: "",
+        bookId: "",
         type: violation,
         description: description.trim(),
-        transactionId: null,
-        bookId: null,
-        status: "active",
-        createdAt: serverTimestamp(),
-        createdBy: auth.currentUser?.uid ?? null,
+        dateRecorded: new Date().toISOString().slice(0, 10),
       });
+
       toast.success("Violation added successfully.");
     } catch (err) {
       console.error(err);
       toast.error("Failed to add violation.");
-      throw err; // keeps the modal open so they can retry
+      throw err;
     }
   };
 
-  const handleRemoveViolation = async (id) => {
+  const handleRemoveViolation = async (key) => {
     try {
-      await update(ref(db, `violations/${id}`), {
-        status: "removed",
-        removedAt: serverTimestamp(),
-        removedBy: auth.currentUser?.uid ?? null,
-      });
+      await remove(ref(db, `violations/${key}`));
       toast.success("Violation removed successfully.");
     } catch (err) {
       console.error(err);

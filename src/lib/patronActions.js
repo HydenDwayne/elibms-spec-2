@@ -1,46 +1,36 @@
-const PATRON_KEY = "elibms.patronOverrides";
+import { ref, update, onValue, serverTimestamp } from "firebase/database";
+import { db, auth } from "./firebase";
 
-const readOverrides = () => {
-  try {
-    return JSON.parse(localStorage.getItem(PATRON_KEY)) || {};
-  } catch {
-    return {};
-  }
-};
-
-const saveOverride = (id, fields) => {
-  const all = readOverrides();
-  all[id] = { ...(all[id] || {}), ...fields };
-  try {
-    localStorage.setItem(PATRON_KEY, JSON.stringify(all));
-  } catch {
-    return;
-  }
-};
-
-export const applyPatronOverride = (patron) => {
-  if (!patron) return patron;
-  return { ...patron, ...(readOverrides()[patron.id] || {}) };
-};
-
-export const suspendPatron = (patron) => {
-  if (patron.status === "Suspended") {
-    return { ok: false, message: "Patron is already suspended." };
-  }
-  saveOverride(patron.id, {
+export const suspendPatron = (patronId) =>
+  update(ref(db, `patrons/${patronId}`), {
     status: "Suspended",
-    suspendedAt: new Date().toISOString(),
+    suspendedAt: serverTimestamp(),
+    suspendedBy: auth.currentUser?.uid ?? null,
   });
-  return { ok: true, message: "Patron suspended." };
-};
 
-export const liftSuspension = (patron) => {
-  if (patron.status !== "Suspended") {
-    return { ok: false, message: "Patron is not suspended." };
-  }
-  saveOverride(patron.id, {
+export const liftSuspension = (patronId) =>
+  update(ref(db, `patrons/${patronId}`), {
     status: "Active",
-    suspendedAt: null,
+    liftedAt: serverTimestamp(),
+    liftedBy: auth.currentUser?.uid ?? null,
   });
-  return { ok: true, message: "Suspension lifted." };
-};
+
+export const listenToPatronStatus = (patronId, callback) =>
+  onValue(
+    ref(db, `patrons/${patronId}/status`),
+    (snap) => callback(snap.val()),
+    (err) => console.error(err),
+  );
+
+export const listenToPatronStatuses = (callback) =>
+  onValue(
+    ref(db, "patrons"),
+    (snap) => {
+      const statuses = {};
+      Object.entries(snap.val() ?? {}).forEach(([id, patron]) => {
+        if (patron?.status) statuses[id] = patron.status;
+      });
+      callback(statuses);
+    },
+    (err) => console.error(err),
+  );

@@ -36,12 +36,10 @@ const BookReviews = () => {
   const { bookId } = useParams();
 
   // Placeholder data -- replace with the selected book / patrons / reviews from your backend.
-  const dummyBook = data.books.find((b) => b.id === bookId);
   const [dbBook, setDbBook] = useState(null);
   const [loaded, setLoaded] = useState(false);
-
+ 
   useEffect(() => {
-    if (dummyBook) return;
     const unsubscribe = onValue(ref(db, "books"), (snap) => {
       let found = null;
       if (snap.exists()) {
@@ -55,10 +53,21 @@ const BookReviews = () => {
       setLoaded(true);
     });
     return unsubscribe;
-  }, [bookId, dummyBook]);
+  }, [bookId]);
 
-  const book = dummyBook ?? dbBook;
-  const loading = !dummyBook && !loaded;
+  const book = dbBook;
+  const loading = !loaded;
+
+  const [coverData, setCoverData] = useState("");
+
+  useEffect(() => {
+    if (!book || !book.hasCover) return;
+    const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
+      setCoverData(snap.exists() ? snap.val() : "");
+    });
+    return unsubscribe;
+  }, [bookId, book]);
+
   const patrons = data.patrons;
   const [reviews, setReviews] = useState(
     data.reviews.filter((r) => r.bookId === bookId),
@@ -157,7 +166,7 @@ const BookReviews = () => {
         <div className="flex flex-col items-center">
           <div className="flex h-90 w-88 shrink-0 justify-center">
             <img
-              src={book.cover || coverFallback}
+              src={coverData || book.cover || coverFallback}
               alt={book.title}
               onError={(e) => {
                 e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too

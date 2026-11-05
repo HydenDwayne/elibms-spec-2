@@ -20,14 +20,12 @@ const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const dummyBook = data.books.find((b) => b.id === bookId);
   const [dbBook, setDbBook] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
   const [coverData, setCoverData] = useState("");
-
+  
   useEffect(() => {
-    if (dummyBook) return;
     const unsubscribe = onValue(ref(db, "books"), (snap) => {
       let found = null;
       if (snap.exists()) {
@@ -41,10 +39,10 @@ const BookDetails = () => {
       setLoaded(true);
     });
     return unsubscribe;
-  }, [bookId, dummyBook]);
+  }, [bookId]);
 
-  const book = dummyBook ?? dbBook;
-  const loading = !dummyBook && !loaded;
+  const book = dbBook;
+  const loading = !loaded;
 
   useEffect(() => {
     if (!book || !book.hasCover) return;

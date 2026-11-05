@@ -1,4 +1,3 @@
-import { useState } from "react";
 import data from "../data/dummy_data.json";
 
 const statusStyles = {
@@ -32,12 +31,12 @@ const statusStyles = {
   },
 };
 
-// Local sample data matching your structure (make sure percentages add up to 100)
+// Default snapshot used when no filtered inventory is passed in
 const INITIAL_INVENTORY = data.dashboard.inventory;
 
-function BookInventoryStatus() {
-  // Initialize state directly with the local data object
-  const [inventory] = useState(INITIAL_INVENTORY);
+function BookInventoryStatus({ inventory: inventoryProp }) {
+  // Use filtered inventory when provided, otherwise the default snapshot
+  const inventory = inventoryProp ?? INITIAL_INVENTORY;
 
   if (!inventory) return null;
 

@@ -41,20 +41,19 @@ const DUMMY_DATE_OPTIONS = [
   { value: "dec", label: "Dec" },
 ];
 
+// Statuses that exist on transactions
 const DUMMY_CATEGORIES = [
-  { value: "available", label: "Available" },
   { value: "borrowed", label: "Borrowed" },
   { value: "returned", label: "Returned" },
   { value: "overdue", label: "Overdue" },
-  { value: "archived", label: "Archived" },
 ];
 
-/* Default Initial Selected Filter Values */
+/* Default Initial Selected Filter Values (no filtering) */
 const INITIAL_FILTERS = {
-  dateFrom: "jan",
-  dateTo: "jun",
+  dateFrom: "",
+  dateTo: "",
   patron: "",
-  category: "available",
+  category: "",
 };
 
 const EMPTY = { dateFrom: "", dateTo: "", patron: "", category: "" };
@@ -156,6 +155,7 @@ export default function ReportFilters({
         </div>
       </div>
 
+      {/* Status */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="rf-category" className={labelCls}>Status</label>
         <select
@@ -164,7 +164,7 @@ export default function ReportFilters({
           onChange={update("category")}
           className={`${selectCls} w-50`}
         >
-          <option value="" />
+          <option value="">All</option>
           {categories.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}

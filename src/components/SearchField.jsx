@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaFilter } from "react-icons/fa6";
 
-function SearchField({ value, onChange, filter, onFilterChange, placeholder, isBooks }) {
-  const [showFilters, setShowFilters] = useState(false);
+const BOOK_FILTERS = ["All", "Title", "Author", "ISBN", "Genre"];
 
-  const filters = ["All", "Title", "Author", "ISBN", "Genre"];
+function SearchField({
+  value,
+  onChange,
+  filter,
+  onFilterChange,
+  placeholder,
+  isBooks,
+  filterOptions, // optional: custom dropdown options for other pages
+}) {
+  const [showFilters, setShowFilters] = useState(false);
+  const wrapperRef = useRef(null);
+
+  // Custom options win; otherwise books get the book filters; otherwise no dropdown
+  const filters = filterOptions ?? (isBooks ? BOOK_FILTERS : null);
+
+  // Close the dropdown when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowFilters(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapperRef}>
       {/* For Search Input */}
       <div className="relative">
         <input
@@ -30,7 +53,7 @@ function SearchField({ value, onChange, filter, onFilterChange, placeholder, isB
             duration-200"
         />
 
-        {isBooks && (
+        {filters && (
           <button
             type="button"
             onClick={() => setShowFilters(!showFilters)}
@@ -48,7 +71,7 @@ function SearchField({ value, onChange, filter, onFilterChange, placeholder, isB
       </div>
 
       {/* For Filter Dropdown options */}
-      {isBooks && showFilters && (
+      {filters && showFilters && (
         <div className="absolute right-0 z-50 mt-1 w-[200px] overflow-hidden rounded-[4px] border border-[#A35139] bg-white shadow-md">
           {filters.map((item) => (
             <button

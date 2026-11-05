@@ -60,7 +60,7 @@ const PatronDetails = () => {
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
   const [isViolationModalOpen, setIsViolationModalOpen] = useState(false);
 
-
+  
   const handleAddViolation = () => {
     setIsViolationModalOpen(true);
   };

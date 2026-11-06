@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { FiEdit, FiCamera, FiCheck, FiX } from "react-icons/fi";
 import { updatePassword, verifyBeforeUpdateEmail } from "firebase/auth";
 import pfp from "../../assets/default.webp";
 import { auth } from "../../lib/firebase";
 import { useLibrarian } from "../../components/LibrarianContext";
+import { uploadImage, UPLOAD_PRESETS } from "../../lib/cloudinary";
 import data from "../../data/dummy_data.json";
 import { Helmet } from "react-helmet-async";
 
@@ -24,23 +26,6 @@ const authMessage = (err) =>
   err.code === "auth/requires-recent-login"
     ? "For security, please log out and log in again, then retry."
     : "Couldn't update. Please try again.";
-
-const resizeImage = (file, size = 256) =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const scale = Math.min(1, size / Math.max(img.width, img.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/jpeg", 0.8));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
 
 function SettingRow({
   label,
@@ -197,14 +182,44 @@ const SettingsPage = () => {
 
   const required = (label) => (v) => (v.trim() ? "" : `${label} is required`);
 
+  const [isUploadingPicture, setIsUploadingPicture] = useState(false);
+
   const handlePictureChange = async (e) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    await updateLibrarian({ avatar: await resizeImage(file) });
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be 5 MB or smaller.");
+      return;
+    }
+
+    setIsUploadingPicture(true);
+    try {
+      const url = await uploadImage(file, UPLOAD_PRESETS.librarian);
+      await updateLibrarian({ avatar: url });
+      toast.success("Profile picture updated successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload profile picture.");
+    } finally {
+      setIsUploadingPicture(false);
+    }
   };
 
-  const handleRemovePicture = () => updateLibrarian({ avatar: null });
+  const handleRemovePicture = async () => {
+    try {
+      await updateLibrarian({ avatar: null });
+      toast.success("Profile picture removed.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to remove profile picture.");
+    }
+  };
 
   if (!librarian)
     return (
@@ -248,14 +263,15 @@ const SettingsPage = () => {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="mt-4 text-xs text-[#c96d45] underline"
+              disabled={isUploadingPicture}
+              className="mt-4 text-xs text-[#c96d45] underline disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Change Profile Picture
+              {isUploadingPicture ? "Uploading..." : "Change Profile Picture"}
             </button>
             <button
               type="button"
               onClick={handleRemovePicture}
-              disabled={!librarian.avatar}
+              disabled={!librarian.avatar || isUploadingPicture}
               className="mt-2 text-xs text-red-600 underline disabled:cursor-not-allowed disabled:opacity-40"
             >
               Remove

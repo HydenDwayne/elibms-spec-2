@@ -35,6 +35,15 @@ export const liftSuspension = (patron) => {
   });
 };
 
+export const updatePatronPhoto = (patron, photoUrl) => {
+  const user = requireUser();
+  return update(patronRef(patron), {
+    photoUrl,
+    photoUpdatedAt: serverTimestamp(),
+    photoUpdatedBy: user.uid,
+  });
+};
+
 /* ---------- Listeners ---------- */
 
 /**

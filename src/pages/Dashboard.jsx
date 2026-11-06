@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Widget from "../components/DashboardWidgets";
 import Dropdown from "../components/QuickActionDropdown";
 import {
@@ -13,9 +13,6 @@ import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
 import { useLibrarian } from "../components/LibrarianContext";
-import { useEffect } from "react";
-import { ref, onValue } from "firebase/database";
-import { db } from "../lib/firebase";
 import { Helmet } from "react-helmet-async";
 
 import data from "../data/dummy_data.json";
@@ -34,12 +31,6 @@ const widgetData = data.dashboard.widgets.map((w) => ({
   icon: iconMap[w.icon],
 }));
 
-const books = data.books.map((b) => ({
-  ...b,
-  genre: b.genre.join(", "),
-  borrowable: b.borrowable ? "Yes" : "No",
-}));
-
 const fieldMap = {
   All: ["title", "author", "isbn", "genre"],
   Title: ["title"],
@@ -52,33 +43,22 @@ const STATUS_OPTIONS = ["Available", "Borrowed", "Overdue", "Archived"];
 
 const Dashboard = () => {
   const { librarian } = useLibrarian();
-  const iconMap = {
-    FiBook: <FiBook className="text-xl" />,
-    PiBooks: <PiBooks className="text-xl" />,
-    FiBookmark: <FiBookmark className="text-xl text-white" />,
-    FiAlertCircle: <FiAlertCircle className="text-xl" />,
-    FiUsers: <FiUsers className="text-xl" />,
-  };
-  const widgetData = data.dashboard.widgets.map((w) => ({
-    ...w,
-    icon: iconMap[w.icon],
-  }));
-
   const [rtdbBooks, setRtdbBooks] = useState(null);
-
-  useEffect(() => listenToBooks(setRtdbBooks), []);
-
-  const books = (
-    rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books
-  ).map((b) => ({
-    ...b,
-    genre: (b.genre ?? []).join(", "),
-    borrowable: b.borrowable ? "Yes" : "No",
-  }));
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+
+  useEffect(() => listenToBooks(setRtdbBooks), []);
+
+  const books = useMemo(
+    () =>
+      (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((b) => ({
+        ...b,
+        genre: (b.genre ?? []).join(", "),
+        borrowable: b.borrowable ? "Yes" : "No",
+      })),
+    [rtdbBooks],
+  );
 
   const filteredBooks = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
@@ -97,7 +77,7 @@ const Dashboard = () => {
 
       return matchesSearch && matchesStatus;
     });
-  }, [searchTerm, selectedFilter, statusFilter]);
+  }, [books, searchTerm, selectedFilter, statusFilter]);
 
   return (
     <div className="px-15 py-10 w-full">

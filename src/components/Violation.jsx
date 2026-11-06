@@ -7,7 +7,7 @@ function Violations({ violations, onAdd, onRemove }) {
   const handleConfirmRemove = () => {
     if (!violationToRemove) return;
 
-    onRemove(violationToRemove.id);
+    onRemove(violationToRemove.key);
     setViolationToRemove(null);
   };
 

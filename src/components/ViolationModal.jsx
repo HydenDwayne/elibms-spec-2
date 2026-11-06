@@ -2,31 +2,37 @@ import { useState } from "react";
 
 function ViolationModal({ isOpen, onClose, onConfirm }) {
   const [violation, setViolation] = useState("");
+  const [description, setDescription] = useState(""); 
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!violation) {
       setError("Please choose the appropriate violation");
       return;
     }
-
     setError("");
-    onConfirm(violation);
-    setViolation("");
-    onClose();
+    try {
+      await onConfirm(violation, description.trim());
+      setViolation("");
+      setDescription("");
+      onClose();
+    } catch {
+      setError("Failed to save. Please try again.");
+    }
   };
 
   const handleClose = () => {
     setViolation("");
+    setDescription("");
     setError("");
     onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/5">
-      <div className="relative h-[295px] w-[520px] rounded-[10px] border-[2px] border-[#53657a] bg-[#fdfdfd]">
+      <div className="relative h-[400px] w-[520px] rounded-[10px] border-[2px] border-[#53657a] bg-[#fdfdfd]">
 
         <button
           type="button"
@@ -53,7 +59,7 @@ function ViolationModal({ isOpen, onClose, onConfirm }) {
               setError("");
             }}
             className="h-[35px] w-full appearance-auto rounded-[4px] border border-[#53657a] bg-white px-[9px] text-[11px] text-[#53657a] outline-none focus:border-[#4d739b]">
-            <option value="">Overdue return of book</option>
+            <option value="" disabled>Select a violation</option>
             <option value="Overdue return of book">Overdue return of book</option>
             <option value="Lost book">Lost book</option>
             <option value="Damaged book">Damaged book</option>
@@ -68,10 +74,22 @@ function ViolationModal({ isOpen, onClose, onConfirm }) {
             {error || "*Please choose the appropriate violation"}
           </p>
 
+            <label className="mb-[6px] mt-[14px] block text-[12px] font-semibold text-[#53657a]">
+              Description <span className="font-normal text-[#8c8c8c]">(optional)</span>
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={200}
+              rows={3}
+              placeholder="e.g. Book returned 5 days late"
+              className="w-full resize-none rounded-[4px] border border-[#53657a] bg-white px-[9px] py-[6px] text-[11px] text-[#53657a] outline-none focus:border-[#4d739b]"
+            />
+
           <button
             type="button"
             onClick={handleConfirm}
-            className="mt-[52px]
+            className="mt-[24px]
                 h-[40px]
                 w-[250px]
                 items-center

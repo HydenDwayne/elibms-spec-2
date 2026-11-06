@@ -10,40 +10,51 @@ import BookTable from "../components/BookTable";
 import { useState, useEffect } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "../lib/firebase";
+import { Helmet } from "react-helmet-async";
 
 import data from "../data/dummy_data.json";
 import { listenToBooks } from "../lib/bookActions";
 
 const Dashbboard = () => {
-const iconMap = {
-  FiBook: <FiBook className="text-xl" />,
-  PiBooks: <PiBooks className="text-xl" />,
-  FiBookmark: <FiBookmark className="text-xl text-white" />,
-  FiAlertCircle: <FiAlertCircle className="text-xl" />,
-  FiUsers: <FiUsers className="text-xl" />,
-};
-const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
+  const iconMap = {
+    FiBook: <FiBook className="text-xl" />,
+    PiBooks: <PiBooks className="text-xl" />,
+    FiBookmark: <FiBookmark className="text-xl text-white" />,
+    FiAlertCircle: <FiAlertCircle className="text-xl" />,
+    FiUsers: <FiUsers className="text-xl" />,
+  };
+  const widgetData = data.dashboard.widgets.map((w) => ({
+    ...w,
+    icon: iconMap[w.icon],
+  }));
 
-const [rtdbBooks, setRtdbBooks] = useState(null);
+  const [rtdbBooks, setRtdbBooks] = useState(null);
 
-useEffect(() => listenToBooks(setRtdbBooks), []);
+  useEffect(() => listenToBooks(setRtdbBooks), []);
 
-const books = (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((b) => ({
-  ...b,
-  genre: (b.genre ?? []).join(", "),
-  borrowable: b.borrowable ? "Yes" : "No",
-}));
+  const books = (
+    rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books
+  ).map((b) => ({
+    ...b,
+    genre: (b.genre ?? []).join(", "),
+    borrowable: b.borrowable ? "Yes" : "No",
+  }));
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Dashboard</title>
+      </Helmet>
       <div className="flex justify-between pr-4">
         <div>
           <p className="text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
             DASHBOARD
           </p>
-          <p className="text-lg text-gray-500">Welcome back, {data.users[0].displayName}!</p>
+          <p className="text-lg text-gray-500">
+            Welcome back, {data.users[0].displayName}!
+          </p>
         </div>
         <Dropdown />
       </div>

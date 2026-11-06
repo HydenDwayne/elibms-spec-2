@@ -10,7 +10,17 @@ import pfp from "../../assets/default.webp";
 import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
 import { useState, useEffect } from "react";
-import { ref, push, set, remove, onValue, query, orderByChild, equalTo, runTransaction } from "firebase/database";
+import {
+  ref,
+  push,
+  set,
+  remove,
+  onValue,
+  query,
+  orderByChild,
+  equalTo,
+  runTransaction,
+} from "firebase/database";
 import { db, auth } from "../../lib/firebase";
 import toast from "react-hot-toast";
 import {
@@ -18,6 +28,7 @@ import {
   liftSuspension,
   listenToPatrons,
 } from "../../lib/patronActions";
+import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 
@@ -28,6 +39,8 @@ const PatronDetails = () => {
   const patron =
     (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
     data.patrons.find((p) => p.id === patronId);
+
+  
   const patronName = patron.name;
   const isSuspended = patron.status === "Suspended";
 
@@ -42,23 +55,25 @@ const PatronDetails = () => {
   const [violationsList, setViolationsList] = useState([]);
 
   useEffect(() => {
-    const q = query(ref(db, "violations"), orderByChild("patronId"), equalTo(patronId));
+    const q = query(
+      ref(db, "violations"),
+      orderByChild("patronId"),
+      equalTo(patronId),
+    );
     const unsubscribe = onValue(q, (snap) => {
       const val = snap.val() ?? {};
       setViolationsList(
         Object.entries(val)
-        .map(([key, v]) => ({ ...v, id: v.id ?? key, key }))
-        .filter((v) => v.status !== "removed"),
+          .map(([key, v]) => ({ ...v, id: v.id ?? key, key }))
+          .filter((v) => v.status !== "removed"),
       );
     });
     return unsubscribe;
   }, [patronId]);
 
-
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
   const [isViolationModalOpen, setIsViolationModalOpen] = useState(false);
 
-  
   const handleAddViolation = () => {
     setIsViolationModalOpen(true);
   };
@@ -69,11 +84,11 @@ const PatronDetails = () => {
         ref(db, "counters/violations"),
         (current) => (current ?? 30) + 1,
       );
-    
+
       if (!result.committed) throw new Error("Counter update failed");
 
-      const n = result.snapshot.val();                      
-      const id = `VIO-${String(n).padStart(3, "0")}`;      
+      const n = result.snapshot.val();
+      const id = `VIO-${String(n).padStart(3, "0")}`;
 
       await set(ref(db, `violations/${n - 1}`), {
         id,
@@ -126,6 +141,9 @@ const PatronDetails = () => {
 
   return (
     <div className="px-15 pt-10 w-full">
+      <Helmet>
+        <title>{`${patron.name} `}</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}
@@ -159,9 +177,7 @@ const PatronDetails = () => {
               </div>
             </div> */}
             <div className="ml-4">
-              <p className="text-xl font-bold mb-5">
-                {patron.name}
-              </p>
+              <p className="text-xl font-bold mb-5">{patron.name}</p>
               {isSuspended && (
                 <span className="mb-2 inline-block rounded-full border border-[#A35139] px-3 py-0.5 text-xs text-[#A35139]">
                   Suspended

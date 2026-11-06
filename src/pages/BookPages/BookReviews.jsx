@@ -8,6 +8,7 @@ import RemoveReviewConfirmationModal from "../../components/RemoveReviewConfirma
 import { ref, onValue } from "firebase/database";
 import { db } from "../../lib/firebase";
 import data from "../../data/dummy_data.json";
+import { Helmet } from "react-helmet-async";
 
 const gradientText =
   "bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent";
@@ -38,7 +39,7 @@ const BookReviews = () => {
   // Placeholder data -- replace with the selected book / patrons / reviews from your backend.
   const [dbBook, setDbBook] = useState(null);
   const [loaded, setLoaded] = useState(false);
- 
+
   useEffect(() => {
     const unsubscribe = onValue(ref(db, "books"), (snap) => {
       let found = null;
@@ -151,6 +152,9 @@ const BookReviews = () => {
 
   return (
     <div className="h-full w-full overflow-y-auto px-15 pt-10 pb-10">
+      <Helmet>
+        <title>{`Reviews | ${book.title} `}</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={() => navigate(`/books/${bookId}`)}
@@ -182,7 +186,9 @@ const BookReviews = () => {
               <p>Call Number: {book.callNumber}</p>
               <p>Publication Year: {book.publicationYear}</p>
               <p>Place of Publication: {book.placeOfPublication}</p>
-              <p>Genre: {Array.isArray(book.genre) ? book.genre.join(", ") : ""}</p>
+              <p>
+                Genre: {Array.isArray(book.genre) ? book.genre.join(", ") : ""}
+              </p>
             </div>
           </div>
         </div>

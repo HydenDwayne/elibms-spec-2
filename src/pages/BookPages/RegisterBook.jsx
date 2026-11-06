@@ -10,6 +10,7 @@ import { useState, useRef } from "react";
 import { ref, update, get, runTransaction } from "firebase/database";
 import { db, auth } from "../../lib/firebase";
 import toast from "react-hot-toast";
+import { Helmet } from 'react-helmet-async';
 
 const resizeImage = (file, maxSize = 400, quality = 0.8) =>
   new Promise((resolve, reject) => {
@@ -218,6 +219,9 @@ const RegisterBook = () => {
 
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Book Registration</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}

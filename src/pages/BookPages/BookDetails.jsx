@@ -13,6 +13,7 @@ import { GoDotFill } from "react-icons/go";
 import StarRating from "../../components/StarRating";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../lib/firebase";
+import { Helmet } from "react-helmet-async";
 
 import {
   archiveBook,
@@ -151,6 +152,9 @@ const BookDetails = () => {
 
   return (
     <div className="px-15 pt-10 w-full">
+      <Helmet>
+        <title>{book.title}</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}

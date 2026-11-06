@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from "react";
 import { ref, onValue, update } from "firebase/database";
 import { db } from "../../lib/firebase";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 
@@ -46,21 +47,32 @@ const EditBookForm = ({ book, bookKey }) => {
   const navigate = useNavigate();
   const [isbn, setIsbn] = useState(book.isbn);
   const [title, setTitle] = useState(book.title);
-  const [callNumber, setCallNumber] = useState(book.callNumber.replace("B-", ""));
+  const [callNumber, setCallNumber] = useState(
+    book.callNumber.replace("B-", ""),
+  );
   const [author, setAuthor] = useState(book.author);
   const [synopsis, setSynopsis] = useState(book.synopsis);
-  const [publicationYear, setPublicationYear] = useState(String(book.publicationYear));
-  const [publicationPlace, setPublicationPlace] = useState(book.placeOfPublication);
-  const [genre, setGenre] = useState(Array.isArray(book.genre) ? book.genre.join(", ") : "");
+  const [publicationYear, setPublicationYear] = useState(
+    String(book.publicationYear),
+  );
+  const [publicationPlace, setPublicationPlace] = useState(
+    book.placeOfPublication,
+  );
+  const [genre, setGenre] = useState(
+    Array.isArray(book.genre) ? book.genre.join(", ") : "",
+  );
   const [errors, setErrors] = useState({});
   const fileRef = useRef(null);
   const [coverFile, setCoverFile] = useState(null);
   const [removeCover, setRemoveCover] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [borrowable, setBorrowable] = useState(book.borrowable ? ["yes"] : ["no"]);
-  const [activeField, setActiveField] = useState(book.borrowable ? "yes" : "no");
-
+  const [borrowable, setBorrowable] = useState(
+    book.borrowable ? ["yes"] : ["no"],
+  );
+  const [activeField, setActiveField] = useState(
+    book.borrowable ? "yes" : "no",
+  );
 
   const handleClick = () => {
     navigate("/books");
@@ -84,13 +96,14 @@ const EditBookForm = ({ book, bookKey }) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    if (!file.type.startsWith("image/")) return toast.error("Please choose an image file.");
-    if (file.size > 5 * 1024 * 1024) return toast.error("Image must be under 5 MB.");
+    if (!file.type.startsWith("image/"))
+      return toast.error("Please choose an image file.");
+    if (file.size > 5 * 1024 * 1024)
+      return toast.error("Image must be under 5 MB.");
     setCoverFile(file);
   };
 
   const handleSave = async () => {
-  
     const newErrors = {};
 
     if (!isbn.trim()) {
@@ -136,7 +149,10 @@ const EditBookForm = ({ book, bookKey }) => {
         callNumber: "B-" + callNumber,
         publicationYear: Number(publicationYear),
         placeOfPublication: publicationPlace.trim(),
-        genre: genre.split(",").map((g) => g.trim()).filter(Boolean),
+        genre: genre
+          .split(",")
+          .map((g) => g.trim())
+          .filter(Boolean),
         borrowable: borrowable[0] === "yes",
         synopsis: synopsis.trim(),
         ...(newCover && { hasCover: true }),
@@ -148,12 +164,12 @@ const EditBookForm = ({ book, bookKey }) => {
       } else if (removeCover) {
         await update(ref(db, "bookCovers"), { [book.id]: null });
       }
-      
+
       toast.success("Book updated successfully");
       navigate(`/books/${book.id}`);
     } catch (err) {
-    console.error(err);
-    toast.error("Failed to update the book. Please try again.");
+      console.error(err);
+      toast.error("Failed to update the book. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -161,6 +177,9 @@ const EditBookForm = ({ book, bookKey }) => {
 
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>{`Editing ${title} `}</title>
+      </Helmet>
       <p className="mb-8 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         EDITING {book.title}
       </p>
@@ -269,7 +288,11 @@ const EditBookForm = ({ book, bookKey }) => {
 
         <div className="grid grid-cols-2 gap-x-4">
           <div className="grid grid-rows-2 items-center text-sm text-[#545F71] self-end pb-2">
-            <p className={`mb-1 text-sm ${errors.borrowable ? "text-red-500" : "text-[#545F71]"}`}>Borrowable</p>
+            <p
+              className={`mb-1 text-sm ${errors.borrowable ? "text-red-500" : "text-[#545F71]"}`}
+            >
+              Borrowable
+            </p>
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -299,24 +322,36 @@ const EditBookForm = ({ book, bookKey }) => {
               />
               No
             </label>
-            </div>
-            <div className="relative w-full">
-              <p className="mb-1 text-sm text-[#545F71]">Upload Book Cover</p>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleCoverChange} />
+          </div>
+          <div className="relative w-full">
+            <p className="mb-1 text-sm text-[#545F71]">Upload Book Cover</p>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleCoverChange}
+            />
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileRef.current?.click()}
-                  className="flex h-9 w-full items-center justify-between rounded-sm border border-[#545F71] bg-white px-3 text-xs text-[#53657a]">
-                    <span className="truncate">
-                      {coverFile ? coverFile.name : removeCover ? "Default cover (applied on save)"
-                      : book.hasCover ? "Current image (select to replace)" : "Select image..."}
-                    </span>
-                    <LuUpload size={16} className="text-gray-400" />
-                </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="flex h-9 w-full items-center justify-between rounded-sm border border-[#545F71] bg-white px-3 text-xs text-[#53657a]"
+              >
+                <span className="truncate">
+                  {coverFile
+                    ? coverFile.name
+                    : removeCover
+                      ? "Default cover (applied on save)"
+                      : book.hasCover
+                        ? "Current image (select to replace)"
+                        : "Select image..."}
+                </span>
+                <LuUpload size={16} className="text-gray-400" />
+              </button>
 
-                {(coverFile || (book.hasCover && !removeCover)) && (
+              {(coverFile || (book.hasCover && !removeCover)) && (
                 <button
                   type="button"
                   onClick={() => {
@@ -325,14 +360,17 @@ const EditBookForm = ({ book, bookKey }) => {
                     } else {
                       setRemoveCover(true);
                     }
-                }}
-                title={coverFile ? "Remove selected image" : "Use default cover"}
-                className="text-lg leading-none text-[#545F71] hover:text-[#A35139]">
+                  }}
+                  title={
+                    coverFile ? "Remove selected image" : "Use default cover"
+                  }
+                  className="text-lg leading-none text-[#545F71] hover:text-[#A35139]"
+                >
                   ×
                 </button>
-                )}
+              )}
             </div>
-          </div>    
+          </div>
         </div>
       </div>
 
@@ -360,7 +398,8 @@ const EditBookForm = ({ book, bookKey }) => {
               onClick={handleSave}
               disabled={isSaving}
               className="flex h-9 w-65 items-center justify-center rounded-sm bg-gradient-to-r from-[#1D2937] to-[#53759D]
-              text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60">
+              text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+            >
               {isSaving ? "Saving..." : "Save Edits"}
             </button>
           </div>
@@ -368,7 +407,7 @@ const EditBookForm = ({ book, bookKey }) => {
       </div>
     </div>
   );
-}
+};
 
 const EditBook = () => {
   const { bookId } = useParams();

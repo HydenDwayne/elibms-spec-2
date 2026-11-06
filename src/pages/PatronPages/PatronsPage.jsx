@@ -2,6 +2,7 @@ import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
@@ -17,12 +18,15 @@ const PatronsPage = () => {
     rtdbPatrons && rtdbPatrons.length > 0 ? rtdbPatrons : data.patrons;
 
   const patrons = patronSource.map((p) => ({
-  ...p,
-  idNumber: p.id,
-  violations: data.violations.filter((v) => v.patronId === p.id).length,
-}));
+    ...p,
+    idNumber: p.id,
+    violations: data.violations.filter((v) => v.patronId === p.id).length,
+  }));
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Patrons</title>
+      </Helmet>
       <p className="mb-5 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         PATRONS PAGE
       </p>
@@ -37,7 +41,7 @@ const PatronsPage = () => {
           isBooks={false}
         />
 
-        <MainButton text={"Register Patron"}  to={"register-patron"}/>
+        <MainButton text={"Register Patron"} to={"register-patron"} />
       </div>
 
       <div className="mt-10">

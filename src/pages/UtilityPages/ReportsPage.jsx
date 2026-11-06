@@ -3,6 +3,7 @@ import Filters from "../../components/ReportFilters";
 import BookInventoryStatus from "../../components/BookInventoryStatus";
 import BorrowingActivityTable from "../../components/BorrowingActivityTable";
 import { LuNfc } from "react-icons/lu";
+import { Helmet } from 'react-helmet-async';
 
 import data from "../../data/dummy_data.json";
 
@@ -19,7 +20,11 @@ const ReportsPage = () => {
   });
 
   return (
+    
     <div className="px-15 py-10 w-full h-full overflow-y-auto">
+      <Helmet>
+        <title>ELIBMS | Reports</title>
+      </Helmet>
       <p className=" text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         REPORTS
       </p>

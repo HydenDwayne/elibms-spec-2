@@ -1,13 +1,19 @@
 import React, { useState, useMemo } from "react";
 import Widget from "../components/DashboardWidgets";
 import Dropdown from "../components/QuickActionDropdown";
-import { FiBook, FiUsers, FiBookmark, FiAlertCircle, FiChevronDown } from "react-icons/fi";
+import {
+  FiBook,
+  FiUsers,
+  FiBookmark,
+  FiAlertCircle,
+  FiChevronDown,
+} from "react-icons/fi";
 import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
 import { useLibrarian } from "../components/LibrarianContext";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "../lib/firebase";
 import { Helmet } from "react-helmet-async";
@@ -46,7 +52,6 @@ const STATUS_OPTIONS = ["Available", "Borrowed", "Overdue", "Archived"];
 
 const Dashboard = () => {
   const { librarian } = useLibrarian();
-const Dashbboard = () => {
   const iconMap = {
     FiBook: <FiBook className="text-xl" />,
     PiBooks: <PiBooks className="text-xl" />,
@@ -82,7 +87,11 @@ const Dashbboard = () => {
     return books.filter((b) => {
       const matchesSearch =
         !term ||
-        fields.some((f) => String(b[f] ?? "").toLowerCase().includes(term));
+        fields.some((f) =>
+          String(b[f] ?? "")
+            .toLowerCase()
+            .includes(term),
+        );
 
       const matchesStatus = statusFilter === "All" || b.status === statusFilter;
 

@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
-import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";

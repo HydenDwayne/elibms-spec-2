@@ -3,78 +3,85 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import BookAvailabilityStatus from "../../components/BookAvailabilityStatus";
 import ArchiveBook from "../../components/ArchiveBook";
 import ChangeBookStatus from "../../components/ChangeBookStatus";
-import MainButton from "../../components/MainButton";
 import SecondaryButton from "../../components/SecondaryButton";
 import BorrowingHistoryTable from "../../components/BorrowingHistoryTable";
 import BookStatus from "../../components/BookNFCStatus";
 import coverFallback from "../../assets/book_default.jpg";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { GoDot, GoDotFill } from "react-icons/go";
-import { FaStar } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
 import StarRating from "../../components/StarRating";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../lib/firebase";
 
-import data from "../../data/dummy_data.json";
 import {
   archiveBook,
   unarchiveBook,
   setBookStatus,
   canArchiveBook,
-  listenToBooks,
 } from "../../lib/bookActions";
+
+// Subscribes to a Realtime Database path and returns its records as an array.
+// Returns null until the first snapshot arrives, so "loading" and "empty" can
+// be told apart. Each record gets its database key as `id` if it has no id field.
+const useRtdbList = (path) => {
+  const [items, setItems] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, path), (snap) => {
+      if (!snap.exists()) {
+        setItems([]);
+        return;
+      }
+      setItems(
+        Object.entries(snap.val())
+          .filter(([, v]) => v)
+          .map(([key, v]) => ({ ...v, id: v.id ?? key, key })),
+      );
+    });
+    return unsubscribe;
+  }, [path]);
+
+  return items;
+};
 
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const [dbBook, setDbBook] = useState(null);
-  const [loaded, setLoaded] = useState(false);
+  const books = useRtdbList("books");
+  const transactions = useRtdbList("transactions");
+  const patrons = useRtdbList("patrons");
+  const allReviews = useRtdbList("reviews");
 
   const [coverData, setCoverData] = useState("");
-  
-  useEffect(() => {
-    const unsubscribe = onValue(ref(db, "books"), (snap) => {
-      let found = null;
-      if (snap.exists()) {
-        Object.values(snap.val()).forEach((b) => {
-          if (b && b.id === bookId) {
-            found = b;
-          }
-        });
-      }
-      setDbBook(found);
-      setLoaded(true);
-    });
-    return unsubscribe;
-  }, [bookId]);
-
-  const loading = !loaded;
-
-  const [rtdbBooks, setRtdbBooks] = useState(null);
-  const book =
-    (rtdbBooks ?? []).find((b) => b.id === bookId) ??
-    data.books.find((b) => b.id === bookId);
   const [pendingStatus, setPendingStatus] = useState(null);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+
+  const loading = books === null;
+  const book = (books ?? []).find((b) => b.id === bookId) ?? null;
+  const hasCover = book?.hasCover;
+
   useEffect(() => {
-    if (!book || !book.hasCover) return;
+    if (!hasCover) {
+      setCoverData("");
+      return;
+    }
     const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
       setCoverData(snap.exists() ? snap.val() : "");
     });
     return unsubscribe;
-  }, [bookId, book]);
+  }, [bookId, hasCover]);
 
-
-  useEffect(() => listenToBooks(setRtdbBooks), []);
-  const borrowingHistory = data.transactions
+  const borrowingHistory = (transactions ?? [])
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
       ...t,
       returnedDate: t.returnedDate ?? "—",
-      patron: data.patrons.find((p) => p.id === t.patronId),
+      patron: (patrons ?? []).find((p) => p.id === t.patronId),
     }));
-  const reviews = data.reviews.filter((r) => r.bookId === bookId);
+
+  const reviews = (allReviews ?? []).filter((r) => r.bookId === bookId);
   const avg = reviews.length
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : 0;
@@ -86,9 +93,7 @@ const BookDetails = () => {
     navigate(`/books/${bookId}/reviews`);
   };
 
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
-
-  const isArchived = book.status === "Archived";
+  const isArchived = book?.status === "Archived";
 
   const handleArchiveConfirm = async (actionType) => {
     const isUnarchiving = actionType === "unarchive";
@@ -127,6 +132,22 @@ const BookDetails = () => {
       toast.error("Failed to change book status.");
     }
   };
+
+  // Early returns go after every hook, and before any code that reads `book`.
+  if (loading) {
+    return <div className="px-15 pt-10 w-full">Loading book…</div>;
+  }
+
+  if (!book) {
+    return (
+      <div className="px-15 pt-10 w-full">
+        <p className="mb-4">Book not found.</p>
+        <button className="text-blue-500 underline" onClick={handleClick}>
+          Back to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="px-15 pt-10 w-full">
@@ -212,7 +233,6 @@ const BookDetails = () => {
         </div>
         <div className="flex flex-row justify-between col-span-2 pt-5">
           <SecondaryButton text={"Edit Book"} to={"edit-book"} id={bookId} />
-          {/* <MainButton text={"Archive Book"} to={"archive-book"} /> */}
           <button
             onClick={() => setIsArchiveModalOpen(true)}
             className="flex

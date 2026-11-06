@@ -74,18 +74,13 @@ export const listenToPatrons = (callback) =>
   listenWhenAuthed(
     "patrons",
     (snap) => {
-      console.log("PATRON SNAPSHOT:", snap.val());
 
       const raw = snap.val() ?? {};
-
-      console.log("PATRON COUNT:", Object.keys(raw).length);
 
       const result = Object.entries(raw).map(([key, patron]) => ({
         ...patron,
         key,
       }));
-
-      console.log("FINAL PATRONS:", result);
 
       callback(result);
     },

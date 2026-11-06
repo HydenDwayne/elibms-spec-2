@@ -86,11 +86,18 @@ const RegisterPatron = () => {
     setDialog(Object.keys(errors).length ? "invalid" : "confirm");
   };
 
-  const handleConfirm = () => {
-    addPatron(form);
+  const handleConfirm = async () => {
+  try {
+    await addPatron(form, nextId);
+
     setDialog(null);
     navigate("/patrons");
-  };
+  } catch (error) {
+    console.error("Failed to register patron:", error);
+
+    setDialog("error");
+  }
+};
 
   return (
     <div className="px-15 py-10 w-full">

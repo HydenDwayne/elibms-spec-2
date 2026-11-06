@@ -7,12 +7,6 @@ import { usePatrons } from "../../store/patronStore";
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
 
-const patrons = data.patrons.map((p) => ({
-  ...p,
-  idNumber: p.id,
-  violations: data.violations.filter((v) => v.patronId === p.id).length,
-}));
-
 const PATRON_FILTERS = ["All", "Name", "ID", "Contact No.", "Email"];
 
 const fieldGetters = {
@@ -33,32 +27,26 @@ const PatronsPage = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const allPatrons = usePatrons();
 
-  const query = searchTerm.trim().toLowerCase();
-
-  
-  const patrons = allPatrons
-    .filter(
-      (p) =>
-        !query ||
-        p.name.toLowerCase().includes(query) ||
-        p.id.toLowerCase().includes(query),
-    )
-    .map((p) => ({
-      ...p,
-      idNumber: p.id,
-      violations: data.violations.filter((v) => v.patronId === p.id).length,
-    }));
-
   const filteredPatrons = useMemo(() => {
+    const withViolations = allPatrons
+      .map((p) => ({
+        ...p,
+        idNumber: p.id,
+        violations: data.violations.filter((v) => v.patronId === p.id).length,
+      }))
+      .sort((a, b) =>
+        String(a.id).localeCompare(String(b.id), undefined, { numeric: true })
+      );
+
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return patrons;
+    if (!term) return withViolations;
 
     const getFields = fieldGetters[selectedFilter] ?? fieldGetters.All;
 
-    return patrons.filter((p) =>
+    return withViolations.filter((p) =>
       getFields(p).some((v) => String(v ?? "").toLowerCase().includes(term))
     );
-  }, [searchTerm, selectedFilter]);
+  }, [allPatrons, searchTerm, selectedFilter]);
 
   return (
     <div className="px-15 py-10 w-full">

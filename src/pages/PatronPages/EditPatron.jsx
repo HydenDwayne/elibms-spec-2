@@ -52,11 +52,18 @@ const EditPatron = () => {
     setDialog(Object.keys(errors).length ? "invalid" : "confirm");
   };
 
-  const handleConfirm = () => {
-    updatePatron(patronId, form);
+  const handleConfirm = async () => {
+  try {
+    await updatePatron(patronId, form);
+
     setDialog(null);
     navigate(`/patrons/${patronId}`);
-  };
+  } catch (error) {
+    console.error("Failed to update patron:", error);
+
+    setDialog("error");
+  }
+};
 
   return (
     <div className="px-15 py-10 w-full">

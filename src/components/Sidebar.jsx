@@ -14,7 +14,7 @@ import {
   FiSettings
 } from "react-icons/fi";
 
-import data from "../data/dummy_data.json";
+import { useLibrarian } from "./LibrarianContext";
 
 const links = [
   { to: "/", label: "Dashboard", icon: FiHome, end: true },
@@ -29,6 +29,7 @@ const links = [
 
 export default function Sidebar({ open, onClose }) {
   const navigate = useNavigate();
+  const { librarian } = useLibrarian();
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -48,8 +49,6 @@ export default function Sidebar({ open, onClose }) {
         : "text-gray-300 hover:bg-slate-700 hover:text-white"
     }`;
 
-    
-
 
   return (
     <>
@@ -61,8 +60,14 @@ export default function Sidebar({ open, onClose }) {
         {/* <h1 className="px-3 pb-6 text-lg font-medium text-gray-200">ELIBMS</h1> */}
 
         <div className="pt-12 flex justify-center items-center flex-col">
-            <img src={pfp} alt="profile_picture" className="bg-green-100 rounded-full w-25" />
-            <p className="mt-2 font-semibold text-white text-xl mb-4">Hi, {data.users[0].displayName}!</p>
+            <img
+              src={librarian?.avatar ?? pfp}
+              alt="profile_picture"
+              className="bg-green-100 rounded-full w-25 h-25 object-cover"
+            />
+            <p className="mt-2 font-semibold text-white text-xl mb-4">
+              Hi, {librarian?.displayName}!
+            </p>
         </div>
 
         <nav className="flex flex-col items-center gap-1">

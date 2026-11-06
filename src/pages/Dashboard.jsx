@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from "react";
 import Widget from "../components/DashboardWidgets";
 import Dropdown from "../components/QuickActionDropdown";
-import { FiBook, FiUsers, FiBookmark, FiAlertCircle } from "react-icons/fi";
+import { FiBook, FiUsers, FiBookmark, FiAlertCircle, FiChevronDown } from "react-icons/fi";
 import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
+import { useLibrarian } from "../components/LibrarianContext";
 
 import data from "../data/dummy_data.json";
 
@@ -28,7 +29,6 @@ const books = data.books.map((b) => ({
   borrowable: b.borrowable ? "Yes" : "No",
 }));
 
-// Which book fields each dropdown option searches
 const fieldMap = {
   All: ["title", "author", "isbn", "genre"],
   Title: ["title"],
@@ -37,20 +37,28 @@ const fieldMap = {
   Genre: ["genre"],
 };
 
+const STATUS_OPTIONS = ["Available", "Borrowed", "Overdue", "Archived"];
+
 const Dashboard = () => {
+  const { librarian } = useLibrarian();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const filteredBooks = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return books;
-
     const fields = fieldMap[selectedFilter] ?? fieldMap.All;
 
-    return books.filter((b) =>
-      fields.some((f) => String(b[f] ?? "").toLowerCase().includes(term))
-    );
-  }, [searchTerm, selectedFilter]);
+    return books.filter((b) => {
+      const matchesSearch =
+        !term ||
+        fields.some((f) => String(b[f] ?? "").toLowerCase().includes(term));
+
+      const matchesStatus = statusFilter === "All" || b.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [searchTerm, selectedFilter, statusFilter]);
 
   return (
     <div className="px-15 py-10 w-full">
@@ -60,7 +68,7 @@ const Dashboard = () => {
             DASHBOARD
           </p>
           <p className="text-lg text-gray-500">
-            Welcome back, {data.users[0].displayName}!
+            Welcome back, {librarian?.displayName}!
           </p>
         </div>
         <Dropdown />
@@ -83,18 +91,38 @@ const Dashboard = () => {
         </p>
 
         <div className="flex justify-between pr-4">
-          <SearchField
-            value={searchTerm}
-            onChange={setSearchTerm}
-            filter={selectedFilter}
-            onFilterChange={setSelectedFilter}
-            placeholder={
-              selectedFilter === "All"
-                ? "Search title, author, ISBN, ..."
-                : `Search by ${selectedFilter}`
-            }
-            isBooks={true}
-          />
+          <div className="flex items-center gap-3">
+            <SearchField
+              value={searchTerm}
+              onChange={setSearchTerm}
+              filter={selectedFilter}
+              onFilterChange={setSelectedFilter}
+              placeholder={
+                selectedFilter === "All"
+                  ? "Search title, author, ISBN, ..."
+                  : `Search by ${selectedFilter}`
+              }
+              isBooks={true}
+            />
+
+            {/* Status filter */}
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                aria-label="Filter by status"
+                className="h-9 w-40 cursor-pointer appearance-none rounded-sm border border-[#A35139] bg-white pl-3 pr-8 text-xs text-[#53657a] outline-none transition-colors duration-200 focus:border-[#c96d45]"
+              >
+                <option value="All">All Status</option>
+                {STATUS_OPTIONS.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              <FiChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-sm text-[#A35139]" />
+            </div>
+          </div>
 
           <MainButton text={"Register Book"} to={"register-book"} />
         </div>

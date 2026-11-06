@@ -11,20 +11,18 @@ const patrons = data.patrons.map((p) => ({
   violations: data.violations.filter((v) => v.patronId === p.id).length,
 }));
 
-// Dropdown options shown in the search field
-const PATRON_FILTERS = ["All", "Name", "ID", "Student No.", "Email"];
+const PATRON_FILTERS = ["All", "Name", "ID", "Contact No.", "Email"];
 
-// What each option searches
 const fieldGetters = {
   Name: (p) => [p.name, `${p.firstName} ${p.middleName} ${p.lastName}`, `${p.firstName} ${p.lastName}`],
   ID: (p) => [p.id],
-  "Student No.": (p) => [p.studentNumber],
+  "Contact No.": (p) => [p.contactNo],
   Email: (p) => [p.email],
 };
 fieldGetters.All = (p) => [
   ...fieldGetters.Name(p),
   ...fieldGetters.ID(p),
-  ...fieldGetters["Student No."](p),
+  ...fieldGetters["Contact No."](p),
   ...fieldGetters.Email(p),
 ];
 

@@ -6,27 +6,28 @@ import BorrowingActivityTable from "../../components/BorrowingActivityTable";
 
 import data from "../../data/dummy_data.json";
 
-const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-const EMPTY_FILTERS = { dateFrom: "", dateTo: "", patron: "", category: "" };
+const EMPTY_FILTERS = { dateFrom: "", dateTo: "", search: "", category: "" };
 
-const monthIndex = (isoDate) => Number(isoDate.slice(5, 7)) - 1;
+const ymOf = (iso) => Number(iso.slice(0, 4)) * 12 + Number(iso.slice(5, 7)) - 1;
 
-const toRecord = (t) => ({
-  ...t,
-  date: t.borrowedDate,
-  book: data.books.find((b) => b.id === t.bookId),
-  patron: data.patrons.find((p) => p.id === t.patronId),
-});
+const toRecord = (t) => {
+  const book = data.books.find((b) => b.id === t.bookId);
+  return {
+    ...t,
+    date: t.borrowedDate,
+    book,
+    patron: data.patrons.find((p) => p.id === t.patronId),
+    status: book?.status === "Archived" ? "Archived" : t.status,
+  };
+};
 
-// Default view: the 10 most recent transactions
 const recentRecords = data.borrowingRecordIds
   .map((id) => data.transactions.find((x) => x.id === id))
   .filter(Boolean)
   .map(toRecord);
 
-// Filtered view searches every transaction, newest first
 const allRecords = [...data.transactions]
   .sort(
     (a, b) =>
@@ -34,29 +35,65 @@ const allRecords = [...data.transactions]
   )
   .map(toRecord);
 
-const lastMonthWithData = Math.max(
-  ...data.transactions.map((t) => monthIndex(t.borrowedDate))
+const borrowMonths = data.transactions.map((t) => ymOf(t.borrowedDate));
+const MIN_YM = Math.min(...borrowMonths);
+const MAX_YM = Math.max(...borrowMonths);
+
+const YEARS = Array.from(
+  { length: Math.floor(MAX_YM / 12) - Math.floor(MIN_YM / 12) + 1 },
+  (_, i) => Math.floor(MIN_YM / 12) + i
 );
-const dataYear = data.transactions[0].borrowedDate.slice(0, 4);
 
-// Month range chosen in the filter (swaps if From is after To)
-const getRange = (f) => {
-  let from = f.dateFrom ? MONTHS.indexOf(f.dateFrom) : 0;
-  let to = f.dateTo ? MONTHS.indexOf(f.dateTo) : lastMonthWithData;
-  if (from > to) [from, to] = [to, from];
-  return { from, to };
-};
+const getRange = (f) => ({
+  from: f.dateFrom ? ymOf(f.dateFrom) : MIN_YM,
+  to: f.dateTo ? ymOf(f.dateTo) : MAX_YM,
+});
 
-const matchesPatron = (r, f) => {
-  const term = f.patron.trim().toLowerCase();
+const matchesSearch = (r, f) => {
+  const term = f.search.trim().toLowerCase();
   if (!term) return true;
-  return [r.patron?.name, r.patron?.studentNumber].some((v) =>
-    String(v ?? "").toLowerCase().includes(term)
-  );
+  return [
+    r.id,
+    r.bookId,
+    r.patronId,
+    r.borrowedDate,
+    r.dueDate,
+    r.returnedDate,
+    r.status,
+    r.book?.title,
+    r.patron?.name,
+    r.patron?.studentNumber,
+    r.patron?.contactNo,
+  ].some((v) => String(v ?? "").toLowerCase().includes(term));
 };
 
 const matchesStatus = (r, f) =>
   !f.category || r.status.toLowerCase() === f.category.toLowerCase();
+
+const STOCK_STATUS_MAP = [
+  ["Returned", "Available"],
+  ["Borrowed", "Borrowed"],
+  ["Archived", "Archived"],
+  ["Overdue", "Overdue"],
+];
+
+const STOCK_INVENTORY = (() => {
+  const total = data.books.length;
+  return {
+    total,
+    statuses: STOCK_STATUS_MAP.map(([label, bookStatus]) => {
+      const count = data.books.filter((b) => b.status === bookStatus).length;
+      return {
+        label,
+        count,
+        percentage: total ? Math.round((count / total) * 100) : 0,
+      };
+    }),
+  };
+})();
+
+const fmtYM = (ym) =>
+  `${String((ym % 12) + 1).padStart(2, "0")}/${Math.floor(ym / 12)}`;
 
 const ReportsPage = () => {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
@@ -64,41 +101,30 @@ const ReportsPage = () => {
   const { from, to } = getRange(filters);
   const isFiltered = Object.values(filters).some(Boolean);
 
-  // Transactions table
   const filteredRecords = useMemo(() => {
     if (!isFiltered) return recentRecords;
     const range = getRange(filters);
     return allRecords.filter((r) => {
-      const m = monthIndex(r.borrowedDate);
+      const m = ymOf(r.borrowedDate);
       return (
         m >= range.from &&
         m <= range.to &&
-        matchesPatron(r, filters) &&
+        matchesSearch(r, filters) &&
         matchesStatus(r, filters)
       );
     });
   }, [filters, isFiltered]);
 
-  // Inventory card: current status of the books in the matching transactions
   const inventoryData = useMemo(() => {
-    if (!isFiltered) return null; // null → card shows its default numbers
+    if (!isFiltered) return STOCK_INVENTORY; 
 
-    const bookIds = new Set(filteredRecords.map((r) => r.bookId));
-    const books = data.books.filter((b) => bookIds.has(b.id));
-    const total = books.length;
-
-    // [label shown on card, status stored on the book]
-    const map = [
-      ["Returned", "Available"],
-      ["Borrowed", "Borrowed"],
-      ["Archived", "Archived"],
-      ["Overdue", "Overdue"],
-    ];
+    const total = filteredRecords.length;
 
     return {
       total,
-      statuses: map.map(([label, bookStatus]) => {
-        const count = books.filter((b) => b.status === bookStatus).length;
+      subtitle: "Matching transactions",
+      statuses: ["Returned", "Borrowed", "Archived", "Overdue"].map((label) => {
+        const count = filteredRecords.filter((r) => r.status === label).length;
         return {
           label,
           count,
@@ -108,25 +134,28 @@ const ReportsPage = () => {
     };
   }, [filteredRecords, isFiltered]);
 
-  // Circulation chart: patron + status filters, limited to the chosen months
   const chartData = useMemo(() => {
     const range = getRange(filters);
     const base = allRecords.filter(
-      (r) => matchesPatron(r, filters) && matchesStatus(r, filters)
+      (r) => matchesSearch(r, filters) && matchesStatus(r, filters)
     );
-    return MONTH_LABELS.slice(range.from, range.to + 1).map((label, i) => {
-      const m = range.from + i;
-      return {
-        month: label,
-        borrows: base.filter((r) => monthIndex(r.borrowedDate) === m).length,
+    const spansYears = Math.floor(range.from / 12) !== Math.floor(range.to / 12);
+
+    const months = [];
+    for (let m = range.from; m <= range.to; m++) {
+      const label = MONTH_LABELS[m % 12];
+      months.push({
+        month: spansYears ? `${label} '${String(Math.floor(m / 12)).slice(2)}` : label,
+        borrows: base.filter((r) => ymOf(r.borrowedDate) === m).length,
         returns: base.filter(
-          (r) => r.returnedDate && monthIndex(r.returnedDate) === m
+          (r) => r.returnedDate && ymOf(r.returnedDate) === m
         ).length,
-      };
-    });
+      });
+    }
+    return months;
   }, [filters]);
 
-  const rangeLabel = `${String(from + 1).padStart(2, "0")}/${dataYear} - ${String(to + 1).padStart(2, "0")}/${dataYear}`;
+  const rangeLabel = `${fmtYM(from)} - ${fmtYM(to)}`;
 
   return (
     <div className="px-15 py-10 w-full h-full overflow-y-auto">
@@ -138,6 +167,7 @@ const ReportsPage = () => {
         <div className="flex flex-col px-15 mt-5">
           <div>
             <Filters
+              years={YEARS}
               onApply={setFilters}
               onReset={() => setFilters(EMPTY_FILTERS)}
             />

@@ -31,11 +31,9 @@ const statusStyles = {
   },
 };
 
-// Default snapshot used when no filtered inventory is passed in
 const INITIAL_INVENTORY = data.dashboard.inventory;
 
 function BookInventoryStatus({ inventory: inventoryProp }) {
-  // Use filtered inventory when provided, otherwise the default snapshot
   const inventory = inventoryProp ?? INITIAL_INVENTORY;
 
   if (!inventory) return null;
@@ -50,7 +48,7 @@ function BookInventoryStatus({ inventory: inventoryProp }) {
           </h3>
 
           <p className="mt-1 text-xs text-gray-400">
-            Total stock distribution
+            {inventory.subtitle ?? "Total stock distribution"}
           </p>
         </div>
 

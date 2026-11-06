@@ -1,10 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
-import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-
+import { usePatrons } from "../../store/patronStore";
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
 

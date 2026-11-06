@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { FiEdit, FiCamera, FiCheck, FiX } from "react-icons/fi";
+import { updatePassword, verifyBeforeUpdateEmail } from "firebase/auth";
 import pfp from "../../assets/default.webp";
+import { auth } from "../../lib/firebase";
+import { useLibrarian } from "../../components/LibrarianContext";
 import data from "../../data/dummy_data.json";
 import { Helmet } from "react-helmet-async";
 
@@ -17,7 +20,28 @@ const formatDate = (iso) => {
   });
 };
 
-// One row of the table: label | value | edit icon. Switches to an input when editing.
+const authMessage = (err) =>
+  err.code === "auth/requires-recent-login"
+    ? "For security, please log out and log in again, then retry."
+    : "Couldn't update. Please try again.";
+
+const resizeImage = (file, size = 256) =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, size / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+
 function SettingRow({
   label,
   value,
@@ -31,6 +55,7 @@ function SettingRow({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const startEdit = () => {
     setDraft(masked ? "" : value);
@@ -43,14 +68,23 @@ function SettingRow({
     setError("");
   };
 
-  const save = () => {
+  const save = async () => {
+    if (saving) return;
     const message = validate ? validate(draft) : "";
     if (message) {
       setError(message);
       return;
     }
-    onSave(draft);
-    setEditing(false);
+    setSaving(true);
+    try {
+      await onSave(draft);
+      setEditing(false);
+      setError("");
+    } catch (err) {
+      setError(err.message || "Couldn't save. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inputClass =
@@ -108,8 +142,9 @@ function SettingRow({
             <button
               type="button"
               onClick={save}
+              disabled={saving}
               aria-label={`Save ${label}`}
-              className="text-lg text-green-700 transition-transform hover:scale-110"
+              className="text-lg text-green-700 transition-transform hover:scale-110 disabled:opacity-40"
             >
               <FiCheck />
             </button>
@@ -139,39 +174,42 @@ function SettingRow({
 
 const SettingsPage = () => {
   const fileRef = useRef(null);
-  const [avatar, setAvatar] = useState(null);
+  const { librarian, updateLibrarian, error } = useLibrarian();
 
-  const u = data.users[0];
-  const [profile, setProfile] = useState({
-    name: u.name,
-    birthDate: u.birthDate,
-    gender: u.gender,
-    email: u.email,
-  });
-  const [account, setAccount] = useState({
-    username: u.username,
-    password: "placeholder",
-  });
+  const saveField = (key) => (val) => updateLibrarian({ [key]: val });
 
-  const setProfileField = (key) => (val) =>
-    setProfile((p) => ({ ...p, [key]: val }));
-  const setAccountField = (key) => (val) =>
-    setAccount((a) => ({ ...a, [key]: val }));
+  const saveEmail = async (val) => {
+    try {
+      await verifyBeforeUpdateEmail(auth.currentUser, val);
+    } catch (err) {
+      throw new Error(authMessage(err));
+    }
+    await updateLibrarian({ email: val });
+  };
+
+  const savePassword = async (val) => {
+    try {
+      await updatePassword(auth.currentUser, val);
+    } catch (err) {
+      throw new Error(authMessage(err));
+    }
+  };
 
   const required = (label) => (v) => (v.trim() ? "" : `${label} is required`);
 
-  const handlePictureChange = (e) => {
+  const handlePictureChange = async (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-    if (avatar) URL.revokeObjectURL(avatar);
-    setAvatar(URL.createObjectURL(file));
     e.target.value = "";
+    if (!file) return;
+    await updateLibrarian({ avatar: await resizeImage(file) });
   };
 
-  const handleRemovePicture = () => {
-    if (avatar) URL.revokeObjectURL(avatar);
-    setAvatar(null);
-  };
+  const handleRemovePicture = () => updateLibrarian({ avatar: null });
+
+  if (!librarian)
+    return (
+      <p className="p-10 text-sm text-red-600">{error || "Loading..."}</p>
+    );
 
   return (
     <div className="h-full w-full overflow-y-auto px-15 pt-10 pb-10">
@@ -192,7 +230,7 @@ const SettingsPage = () => {
               className="group relative size-30 overflow-hidden rounded-full bg-gradient-to-b from-[#f0e6e0] to-[#8a7d76]"
             >
               <img
-                src={avatar ?? pfp}
+                src={librarian.avatar ?? pfp}
                 alt="profile_picture"
                 className="size-full object-cover"
               />
@@ -217,7 +255,7 @@ const SettingsPage = () => {
             <button
               type="button"
               onClick={handleRemovePicture}
-              disabled={!avatar}
+              disabled={!librarian.avatar}
               className="mt-2 text-xs text-red-600 underline disabled:cursor-not-allowed disabled:opacity-40"
             >
               Remove
@@ -227,29 +265,35 @@ const SettingsPage = () => {
           <div className="flex-1">
             <SettingRow
               label="Name"
-              value={profile.name}
-              onSave={setProfileField("name")}
+              value={librarian.name}
+              onSave={saveField("name")}
               validate={required("Name")}
+            />
+            <SettingRow
+              label="Display Name"
+              value={librarian.displayName}
+              onSave={saveField("displayName")}
+              validate={required("Display name")}
             />
             <SettingRow
               label="Date of Birth"
               type="date"
-              value={profile.birthDate}
-              display={formatDate(profile.birthDate)}
-              onSave={setProfileField("birthDate")}
+              value={librarian.birthDate}
+              display={formatDate(librarian.birthDate)}
+              onSave={saveField("birthDate")}
               validate={(v) => (v ? "" : "Date of birth is required")}
             />
             <SettingRow
               label="Gender"
-              value={profile.gender}
+              value={librarian.gender}
               options={["Female", "Male", "Other", "Prefer not to say"]}
-              onSave={setProfileField("gender")}
+              onSave={saveField("gender")}
             />
             <SettingRow
               label="Email"
               type="email"
-              value={profile.email}
-              onSave={setProfileField("email")}
+              value={librarian.email}
+              onSave={saveEmail}
               validate={(v) =>
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
                   ? ""
@@ -271,8 +315,8 @@ const SettingsPage = () => {
         <div className="ml-50">
           <SettingRow
             label="Username"
-            value={account.username}
-            onSave={setAccountField("username")}
+            value={librarian.username}
+            onSave={saveField("username")}
             validate={(v) =>
               v.trim().length >= 4
                 ? ""
@@ -281,9 +325,9 @@ const SettingsPage = () => {
           />
           <SettingRow
             label="Password"
-            value={account.password}
+            value=""
             masked
-            onSave={setAccountField("password")}
+            onSave={savePassword}
             validate={(v) =>
               v.length >= 8 ? "" : "Password must be at least 8 characters"
             }

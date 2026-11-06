@@ -1,16 +1,21 @@
 import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import data from "../../data/dummy_data.json";
+import { listenToPatronStatuses } from "../../lib/patronActions";
 
 const PatronsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [statuses, setStatuses] = useState({});
+
+  useEffect(() => listenToPatronStatuses(setStatuses), []);
 
   const patrons = data.patrons.map((p) => ({
   ...p,
+  status: statuses[p.id] ?? p.status,
   idNumber: p.id,
   violations: data.violations.filter((v) => v.patronId === p.id).length,
 }));

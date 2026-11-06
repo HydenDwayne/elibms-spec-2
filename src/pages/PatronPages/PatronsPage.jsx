@@ -3,7 +3,7 @@ import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
 import { Helmet } from "react-helmet-async";
-
+import { usePatrons } from "../../store/patronStore";
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
 
@@ -26,20 +26,25 @@ const PatronsPage = () => {
   const [rtdbPatrons, setRtdbPatrons] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const storePatrons = usePatrons();
 
   useEffect(() => listenToPatrons(setRtdbPatrons), []);
 
-  const patrons = useMemo(
-    () =>
-      (rtdbPatrons && rtdbPatrons.length > 0 ? rtdbPatrons : data.patrons).map(
-        (p) => ({
-          ...p,
-          idNumber: p.id,
-          violations: data.violations.filter((v) => v.patronId === p.id).length,
-        }),
-      ),
-    [rtdbPatrons],
-  );
+  // Prefer live Firebase data, then the store, then the dummy data
+  const patrons = useMemo(() => {
+    const source =
+      rtdbPatrons && rtdbPatrons.length > 0
+        ? rtdbPatrons
+        : storePatrons && storePatrons.length > 0
+          ? storePatrons
+          : data.patrons;
+
+    return source.map((p) => ({
+      ...p,
+      idNumber: p.id,
+      violations: data.violations.filter((v) => v.patronId === p.id).length,
+    }));
+  }, [rtdbPatrons, storePatrons]);
 
   const filteredPatrons = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();

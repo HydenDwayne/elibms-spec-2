@@ -1,7 +1,6 @@
-import { useParams } from "react-router-dom";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import FormInput from "../../components/FormInput";
-import MainButton from "../../components/MainButton";
+import { useNavigate, useParams } from "react-router-dom";
+import ValidatedInput from "../../components/ValidatedInput";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import SecondaryButton from "../../components/SecondaryButton";
 import BookStatus from "../../components/BookNFCStatus";
 import { useState } from "react";
@@ -9,20 +8,55 @@ import { LuUpload, LuNfc } from "react-icons/lu";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { Helmet } from "react-helmet-async";
 
-import data from "../../data/dummy_data.json";
+import { usePatrons, updatePatron } from "../../store/patronStore";
+import {
+  validatePatronForm,
+  PHONE_LENGTH,
+} from "../../utils/patronValidation";
+
+const gradientText =
+  "bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent";
 
 const EditPatron = () => {
+  const navigate = useNavigate();
   const { patronId } = useParams();
-  const patron = data.patrons.find((p) => p.id === patronId);
-  const [firstName, setFirstName] = useState(patron.firstName);
-  const [studentNumber, setStudentNumber] = useState(patron.studentNumber);
-  const [birthDate, setBirthDate] = useState(patron.birthDate);
-  const [emailAddress, setEmailAddress] = useState(patron.email);
-  const [lastName, setLastName] = useState(patron.lastName);
-  const [middleName, setMiddleName] = useState(patron.middleName);
-  const [phoneNumber, setPhoneNumber] = useState(patron.contactNo);
+  const patron = usePatrons().find((p) => p.id === patronId);
 
-  
+  const [form, setForm] = useState({
+    firstName: patron?.firstName ?? "",
+    lastName: patron?.lastName ?? "",
+    middleName: patron?.middleName ?? "",
+    birthDate: patron?.birthDate ?? "",
+    email: patron?.email ?? "",
+    phone: patron?.contactNo ?? "",
+  });
+  const [touched, setTouched] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [dialog, setDialog] = useState(null); // null | "confirm" | "invalid"
+
+  if (!patron) return <p className="p-10">Patron not found.</p>;
+
+  const errors = validatePatronForm(form);
+  const setField = (key) => (value) =>
+    setForm((prev) => ({ ...prev, [key]: value }));
+  const touch = (key) => () => setTouched((prev) => ({ ...prev, [key]: true }));
+  const errorFor = (key) => (touched[key] || submitted ? errors[key] || "" : "");
+
+  const setPhone = (value) =>
+    setField("phone")(value.replace(/\D/g, "").slice(0, PHONE_LENGTH));
+  const setBirthDate = (value) =>
+    setField("birthDate")(value.replace(/[^\d-]/g, "").slice(0, 10));
+
+  const handleSaveClick = () => {
+    setSubmitted(true);
+    setDialog(Object.keys(errors).length ? "invalid" : "confirm");
+  };
+
+  const handleConfirm = () => {
+    updatePatron(patronId, form);
+    setDialog(null);
+    navigate(`/patrons/${patronId}`);
+  };
 
   return (
     <div className="px-15 py-10 w-full">
@@ -35,98 +69,125 @@ const EditPatron = () => {
 
       <div className="grid grid-cols-2 gap-y-3 gap-x-25">
         <div>
-          <p className="mb-8 text-lg font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
+          <p className={`mb-8 text-lg font-bold ${gradientText}`}>
             Patron Information
           </p>
-          <FormInput
+          <ValidatedInput
             label="First Name"
-            length="w-full"
-            value={firstName}
-            onChange={setFirstName}
-            placeholder=""
+            value={form.firstName}
+            onChange={setField("firstName")}
+            onBlur={touch("firstName")}
+            error={errorFor("firstName")}
           />
           <div className="grid grid-cols-2 gap-x-4">
-            <FormInput
+            <ValidatedInput
               label="Last Name"
-              length="w-full"
-              value={lastName}
-              onChange={setLastName}
-              placeholder=""
+              value={form.lastName}
+              onChange={setField("lastName")}
+              onBlur={touch("lastName")}
+              error={errorFor("lastName")}
             />
-            <FormInput
+            <ValidatedInput
               label="Middle Name"
-              length="w-full"
-              value={middleName}
-              onChange={setMiddleName}
+              value={form.middleName}
+              onChange={setField("middleName")}
               placeholder="optional"
             />
           </div>
           <div className="grid grid-cols-2 gap-x-4">
-            <FormInput
-              label="ID Number"
-              length="w-full"
-              value={studentNumber}
-              onChange={setStudentNumber}
-              placeholder=""
-            />
-            <FormInput
+            <ValidatedInput label="ID Number" value={patron.id} readOnly />
+            <ValidatedInput
               label="Birthdate"
-              length="w-full"
-              value={birthDate}
+              value={form.birthDate}
               onChange={setBirthDate}
-              placeholder=""
+              onBlur={touch("birthDate")}
+              error={errorFor("birthDate")}
+              placeholder="YYYY-MM-DD"
+              inputMode="numeric"
             />
           </div>
           <div className="mt-8 grid grid-cols-2 gap-x-4">
-            <p className="col-span-2 mb-3 text-sm font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
+            <p
+              className={`col-span-2 mb-3 text-sm font-bold ${gradientText}`}
+            >
               Contact Information
             </p>
-            <FormInput
+            <ValidatedInput
               label="Email Address"
-              length="w-full"
-              value={emailAddress}
-              onChange={setEmailAddress}
-              placeholder=""
+              value={form.email}
+              onChange={setField("email")}
+              onBlur={touch("email")}
+              error={errorFor("email")}
+              placeholder="name@example.com"
             />
-            <FormInput
+            <ValidatedInput
               label="Phone Number"
-              length="w-full"
-              value={phoneNumber}
-              onChange={setPhoneNumber}
-              placeholder=""
+              value={form.phone}
+              onChange={setPhone}
+              onBlur={touch("phone")}
+              error={errorFor("phone")}
+              maxLength={PHONE_LENGTH}
+              inputMode="numeric"
+              placeholder="09XXXXXXXXX"
             />
-          </div> 
+          </div>
         </div>
         <div>
-          <p className="mb-13 text-lg font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
+          <p className={`mb-13 text-lg font-bold ${gradientText}`}>
             Link NFC Card
           </p>
           <div className="grid grid-rows-2 gap-x-25">
             <div className="py-10 bg-white rounded-sm flex justify-center items-center flex-col border border-[#545F71]">
               <LuNfc className="size-10" />
-              <p className="mb-5 mt-2 font-semibold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
-                {patron.tagId}
+              <p className={`mb-5 mt-2 font-semibold ${gradientText}`}>
+                {patron.tagId || "No card linked"}
               </p>
-              <SecondaryButton text={"Unlink Tag"} to={"unlink-tag"} />
+              {patron.tagId && (
+                <SecondaryButton text={"Unlink Tag"} to={"unlink-tag"} />
+              )}
             </div>
             <div className="mt-3 grid grid-rows-2">
-              <BookStatus value="Linked" icon={GoDotFill} />
+              <BookStatus
+                value={patron.tagId ? "Linked" : "Not Linked"}
+                icon={GoDotFill}
+              />
             </div>
           </div>
         </div>
       </div>
-        <div className=" flex flex-row justify-center gap-6">
-          <SecondaryButton
-            text={"Cancel"}
-            to={"cancel-patron-edit"}
-            id={patronId}
-          />
-          <MainButton
-            text={"Save Changes"}
-            to={"save-patron-edit"}
-            id={patronId}
-          />
-        </div>
+
+      <div className="mt-10 flex flex-row justify-center gap-6">
+        <button
+          onClick={() => navigate(`/patrons/${patronId}`)}
+          className="h-9 w-65 rounded-sm border border-[#1D2937] bg-white text-sm font-semibold text-[#1D2937]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSaveClick}
+          className="h-9 w-65 rounded-sm bg-gradient-to-r from-[#1D2937] to-[#53759D] text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
+        >
+          Save Changes
+        </button>
+      </div>
+
+      <ConfirmDialog
+        isOpen={dialog === "confirm"}
+        variant="warning"
+        title="Save changes?"
+        message={`This will update the details of ${patron.name}.`}
+        confirmText="Save"
+        onConfirm={handleConfirm}
+        onClose={() => setDialog(null)}
+      />
+      <ConfirmDialog
+        isOpen={dialog === "invalid"}
+        variant="error"
+        title="Incomplete or invalid details"
+        message="Please fix the following before saving:"
+        details={Object.values(errors)}
+        onClose={() => setDialog(null)}
+      />
     </div>
   );
 };

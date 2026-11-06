@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import PatronBorrowingHistoryTable from "../../components/PatronBorrowingHistoryTable";
 import MainButton from "../../components/MainButton";
@@ -144,20 +144,14 @@ const PatronDetails = () => {
     }
   };
 
-  // Guard goes AFTER all hooks have been called
+  // Not in the local data yet, and Firebase hasn't answered
+  if (!patron && rtdbPatrons === null) {
+    return <p className="px-15 pt-10 w-full text-[#545F71]">Loading...</p>;
+  }
+
+  // Firebase has answered and this ID doesn't exist anywhere
   if (!patron) {
-    return (
-      <div className="px-15 pt-10 w-full">
-        <button
-          className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
-          onClick={handleClick}
-        >
-          <IoMdArrowRoundBack className="text-xl" />
-          <span>Back to Patrons</span>
-        </button>
-        <p>Patron not found.</p>
-      </div>
-    );
+    return <Navigate to="/404" replace />;
   }
 
   return (

@@ -4,9 +4,52 @@ import BookStatus from "../../components/BookNFCStatus";
 import ValidatedInput from "../../components/ValidatedInput";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { useState } from "react";
-import { LuUpload, LuNfc } from "react-icons/lu";
-import { GoDot, GoDotFill } from "react-icons/go";
-import { Helmet } from 'react-helmet-async';
+import { LuNfc } from "react-icons/lu";
+import { GoDot } from "react-icons/go";
+import { Helmet } from "react-helmet-async";
+
+import {
+  usePatrons,
+  getNextPatronId,
+  addPatron,
+} from "../../store/patronStore";
+
+const PHONE_LENGTH = 11;
+
+const gradientText =
+  "bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent";
+
+const validatePatronForm = (form) => {
+  const errors = {};
+
+  if (!form.firstName.trim()) {
+    errors.firstName = "First name is required.";
+  }
+
+  if (!form.lastName.trim()) {
+    errors.lastName = "Last name is required.";
+  }
+
+  if (!form.birthDate.trim()) {
+    errors.birthDate = "Birthdate is required.";
+  } else if (!/^\d{4}-\d{2}-\d{2}$/.test(form.birthDate)) {
+    errors.birthDate = "Use YYYY-MM-DD format.";
+  }
+
+  if (!form.email.trim()) {
+    errors.email = "Email address is required.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = "Enter a valid email address.";
+  }
+
+  if (!form.phone.trim()) {
+    errors.phone = "Phone number is required.";
+  } else if (form.phone.length !== PHONE_LENGTH) {
+    errors.phone = "Phone number must contain 11 digits.";
+  }
+
+  return errors;
+};
 
 const RegisterPatron = () => {
   const navigate = useNavigate();

@@ -45,7 +45,6 @@ const STATUS_OPTIONS = ["Available", "Borrowed", "Overdue", "Archived"];
 
 const Dashboard = () => {
   const { librarian } = useLibrarian();
-const Dashbboard = () => {
   const iconMap = {
     FiBook: <FiBook className="text-xl" />,
     PiBooks: <PiBooks className="text-xl" />,
@@ -170,5 +169,5 @@ const Dashbboard = () => {
     </div>
   );
 };
-};
+
 export default Dashboard;

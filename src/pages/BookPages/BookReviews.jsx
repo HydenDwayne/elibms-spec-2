@@ -170,7 +170,7 @@ const BookReviews = () => {
         <div className="flex flex-col items-center">
           <div className="flex h-90 w-88 shrink-0 justify-center">
             <img
-              src={coverData || book.cover || coverFallback}
+              src={book.coverUrl || coverData || book.cover || coverFallback}
               alt={book.title}
               onError={(e) => {
                 e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too

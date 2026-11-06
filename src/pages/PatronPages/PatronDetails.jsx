@@ -144,6 +144,8 @@ const PatronDetails = () => {
     }
   };
 
+  // Guards go AFTER all hooks have been called
+
   // Not in the local data yet, and Firebase hasn't answered
   if (!patron && rtdbPatrons === null) {
     return <p className="px-15 pt-10 w-full text-[#545F71]">Loading...</p>;

@@ -13,7 +13,6 @@ import toast from "react-hot-toast";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { FaStar } from "react-icons/fa";
 import StarRating from "../../components/StarRating";
-import { useState, useEffect } from "react";
 import { ref, onValue } from "firebase/database";
 import { db } from "../../lib/firebase";
 
@@ -51,9 +50,13 @@ const BookDetails = () => {
     return unsubscribe;
   }, [bookId]);
 
-  const book = dbBook;
   const loading = !loaded;
 
+  const [rtdbBooks, setRtdbBooks] = useState(null);
+  const book =
+    (rtdbBooks ?? []).find((b) => b.id === bookId) ??
+    data.books.find((b) => b.id === bookId);
+  const [pendingStatus, setPendingStatus] = useState(null);
   useEffect(() => {
     if (!book || !book.hasCover) return;
     const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
@@ -62,11 +65,6 @@ const BookDetails = () => {
     return unsubscribe;
   }, [bookId, book]);
 
-  const [rtdbBooks, setRtdbBooks] = useState(null);
-  const book =
-    (rtdbBooks ?? []).find((b) => b.id === bookId) ??
-    data.books.find((b) => b.id === bookId);
-  const [pendingStatus, setPendingStatus] = useState(null);
 
   useEffect(() => listenToBooks(setRtdbBooks), []);
   const borrowingHistory = data.transactions

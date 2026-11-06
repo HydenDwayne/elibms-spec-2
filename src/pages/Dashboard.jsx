@@ -7,9 +7,10 @@ import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import data from "../data/dummy_data.json";
+import { listenToBooks } from "../lib/bookActions";
 
 const Dashbboard = () => {
 const iconMap = {
@@ -21,9 +22,13 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const books = data.books.map((b) => ({
+const [rtdbBooks, setRtdbBooks] = useState(null);
+
+useEffect(() => listenToBooks(setRtdbBooks), []);
+
+const books = (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((b) => ({
   ...b,
-  genre: b.genre.join(", "),
+  genre: (b.genre ?? []).join(", "),
   borrowable: b.borrowable ? "Yes" : "No",
 }));
   const [searchTerm, setSearchTerm] = useState("");

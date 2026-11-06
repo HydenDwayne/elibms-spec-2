@@ -23,6 +23,7 @@ import BookReviews from "./pages/BookPages/BookReviews";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LibrarianProvider } from "./components/LibrarianContext";
 import Layout from "./layout/Layout";
+import NotFound from "./NotFound";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -75,6 +76,8 @@ function App() {
             <Route path="/return/txn" element={<ReturnBookTransaction />} />
           </Route>
         </Route>
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </LibrarianProvider>
   );

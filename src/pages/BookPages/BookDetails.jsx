@@ -13,6 +13,9 @@ import toast from "react-hot-toast";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { FaStar } from "react-icons/fa";
 import StarRating from "../../components/StarRating";
+import { useState, useEffect } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../../lib/firebase";
 
 import data from "../../data/dummy_data.json";
 import {
@@ -26,6 +29,38 @@ import {
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
+
+  const [dbBook, setDbBook] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const [coverData, setCoverData] = useState("");
+  
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, "books"), (snap) => {
+      let found = null;
+      if (snap.exists()) {
+        Object.values(snap.val()).forEach((b) => {
+          if (b && b.id === bookId) {
+            found = b;
+          }
+        });
+      }
+      setDbBook(found);
+      setLoaded(true);
+    });
+    return unsubscribe;
+  }, [bookId]);
+
+  const book = dbBook;
+  const loading = !loaded;
+
+  useEffect(() => {
+    if (!book || !book.hasCover) return;
+    const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
+      setCoverData(snap.exists() ? snap.val() : "");
+    });
+    return unsubscribe;
+  }, [bookId, book]);
 
   const [rtdbBooks, setRtdbBooks] = useState(null);
   const book =
@@ -125,7 +160,7 @@ const BookDetails = () => {
           <div className="flex flex-row">
             <div className=" w-35 h-50 flex justify-center">
               <img
-                src={book.cover || coverFallback}
+                src={coverData || book.cover || coverFallback}
                 alt={book.title}
                 onError={(e) => {
                   e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too

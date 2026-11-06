@@ -8,6 +8,8 @@ import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
 import BookTable from "../components/BookTable";
 import { useState, useEffect } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../lib/firebase";
 
 import data from "../data/dummy_data.json";
 import { listenToBooks } from "../lib/bookActions";
@@ -31,6 +33,7 @@ const books = (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((
   genre: (b.genre ?? []).join(", "),
   borrowable: b.borrowable ? "Yes" : "No",
 }));
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   return (

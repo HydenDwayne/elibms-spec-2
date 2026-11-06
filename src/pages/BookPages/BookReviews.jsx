@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import coverFallback from "../../assets/book_default.jpg";
 import StarRating from "../../components/StarRating";
 import ReviewCard from "../../components/ReviewCard";
 import RemoveReviewConfirmationModal from "../../components/RemoveReviewConfirmationModal";
-
+import { ref, onValue } from "firebase/database";
+import { db } from "../../lib/firebase";
 import data from "../../data/dummy_data.json";
 
 const gradientText =
@@ -35,7 +36,38 @@ const BookReviews = () => {
   const { bookId } = useParams();
 
   // Placeholder data -- replace with the selected book / patrons / reviews from your backend.
-  const book = data.books.find((b) => b.id === bookId);
+  const [dbBook, setDbBook] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+ 
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, "books"), (snap) => {
+      let found = null;
+      if (snap.exists()) {
+        Object.values(snap.val()).forEach((b) => {
+          if (b && b.id === bookId) {
+            found = b;
+          }
+        });
+      }
+      setDbBook(found);
+      setLoaded(true);
+    });
+    return unsubscribe;
+  }, [bookId]);
+
+  const book = dbBook;
+  const loading = !loaded;
+
+  const [coverData, setCoverData] = useState("");
+
+  useEffect(() => {
+    if (!book || !book.hasCover) return;
+    const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
+      setCoverData(snap.exists() ? snap.val() : "");
+    });
+    return unsubscribe;
+  }, [bookId, book]);
+
   const patrons = data.patrons;
   const [reviews, setReviews] = useState(
     data.reviews.filter((r) => r.bookId === bookId),
@@ -114,6 +146,9 @@ const BookReviews = () => {
     setReviewToRemove(null);
   };
 
+  if (loading) return <p className="px-15 pt-10">Loading...</p>;
+  if (!book) return <p className="px-15 pt-10">Book not found.</p>;
+
   return (
     <div className="h-full w-full overflow-y-auto px-15 pt-10 pb-10">
       <button
@@ -131,7 +166,7 @@ const BookReviews = () => {
         <div className="flex flex-col items-center">
           <div className="flex h-90 w-88 shrink-0 justify-center">
             <img
-              src={book.cover || coverFallback}
+              src={coverData || book.cover || coverFallback}
               alt={book.title}
               onError={(e) => {
                 e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too
@@ -147,7 +182,7 @@ const BookReviews = () => {
               <p>Call Number: {book.callNumber}</p>
               <p>Publication Year: {book.publicationYear}</p>
               <p>Place of Publication: {book.placeOfPublication}</p>
-              <p>Genre: {book.genre.join(", ")}</p>
+              <p>Genre: {Array.isArray(book.genre) ? book.genre.join(", ") : ""}</p>
             </div>
           </div>
         </div>

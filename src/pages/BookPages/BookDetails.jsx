@@ -7,7 +7,7 @@ import SecondaryButton from "../../components/SecondaryButton";
 import BorrowingHistoryTable from "../../components/BorrowingHistoryTable";
 import BookStatus from "../../components/BookNFCStatus";
 import coverFallback from "../../assets/book_default.jpg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { GoDotFill } from "react-icons/go";
 import StarRating from "../../components/StarRating";
@@ -20,7 +20,9 @@ import {
   unarchiveBook,
   setBookStatus,
   canArchiveBook,
+  updateBookCover,
 } from "../../lib/bookActions";
+import { uploadImage, UPLOAD_PRESETS } from "../../lib/cloudinary";
 
 // Subscribes to a Realtime Database path and returns its records as an array.
 // Returns null until the first snapshot arrives, so "loading" and "empty" can
@@ -62,6 +64,36 @@ const BookDetails = () => {
   const loading = books === null;
   const book = (books ?? []).find((b) => b.id === bookId) ?? null;
   const hasCover = book?.hasCover;
+
+  const coverInputRef = useRef(null);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+
+  const handleCoverChange = async (e) => {
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be 5 MB or smaller.");
+      return;
+    }
+
+    setIsUploadingCover(true);
+    try {
+      const url = await uploadImage(file, UPLOAD_PRESETS.cover);
+      await updateBookCover(book, url);
+      toast.success("Book cover updated successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload book cover.");
+    } finally {
+      setIsUploadingCover(false);
+    }
+  };
 
   useEffect(() => {
     if (!hasCover) {
@@ -181,15 +213,35 @@ const BookDetails = () => {
       <div className="grid grid-cols-2 gap-x-4">
         <div className="flex flex-col">
           <div className="flex flex-row">
-            <div className=" w-35 h-50 flex justify-center">
-              <img
-                src={coverData || book.cover || coverFallback}
-                alt={book.title}
-                onError={(e) => {
-                  e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too
-                  e.currentTarget.src = coverFallback;
-                }}
+            <div className="flex flex-col items-center">
+              <div className=" w-35 h-50 flex justify-center">
+                <img
+                  src={book.coverUrl || coverData || book.cover || coverFallback}
+                  alt={book.title}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too
+                    e.currentTarget.src = coverFallback;
+                  }}
+                />
+              </div>
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={handleCoverChange}
               />
+              <button
+                type="button"
+                disabled={isUploadingCover}
+                onClick={() => coverInputRef.current?.click()}
+                className="mt-2 text-xs text-[#53759D] underline transition-opacity hover:opacity-60 disabled:cursor-not-allowed disabled:opacity-50">
+                {isUploadingCover
+                  ? "Uploading..."
+                  : book.coverUrl
+                    ? "Change Cover"
+                    : "Add Cover"}
+              </button>
             </div>
             <div className="ml-4">
               <p className="text-lg font-bold">Book Title: {book.title}</p>

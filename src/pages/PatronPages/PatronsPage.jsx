@@ -1,18 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
-import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
-
-const patrons = data.patrons.map((p) => ({
-  ...p,
-  idNumber: p.id,
-  violations: data.violations.filter((v) => v.patronId === p.id).length,
-}));
 
 const PATRON_FILTERS = ["All", "Name", "ID", "Contact No.", "Email"];
 
@@ -30,8 +23,23 @@ fieldGetters.All = (p) => [
 ];
 
 const PatronsPage = () => {
+  const [rtdbPatrons, setRtdbPatrons] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
+
+  useEffect(() => listenToPatrons(setRtdbPatrons), []);
+
+  const patrons = useMemo(
+    () =>
+      (rtdbPatrons && rtdbPatrons.length > 0 ? rtdbPatrons : data.patrons).map(
+        (p) => ({
+          ...p,
+          idNumber: p.id,
+          violations: data.violations.filter((v) => v.patronId === p.id).length,
+        }),
+      ),
+    [rtdbPatrons],
+  );
 
   const filteredPatrons = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
@@ -42,7 +50,7 @@ const PatronsPage = () => {
     return patrons.filter((p) =>
       getFields(p).some((v) => String(v ?? "").toLowerCase().includes(term))
     );
-  }, [searchTerm, selectedFilter]);
+  }, [patrons, searchTerm, selectedFilter]);
 
   return (
     <div className="px-15 py-10 w-full">
@@ -52,6 +60,7 @@ const PatronsPage = () => {
       <p className="mb-5 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         PATRONS PAGE
       </p>
+
 
       <div className="flex justify-between pr-4">
         <SearchField

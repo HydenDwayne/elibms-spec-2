@@ -11,6 +11,13 @@ const updateBook = (book, fields) => {
   return update(ref(db, `books/${book.key}`), fields);
 };
 
+export const updateBookCover = (book, coverUrl) =>
+  updateBook(book, {
+    coverUrl,
+    coverUpdatedAt: serverTimestamp(),
+    coverUpdatedBy: auth.currentUser?.uid ?? null,
+  });
+
 export const archiveBook = (book) =>
   updateBook(book, {
     status: "Archived",

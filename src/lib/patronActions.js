@@ -10,18 +10,25 @@ const requireUser = () => {
   return user;
 };
 
-export const suspendPatron = (patronId) => {
+const patronRef = (patron) => {
+  if (patron?.key === undefined || patron?.key === null) {
+    throw new Error("Patron was not found in the database.");
+  }
+  return ref(db, `patrons/${patron.key}`);
+};
+
+export const suspendPatron = (patron) => {
   const user = requireUser();
-  return update(ref(db, `patrons/${patronId}`), {
+  return update(patronRef(patron), {
     status: "Suspended",
     suspendedAt: serverTimestamp(),
     suspendedBy: user.uid,
   });
 };
 
-export const liftSuspension = (patronId) => {
+export const liftSuspension = (patron) => {
   const user = requireUser();
-  return update(ref(db, `patrons/${patronId}`), {
+  return update(patronRef(patron), {
     status: "Active",
     liftedAt: serverTimestamp(),
     liftedBy: user.uid,
@@ -63,22 +70,14 @@ const listenWhenAuthed = (path, onData, onSignedOut) => {
   };
 };
 
-export const listenToPatronStatus = (patronId, callback) =>
-  listenWhenAuthed(
-    `patrons/${patronId}/status`,
-    (snap) => callback(snap.val()),
-    () => callback(null),
-  );
-
-export const listenToPatronStatuses = (callback) =>
+export const listenToPatrons = (callback) =>
   listenWhenAuthed(
     "patrons",
     (snap) => {
-      const statuses = {};
-      Object.entries(snap.val() ?? {}).forEach(([id, patron]) => {
-        if (patron?.status) statuses[id] = patron.status;
-      });
-      callback(statuses);
+      const patrons = Object.entries(snap.val() ?? {})
+        .filter(([, patron]) => patron && patron.id && patron.name)
+        .map(([key, patron]) => ({ ...patron, key }));
+      callback(patrons);
     },
-    () => callback({}),
+    () => callback(null),
   );

@@ -12,6 +12,7 @@ import { ref, onValue } from "firebase/database";
 import { db } from "../lib/firebase";
 
 import data from "../data/dummy_data.json";
+import { listenToBooks } from "../lib/bookActions";
 
 const Dashbboard = () => {
 const iconMap = {
@@ -23,18 +24,13 @@ const iconMap = {
 };
 const widgetData = data.dashboard.widgets.map((w) => ({ ...w, icon: iconMap[w.icon] }));
 
-const [dbBooks, setDbBooks] = useState([]);
- useEffect(() => {
-  const unsubscribe = onValue(ref(db, "books"), (snap) => {
-    const val = snap.val() ?? {};
-    setDbBooks(Object.entries(val).map(([id, b]) => ({ id, ...b })));
-  });
-  return unsubscribe;
-}, []);
+const [rtdbBooks, setRtdbBooks] = useState(null);
 
-const books = dbBooks.map((b) => ({
+useEffect(() => listenToBooks(setRtdbBooks), []);
+
+const books = (rtdbBooks && rtdbBooks.length > 0 ? rtdbBooks : data.books).map((b) => ({
   ...b,
-  genre: Array.isArray(b.genre) ? b.genre.join(", ") : "",
+  genre: (b.genre ?? []).join(", "),
   borrowable: b.borrowable ? "Yes" : "No",
 }));
 

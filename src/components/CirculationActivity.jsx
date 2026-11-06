@@ -7,7 +7,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function CirculationActivity({ data = [] }) {
+function CirculationActivity({ data = [], rangeLabel = "(MM/YYYY) - (MM/YYYY)" }) {
   return (
     <div className="h-full max-h-[300px] w-full max-w-[500px] rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
 
@@ -18,7 +18,7 @@ function CirculationActivity({ data = [] }) {
           </h3>
 
           <p className="mt-1 text-xs text-gray-500">
-            Borrows vs. Returns | (MM/YYYY) - (MM/YYYY)
+            Borrows vs. Returns | {rangeLabel}
           </p>
         </div>
 
@@ -118,5 +118,3 @@ function CirculationActivity({ data = [] }) {
 }
 
 export default CirculationActivity;
-
-

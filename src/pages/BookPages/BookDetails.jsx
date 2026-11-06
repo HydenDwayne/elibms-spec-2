@@ -2,31 +2,87 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import BookAvailabilityStatus from "../../components/BookAvailabilityStatus";
 import ArchiveBook from "../../components/ArchiveBook";
-import MainButton from "../../components/MainButton";
+import ChangeBookStatus from "../../components/ChangeBookStatus";
 import SecondaryButton from "../../components/SecondaryButton";
 import BorrowingHistoryTable from "../../components/BorrowingHistoryTable";
 import BookStatus from "../../components/BookNFCStatus";
 import coverFallback from "../../assets/book_default.jpg";
-import { useState } from "react";
-import { GoDot, GoDotFill } from "react-icons/go";
-import { FaStar } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { GoDotFill } from "react-icons/go";
 import StarRating from "../../components/StarRating";
+import { ref, onValue } from "firebase/database";
+import { db } from "../../lib/firebase";
+import { Helmet } from "react-helmet-async";
 
-import data from "../../data/dummy_data.json";
+import {
+  archiveBook,
+  unarchiveBook,
+  setBookStatus,
+  canArchiveBook,
+} from "../../lib/bookActions";
+
+// Subscribes to a Realtime Database path and returns its records as an array.
+// Returns null until the first snapshot arrives, so "loading" and "empty" can
+// be told apart. Each record gets its database key as `id` if it has no id field.
+const useRtdbList = (path) => {
+  const [items, setItems] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onValue(ref(db, path), (snap) => {
+      if (!snap.exists()) {
+        setItems([]);
+        return;
+      }
+      setItems(
+        Object.entries(snap.val())
+          .filter(([, v]) => v)
+          .map(([key, v]) => ({ ...v, id: v.id ?? key, key })),
+      );
+    });
+    return unsubscribe;
+  }, [path]);
+
+  return items;
+};
 
 const BookDetails = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
 
-  const book = data.books.find((b) => b.id === bookId);
-  const borrowingHistory = data.transactions
+  const books = useRtdbList("books");
+  const transactions = useRtdbList("transactions");
+  const patrons = useRtdbList("patrons");
+  const allReviews = useRtdbList("reviews");
+
+  const [coverData, setCoverData] = useState("");
+  const [pendingStatus, setPendingStatus] = useState(null);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+
+  const loading = books === null;
+  const book = (books ?? []).find((b) => b.id === bookId) ?? null;
+  const hasCover = book?.hasCover;
+
+  useEffect(() => {
+    if (!hasCover) {
+      setCoverData("");
+      return;
+    }
+    const unsubscribe = onValue(ref(db, `bookCovers/${bookId}`), (snap) => {
+      setCoverData(snap.exists() ? snap.val() : "");
+    });
+    return unsubscribe;
+  }, [bookId, hasCover]);
+
+  const borrowingHistory = (transactions ?? [])
     .filter((t) => t.bookId === bookId)
     .map((t) => ({
       ...t,
       returnedDate: t.returnedDate ?? "—",
-      patron: data.patrons.find((p) => p.id === t.patronId),
+      patron: (patrons ?? []).find((p) => p.id === t.patronId),
     }));
-  const reviews = data.reviews.filter((r) => r.bookId === bookId);
+
+  const reviews = (allReviews ?? []).filter((r) => r.bookId === bookId);
   const avg = reviews.length
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : 0;
@@ -38,14 +94,67 @@ const BookDetails = () => {
     navigate(`/books/${bookId}/reviews`);
   };
 
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const isArchived = book?.status === "Archived";
 
-  const handleArchiveConfirm = (actionType) => {
-    navigate("/");
+  const handleArchiveConfirm = async (actionType) => {
+    const isUnarchiving = actionType === "unarchive";
+
+    if (!isUnarchiving && !canArchiveBook(book)) {
+      toast.error("Cannot archive a book that is currently borrowed.");
+      return;
+    }
+
+    try {
+      if (isUnarchiving) {
+        await unarchiveBook(book);
+        toast.success("Book unarchived successfully.");
+      } else {
+        await archiveBook(book);
+        toast.success("Book archived successfully.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        isUnarchiving ? "Failed to unarchive book." : "Failed to archive book.",
+      );
+    }
   };
+
+  const handleStatusRequest = (status) => {
+    if (status !== book.status) setPendingStatus(status);
+  };
+
+  const handleStatusConfirm = async (status) => {
+    try {
+      await setBookStatus(book, status);
+      toast.success(`Book status changed to ${status}.`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to change book status.");
+    }
+  };
+
+  // Early returns go after every hook, and before any code that reads `book`.
+  if (loading) {
+    return <div className="px-15 pt-10 w-full">Loading book…</div>;
+  }
+
+  if (!book) {
+    return (
+      <div className="px-15 pt-10 w-full">
+        <p className="mb-4">Book not found.</p>
+        <button className="text-blue-500 underline" onClick={handleClick}>
+          Back to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="px-15 pt-10 w-full">
+      <Helmet>
+        <title>{book.title}</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}
@@ -62,7 +171,10 @@ const BookDetails = () => {
         </p>
         <div className="pr-10">
           <p>Availability Status</p>
-          <BookAvailabilityStatus />
+          <BookAvailabilityStatus
+            status={book.status}
+            onChange={handleStatusRequest}
+          />
         </div>
       </div>
 
@@ -71,7 +183,7 @@ const BookDetails = () => {
           <div className="flex flex-row">
             <div className=" w-35 h-50 flex justify-center">
               <img
-                src={book.cover || coverFallback}
+                src={coverData || book.cover || coverFallback}
                 alt={book.title}
                 onError={(e) => {
                   e.currentTarget.onerror = null; // prevents an infinite loop if the fallback fails too
@@ -81,13 +193,18 @@ const BookDetails = () => {
             </div>
             <div className="ml-4">
               <p className="text-lg font-bold">Book Title: {book.title}</p>
+              {isArchived && (
+                <span className="mb-2 inline-block rounded-full border border-[#A35139] px-3 py-0.5 text-xs text-[#A35139]">
+                  Archived
+                </span>
+              )}
               <p className="mb-4 font-semibold">Author: {book.author}</p>
               <div className="text-sm">
                 <p>ISBN: {book.isbn}</p>
                 <p>Call Number: {book.callNumber}</p>
                 <p>Publication Year: {book.publicationYear}</p>
                 <p>Place of Publication: {book.placeOfPublication}</p>
-                <p>Genre: {book.genre.join(", ")}</p>
+                <p>Genre: {(book.genre ?? []).join(", ")}</p>
                 <p>Borrowable: {book.borrowable ? "Yes" : "No"}</p>
               </div>
             </div>
@@ -120,7 +237,6 @@ const BookDetails = () => {
         </div>
         <div className="flex flex-row justify-between col-span-2 pt-5">
           <SecondaryButton text={"Edit Book"} to={"edit-book"} id={bookId} />
-          {/* <MainButton text={"Archive Book"} to={"archive-book"} /> */}
           <button
             onClick={() => setIsArchiveModalOpen(true)}
             className="flex
@@ -142,14 +258,22 @@ const BookDetails = () => {
         hover:shadow-md
         active:translate-y-0"
           >
-            {"Archive Book"}
+            {isArchived ? "Unarchive Book" : "Archive Book"}
           </button>
           <ArchiveBook
             isOpen={isArchiveModalOpen}
             onClose={() => setIsArchiveModalOpen(false)}
             onConfirm={handleArchiveConfirm}
-            patronName={bookId}
-            action="archive"
+            bookTitle={book.title}
+            action={isArchived ? "unarchive" : "archive"}
+          />
+          <ChangeBookStatus
+            isOpen={pendingStatus !== null}
+            onClose={() => setPendingStatus(null)}
+            onConfirm={handleStatusConfirm}
+            bookTitle={book.title}
+            currentStatus={book.status}
+            newStatus={pendingStatus ?? ""}
           />
         </div>
         <div className="col-span-2 mt-5">

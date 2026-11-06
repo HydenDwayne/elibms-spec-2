@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function LoginPage({ setIsAuthenticated }) {
   const [email, setEmail] = useState("");
@@ -26,6 +27,9 @@ export default function LoginPage({ setIsAuthenticated }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-orange-900 to-orange-700 flex justify-center items-center flex-col">
+      <Helmet>
+        <title>ELIBMS | Login</title>
+      </Helmet>
       <h2 className="text-lg weight-500 pb-3 text-gray-300">
         Login as Librarian
       </h2>

@@ -4,21 +4,9 @@ import BookStatus from "../../components/BookNFCStatus";
 import ValidatedInput from "../../components/ValidatedInput";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { useState } from "react";
-import { LuNfc } from "react-icons/lu";
-import { GoDot } from "react-icons/go";
-
-import {
-  usePatrons,
-  getNextPatronId,
-  addPatron,
-} from "../../store/patronStore";
-import {
-  validatePatronForm,
-  PHONE_LENGTH,
-} from "../../utils/patronValidation";
-
-const gradientText =
-  "bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent";
+import { LuUpload, LuNfc } from "react-icons/lu";
+import { GoDot, GoDotFill } from "react-icons/go";
+import { Helmet } from 'react-helmet-async';
 
 const RegisterPatron = () => {
   const navigate = useNavigate();
@@ -63,6 +51,9 @@ const RegisterPatron = () => {
 
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Patron Registration</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={() => navigate("/patrons")}

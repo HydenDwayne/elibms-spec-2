@@ -1,4 +1,3 @@
-import { useState } from "react";
 import data from "../data/dummy_data.json";
 
 const statusStyles = {
@@ -32,12 +31,10 @@ const statusStyles = {
   },
 };
 
-// Local sample data matching your structure (make sure percentages add up to 100)
 const INITIAL_INVENTORY = data.dashboard.inventory;
 
-function BookInventoryStatus() {
-  // Initialize state directly with the local data object
-  const [inventory] = useState(INITIAL_INVENTORY);
+function BookInventoryStatus({ inventory: inventoryProp }) {
+  const inventory = inventoryProp ?? INITIAL_INVENTORY;
 
   if (!inventory) return null;
 
@@ -51,7 +48,7 @@ function BookInventoryStatus() {
           </h3>
 
           <p className="mt-1 text-xs text-gray-400">
-            Total stock distribution
+            {inventory.subtitle ?? "Total stock distribution"}
           </p>
         </div>
 

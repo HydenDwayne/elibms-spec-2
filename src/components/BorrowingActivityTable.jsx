@@ -126,6 +126,7 @@ function BorrowingStatus({ status }) {
     Borrowed: `bg-[#A35139] text-white border border-[#A35139]`,
     Returned: `bg-[#e9edf0] text-[#53657a] border border-[#e9edf0]`,
     Overdue: `bg-[#f0f1f2] text-[#A35139] border border-[#f0f1f2]`,
+    Archived: `bg-[#d9d3cc] text-[#4b5563] border border-[#d9d3cc]`,
   };
 
   return (

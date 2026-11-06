@@ -3,14 +3,32 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import PatronBorrowingHistoryTable from "../../components/PatronBorrowingHistoryTable";
 import MainButton from "../../components/MainButton";
 import SecondaryButton from "../../components/SecondaryButton";
-// 1. Updated this import to match your new multi-state component name
 import Violations from "../../components/Violation";
 import ViolationModal from "../../components/ViolationModal";
 import BookStatus from "../../components/BookNFCStatus";
 import pfp from "../../assets/default.webp";
-import { useState } from "react";
 import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
+import { useState, useEffect } from "react";
+import {
+  ref,
+  push,
+  set,
+  remove,
+  onValue,
+  query,
+  orderByChild,
+  equalTo,
+  runTransaction,
+} from "firebase/database";
+import { db, auth } from "../../lib/firebase";
+import toast from "react-hot-toast";
+import {
+  suspendPatron,
+  liftSuspension,
+  listenToPatrons,
+} from "../../lib/patronActions";
+import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 import { usePatrons } from "../../store/patronStore";
@@ -18,8 +36,16 @@ import { usePatrons } from "../../store/patronStore";
 const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
-  const patron = usePatrons().find((p) => p.id === patronId);
+const [rtdbPatrons, setRtdbPatrons] = useState(null);
+
+const patron =
+  (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
+  usePatrons().find((p) => p.id === patronId) ??
+  data.patrons.find((p) => p.id === patronId);
   const patronName = patron.name;
+  const isSuspended = patron.status === "Suspended";
+
+  useEffect(() => listenToPatrons(setRtdbPatrons), []);
   const transactions = data.transactions
     .filter((t) => t.patronId === patronId)
     .map((t) => ({
@@ -27,41 +53,98 @@ const PatronDetails = () => {
       returnedDate: t.returnedDate ?? "—",
       book: data.books.find((b) => b.id === t.bookId),
     }));
-  const [violationsList, setViolationsList] = useState(
-    data.violations.filter((v) => v.patronId === patronId),
-  );
+  const [violationsList, setViolationsList] = useState([]);
 
-  // 3. Initialize modal visibility state
+  useEffect(() => {
+    const q = query(
+      ref(db, "violations"),
+      orderByChild("patronId"),
+      equalTo(patronId),
+    );
+    const unsubscribe = onValue(q, (snap) => {
+      const val = snap.val() ?? {};
+      setViolationsList(
+        Object.entries(val)
+          .map(([key, v]) => ({ ...v, id: v.id ?? key, key }))
+          .filter((v) => v.status !== "removed"),
+      );
+    });
+    return unsubscribe;
+  }, [patronId]);
+
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
   const [isViolationModalOpen, setIsViolationModalOpen] = useState(false);
 
-  // 3. Handler functions to pass into your component
   const handleAddViolation = () => {
     setIsViolationModalOpen(true);
   };
 
-  const handleViolationConfirm = (violation) => {
-    const newViolation = {
-      id: Date.now(),
-      type: violation,
-      description: "",
-    };
-    setViolationsList((prev) => [...prev, newViolation]);
+  const handleViolationConfirm = async (violation, description) => {
+    try {
+      const result = await runTransaction(
+        ref(db, "counters/violations"),
+        (current) => (current ?? 30) + 1,
+      );
+
+      if (!result.committed) throw new Error("Counter update failed");
+
+      const n = result.snapshot.val();
+      const id = `VIO-${String(n).padStart(3, "0")}`;
+
+      await set(ref(db, `violations/${n - 1}`), {
+        id,
+        patronId,
+        transactionId: "",
+        bookId: "",
+        type: violation,
+        description: description.trim(),
+        dateRecorded: new Date().toISOString().slice(0, 10),
+      });
+
+      toast.success("Violation added successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add violation.");
+      throw err;
+    }
   };
 
-  const handleRemoveViolation = (id) => {
-    setViolationsList(violationsList.filter((v) => v.id !== id));
+  const handleRemoveViolation = async (key) => {
+    try {
+      await remove(ref(db, `violations/${key}`));
+      toast.success("Violation removed successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to remove violation.");
+    }
   };
 
   const handleClick = () => {
     navigate("/patrons");
   };
-  const handleArchiveConfirm = (actionType) => {
-    navigate("/patrons");
+  const handleArchiveConfirm = async (actionType) => {
+    const isLifting = actionType === "unsuspend";
+    try {
+      if (isLifting) {
+        await liftSuspension(patron);
+        toast.success("Suspension lifted successfully.");
+      } else {
+        await suspendPatron(patron);
+        toast.success("Patron suspended successfully.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        isLifting ? "Failed to lift suspension." : "Failed to suspend patron.",
+      );
+    }
   };
 
   return (
     <div className="px-15 pt-10 w-full">
+      <Helmet>
+        <title>{`${patron.name} `}</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}
@@ -95,9 +178,12 @@ const PatronDetails = () => {
               </div>
             </div> */}
             <div className="ml-4">
-              <p className="text-xl font-bold mb-5">
-                {patron.name}
-              </p>
+              <p className="text-xl font-bold mb-5">{patron.name}</p>
+              {isSuspended && (
+                <span className="mb-2 inline-block rounded-full border border-[#A35139] px-3 py-0.5 text-xs text-[#A35139]">
+                  Suspended
+                </span>
+              )}
               <div className="text-sm">
                 <p>Email: {patron.email}</p>
                 <p>Contact No.: {patron.contactNo}</p>
@@ -152,7 +238,7 @@ const PatronDetails = () => {
         hover:shadow-md
         active:translate-y-0"
           >
-            {"Archive Patron"}
+            {isSuspended ? "Lift Suspension" : "Suspend Patron"}
           </button>
         </div>
         <div className="col-span-2 mt-5">
@@ -166,7 +252,7 @@ const PatronDetails = () => {
         onClose={() => setIsArchiveModalOpen(false)}
         onConfirm={handleArchiveConfirm}
         patronName={patronName}
-        action="suspend"
+        action={isSuspended ? "unsuspend" : "suspend"}
       />
       <ViolationModal
         isOpen={isViolationModalOpen}

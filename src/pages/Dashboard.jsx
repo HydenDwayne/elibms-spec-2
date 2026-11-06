@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Widget from "../components/DashboardWidgets";
 import Dropdown from "../components/QuickActionDropdown";
-import { FiBook, FiUsers, FiBookmark, FiAlertCircle, FiChevronDown } from "react-icons/fi";
+import {
+  FiBook,
+  FiUsers,
+  FiBookmark,
+  FiAlertCircle,
+  FiChevronDown,
+} from "react-icons/fi";
 import { PiBooks } from "react-icons/pi";
 import SearchField from "../components/SearchField";
 import MainButton from "../components/MainButton";
@@ -61,7 +67,11 @@ const Dashboard = () => {
     return books.filter((b) => {
       const matchesSearch =
         !term ||
-        fields.some((f) => String(b[f] ?? "").toLowerCase().includes(term));
+        fields.some((f) =>
+          String(b[f] ?? "")
+            .toLowerCase()
+            .includes(term),
+        );
 
       const matchesStatus = statusFilter === "All" || b.status === statusFilter;
 

@@ -24,6 +24,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LibrarianProvider } from "./components/LibrarianContext";
 import Layout from "./layout/Layout";
 import NotFound from "./NotFound";
+import RegistrationPage from "./pages/RegistrationPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,6 +50,7 @@ function App() {
     <LibrarianProvider>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
 
         <Route element={<ProtectedRoute isAuthenticated={!!user} />}>
           <Route element={<Layout />}>

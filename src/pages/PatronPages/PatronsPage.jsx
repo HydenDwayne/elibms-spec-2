@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
@@ -23,9 +23,24 @@ fieldGetters.All = (p) => [
 ];
 
 const PatronsPage = () => {
+  const [rtdbPatrons, setRtdbPatrons] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   const allPatrons = usePatrons();
+
+  useEffect(() => listenToPatrons(setRtdbPatrons), []);
+
+  const patrons = useMemo(
+    () =>
+      (rtdbPatrons && rtdbPatrons.length > 0 ? rtdbPatrons : data.patrons).map(
+        (p) => ({
+          ...p,
+          idNumber: p.id,
+          violations: data.violations.filter((v) => v.patronId === p.id).length,
+        }),
+      ),
+    [rtdbPatrons],
+  );
 
   const filteredPatrons = useMemo(() => {
     const withViolations = allPatrons
@@ -56,6 +71,7 @@ const PatronsPage = () => {
       <p className="mb-5 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         PATRONS PAGE
       </p>
+
 
       <div className="flex justify-between pr-4">
         <SearchField

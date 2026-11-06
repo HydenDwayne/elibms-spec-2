@@ -9,7 +9,7 @@ import BookStatus from "../../components/BookNFCStatus";
 import pfp from "../../assets/default.webp";
 import { GoDot, GoDotFill } from "react-icons/go";
 import ArchivePatron from "../../components/ArchivePatron";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ref,
   push,
@@ -27,7 +27,9 @@ import {
   suspendPatron,
   liftSuspension,
   listenToPatrons,
+  updatePatronPhoto,
 } from "../../lib/patronActions";
+import { uploadImage, UPLOAD_PRESETS } from "../../lib/cloudinary";
 import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
@@ -54,6 +56,35 @@ const PatronDetails = () => {
   const patronName = patron?.name;
   const isSuspended = patron?.status === "Suspended";
 
+  const photoInputRef = useRef(null);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  const handlePhotoChange = async (e) => {
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be 5 MB or smaller.");
+      return;
+    }
+
+    setIsUploadingPhoto(true);
+    try {
+      const url = await uploadImage(file, UPLOAD_PRESETS.profile);
+      await updatePatronPhoto(patron, url);
+      toast.success("Profile photo updated successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload profile photo.");
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
   const transactions = data.transactions
     .filter((t) => t.patronId === patronId)
     .map((t) => ({
@@ -176,8 +207,32 @@ const PatronDetails = () => {
       <div className="grid grid-cols-2 gap-x-4">
         <div className="flex flex-col">
           <div className="flex flex-row">
-            <div className="w-50 h-50 rounded-full flex justify-center">
-              <img src={pfp} alt="JJK" className="w-50 h-50 rounded-full" />
+            <div className="flex flex-col items-center">
+              <div className="w-50 h-50 rounded-full flex justify-center">
+                <img
+                  src={patron.photoUrl || pfp}
+                  alt={`${patron.name} profile`}
+                  className="w-50 h-50 rounded-full object-cover"
+                />
+              </div>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={handlePhotoChange}
+              />
+              <button
+                type="button"
+                disabled={isUploadingPhoto}
+                onClick={() => photoInputRef.current?.click()}
+                className="mt-2 text-xs text-[#53759D] underline transition-opacity hover:opacity-60 disabled:cursor-not-allowed disabled:opacity-50">
+                {isUploadingPhoto
+                  ? "Uploading..."
+                  : patron.photoUrl
+                    ? "Change Photo"
+                    : "Add Photo"}
+              </button>
             </div>
             {/* <div className="ml-4">
               <p className="text-lg font-bold">Book Title: Jujutsu Kaisen</p>

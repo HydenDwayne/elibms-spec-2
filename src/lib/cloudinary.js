@@ -3,6 +3,7 @@ const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 export const UPLOAD_PRESETS = {
   cover: import.meta.env.VITE_CLOUDINARY_PRESET_COVERS,
   profile: import.meta.env.VITE_CLOUDINARY_PRESET_PROFILES,
+  librarian: import.meta.env.VITE_CLOUDINARY_PRESET_LIBRARIANS,
 };
 
 export const uploadImage = async (file, preset) => {

@@ -7,6 +7,7 @@ import BookStatus from "../../components/BookNFCStatus";
 import { useState } from "react";
 import { LuUpload, LuNfc } from "react-icons/lu";
 import { GoDot, GoDotFill } from "react-icons/go";
+import { Helmet } from 'react-helmet-async';
 
 const RegisterPatron = () => {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ const RegisterPatron = () => {
 
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Patron Registration</title>
+      </Helmet>
       <button
         className="mb-5 flex items-center gap-2 text-lg font-semibold text-[#1D2937]"
         onClick={handleClick}

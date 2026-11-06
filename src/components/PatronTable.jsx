@@ -62,6 +62,11 @@ function PatronTable({ patrons }) {
 
               <td className="truncate px-[12px] py-0 text-[10px] leading-none text-[#A35139]">
                 {patron.name}
+                {patron.status === "Suspended" && (
+                  <span className="ml-2 rounded-full border border-[#A35139] px-2 py-0.5 text-[9px]">
+                    Suspended
+                  </span>
+                )}
               </td>
 
               <td className="truncate px-[12px] py-0 text-[10px] leading-none text-[#A35139]">

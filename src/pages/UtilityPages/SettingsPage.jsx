@@ -4,6 +4,8 @@ import { updatePassword, verifyBeforeUpdateEmail } from "firebase/auth";
 import pfp from "../../assets/default.webp";
 import { auth } from "../../lib/firebase";
 import { useLibrarian } from "../../components/LibrarianContext";
+import data from "../../data/dummy_data.json";
+import { Helmet } from "react-helmet-async";
 
 const gradientText =
   "bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent";
@@ -90,6 +92,9 @@ function SettingRow({
 
   return (
     <div className="flex min-h-12 items-center border-b border-[#545F71]/60 py-2 first:border-t">
+      <Helmet>
+        <title>ELIBMS | Settings</title>
+      </Helmet>
       <p className="w-40 shrink-0 pl-2 text-xs text-[#545F71]">{label}</p>
 
       <div className="flex-1">

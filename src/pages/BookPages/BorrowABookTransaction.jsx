@@ -3,10 +3,14 @@ import MainButton from "../../components/MainButton";
 import { LuNfc } from "react-icons/lu";
 import JJK from "../../assets/Jujutsu_kaisen.jpg";
 import pfp from "../../assets/default.webp";
+import { Helmet } from 'react-helmet-async';
 
 const BorrowABookTransaction = () => {
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Borrow a book</title>
+      </Helmet>
       <p className=" text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         BORROW BOOK
       </p>

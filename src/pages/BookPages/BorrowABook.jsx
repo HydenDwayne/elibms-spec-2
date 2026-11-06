@@ -1,9 +1,13 @@
 import SecondaryButton from "../../components/SecondaryButton";
 import { LuNfc } from "react-icons/lu";
+import { Helmet } from 'react-helmet-async';
 
 const BorrowABook = () => {
   return (
     <div className="px-15 py-10 w-full">
+      <Helmet>
+        <title>ELIBMS | Borrow a book</title>
+      </Helmet>
       <p className="mb-8 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         BORROW BOOK
       </p>

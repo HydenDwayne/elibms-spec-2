@@ -7,6 +7,7 @@ import BookStatus from "../../components/BookNFCStatus";
 import { useState } from "react";
 import { LuUpload, LuNfc } from "react-icons/lu";
 import { GoDot, GoDotFill } from "react-icons/go";
+import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
 
@@ -25,6 +26,9 @@ const EditPatron = () => {
 
   return (
     <div className="px-15 py-10 w-full">
+            <Helmet>
+        <title>{`Editing ${patron.name} `}</title>
+      </Helmet>
       <p className="mb-10 text-2xl font-bold bg-gradient-to-b from-[#1D2937] to-[#53759D] bg-clip-text text-transparent">
         EDITING {patron.name}
       </p>

@@ -3,7 +3,7 @@ import SearchField from "../../components/SearchField";
 import MainButton from "../../components/MainButton";
 import PatronTable from "../../components/PatronTable";
 import { Helmet } from "react-helmet-async";
-
+import { usePatrons } from "../../store/patronStore";
 import data from "../../data/dummy_data.json";
 import { listenToPatrons } from "../../lib/patronActions";
 
@@ -26,6 +26,7 @@ const PatronsPage = () => {
   const [rtdbPatrons, setRtdbPatrons] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const allPatrons = usePatrons();
 
   useEffect(() => listenToPatrons(setRtdbPatrons), []);
 
@@ -42,15 +43,25 @@ const PatronsPage = () => {
   );
 
   const filteredPatrons = useMemo(() => {
+    const withViolations = allPatrons
+      .map((p) => ({
+        ...p,
+        idNumber: p.id,
+        violations: data.violations.filter((v) => v.patronId === p.id).length,
+      }))
+      .sort((a, b) =>
+        String(a.id).localeCompare(String(b.id), undefined, { numeric: true })
+      );
+
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return patrons;
+    if (!term) return withViolations;
 
     const getFields = fieldGetters[selectedFilter] ?? fieldGetters.All;
 
-    return patrons.filter((p) =>
+    return withViolations.filter((p) =>
       getFields(p).some((v) => String(v ?? "").toLowerCase().includes(term))
     );
-  }, [patrons, searchTerm, selectedFilter]);
+  }, [allPatrons, searchTerm, selectedFilter]);
 
   return (
     <div className="px-15 py-10 w-full">

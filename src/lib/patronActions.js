@@ -1,4 +1,4 @@
-import { ref, update, onValue, serverTimestamp } from "firebase/database";
+import { ref, update, onValue, serverTimestamp, runTransaction, set } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "./firebase";
 
@@ -83,10 +83,32 @@ export const listenToPatrons = (callback) =>
   listenWhenAuthed(
     "patrons",
     (snap) => {
-      const patrons = Object.entries(snap.val() ?? {})
-        .filter(([, patron]) => patron && patron.id && patron.name)
-        .map(([key, patron]) => ({ ...patron, key }));
-      callback(patrons);
+
+      const raw = snap.val() ?? {};
+
+      const result = Object.entries(raw).map(([key, patron]) => ({
+        ...patron,
+        key,
+      }));
+
+      callback(result);
     },
-    () => callback(null),
+    () => callback([]),
   );
+
+
+
+export const registerPatron = async (data) => {
+  const counterRef = ref(db, "counters/patrons");
+
+  const result = await runTransaction(counterRef, (current) => (current || 0) + 1);
+  const next = result.snapshot.val();
+
+  const patronId = `PT-${String(next).padStart(4, "0")}`;
+
+  await set(ref(db, `patrons/${patronId}`), {
+    ...data,
+    patronId,
+    createdAt: serverTimestamp(),
+  });
+};

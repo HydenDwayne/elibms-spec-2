@@ -33,19 +33,28 @@ import { uploadImage, UPLOAD_PRESETS } from "../../lib/cloudinary";
 import { Helmet } from "react-helmet-async";
 
 import data from "../../data/dummy_data.json";
+import { usePatrons } from "../../store/patronStore";
 
 const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
-  const [rtdbPatrons, setRtdbPatrons] = useState(null);
-const patron =
-  (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
-  data.patrons.find((p) => p.id === patronId);
 
-const patronName = patron?.name;
-const isSuspended = patron?.status === "Suspended";
+  // All hooks are called unconditionally, in the same order on every render
+  const [rtdbPatrons, setRtdbPatrons] = useState(null);
+  const storePatrons = usePatrons();
+  const [violationsList, setViolationsList] = useState([]);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [isViolationModalOpen, setIsViolationModalOpen] = useState(false);
 
   useEffect(() => listenToPatrons(setRtdbPatrons), []);
+
+  // Plain lookups (not hooks) are safe to do after the hooks
+  const patron =
+    (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
+    (storePatrons ?? []).find((p) => p.id === patronId) ??
+    data.patrons.find((p) => p.id === patronId);
+  const patronName = patron?.name;
+  const isSuspended = patron?.status === "Suspended";
 
   const photoInputRef = useRef(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -83,7 +92,6 @@ const isSuspended = patron?.status === "Suspended";
       returnedDate: t.returnedDate ?? "—",
       book: data.books.find((b) => b.id === t.bookId),
     }));
-  const [violationsList, setViolationsList] = useState([]);
 
   useEffect(() => {
     const q = query(
@@ -101,9 +109,6 @@ const isSuspended = patron?.status === "Suspended";
     });
     return unsubscribe;
   }, [patronId]);
-
-  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
-  const [isViolationModalOpen, setIsViolationModalOpen] = useState(false);
 
   const handleAddViolation = () => {
     setIsViolationModalOpen(true);
@@ -170,7 +175,7 @@ const isSuspended = patron?.status === "Suspended";
     }
   };
 
-    // Not in the local data yet, and Firebase hasn't answered
+  // Not in the local data yet, and Firebase hasn't answered
   if (!patron && rtdbPatrons === null) {
     return <p className="px-15 pt-10 w-full text-[#545F71]">Loading...</p>;
   }
@@ -179,7 +184,6 @@ const isSuspended = patron?.status === "Suspended";
   if (!patron) {
     return <Navigate to="/404" replace />;
   }
-
 
   return (
     <div className="px-15 pt-10 w-full">

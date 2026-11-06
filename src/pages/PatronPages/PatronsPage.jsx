@@ -4,18 +4,20 @@ import PatronTable from "../../components/PatronTable";
 import { useState, useEffect } from "react";
 
 import data from "../../data/dummy_data.json";
-import { listenToPatronStatuses } from "../../lib/patronActions";
+import { listenToPatrons } from "../../lib/patronActions";
 
 const PatronsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
-  const [statuses, setStatuses] = useState({});
+  const [rtdbPatrons, setRtdbPatrons] = useState(null);
 
-  useEffect(() => listenToPatronStatuses(setStatuses), []);
+  useEffect(() => listenToPatrons(setRtdbPatrons), []);
 
-  const patrons = data.patrons.map((p) => ({
+  const patronSource =
+    rtdbPatrons && rtdbPatrons.length > 0 ? rtdbPatrons : data.patrons;
+
+  const patrons = patronSource.map((p) => ({
   ...p,
-  status: statuses[p.id] ?? p.status,
   idNumber: p.id,
   violations: data.violations.filter((v) => v.patronId === p.id).length,
 }));

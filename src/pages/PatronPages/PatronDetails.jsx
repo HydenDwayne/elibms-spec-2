@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import {
   suspendPatron,
   liftSuspension,
-  listenToPatronStatus,
+  listenToPatrons,
 } from "../../lib/patronActions";
 
 import data from "../../data/dummy_data.json";
@@ -24,16 +24,14 @@ import data from "../../data/dummy_data.json";
 const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
-  const patron = data.patrons.find((p) => p.id === patronId);
+  const [rtdbPatrons, setRtdbPatrons] = useState(null);
+  const patron =
+    (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
+    data.patrons.find((p) => p.id === patronId);
   const patronName = patron.name;
-  const [status, setStatus] = useState(patron.status);
-  const isSuspended = status === "Suspended";
+  const isSuspended = patron.status === "Suspended";
 
-  useEffect(() => {
-    return listenToPatronStatus(patronId, (value) =>
-      setStatus(value ?? patron.status),
-    );
-  }, [patronId, patron.status]);
+  useEffect(() => listenToPatrons(setRtdbPatrons), []);
   const transactions = data.transactions
     .filter((t) => t.patronId === patronId)
     .map((t) => ({
@@ -112,10 +110,10 @@ const PatronDetails = () => {
     const isLifting = actionType === "unsuspend";
     try {
       if (isLifting) {
-        await liftSuspension(patronId);
+        await liftSuspension(patron);
         toast.success("Suspension lifted successfully.");
       } else {
-        await suspendPatron(patronId);
+        await suspendPatron(patron);
         toast.success("Patron suspended successfully.");
       }
     } catch (err) {

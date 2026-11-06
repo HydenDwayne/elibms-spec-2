@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import BookAvailabilityStatus from "../../components/BookAvailabilityStatus";
 import ArchiveBook from "../../components/ArchiveBook";
@@ -172,14 +172,7 @@ const BookDetails = () => {
   }
 
   if (!book) {
-    return (
-      <div className="px-15 pt-10 w-full">
-        <p className="mb-4">Book not found.</p>
-        <button className="text-blue-500 underline" onClick={handleClick}>
-          Back to Dashboard
-        </button>
-      </div>
-    );
+    return <Navigate to="/404" replace />;
   }
 
   return (

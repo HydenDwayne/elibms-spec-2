@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import PatronBorrowingHistoryTable from "../../components/PatronBorrowingHistoryTable";
 import MainButton from "../../components/MainButton";
@@ -38,13 +38,12 @@ const PatronDetails = () => {
   const navigate = useNavigate();
   const { patronId } = useParams();
   const [rtdbPatrons, setRtdbPatrons] = useState(null);
-  const patron =
-    (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
-    data.patrons.find((p) => p.id === patronId);
+const patron =
+  (rtdbPatrons ?? []).find((p) => p.id === patronId) ??
+  data.patrons.find((p) => p.id === patronId);
 
-  
-  const patronName = patron.name;
-  const isSuspended = patron.status === "Suspended";
+const patronName = patron?.name;
+const isSuspended = patron?.status === "Suspended";
 
   useEffect(() => listenToPatrons(setRtdbPatrons), []);
 
@@ -170,6 +169,17 @@ const PatronDetails = () => {
       );
     }
   };
+
+    // Not in the local data yet, and Firebase hasn't answered
+  if (!patron && rtdbPatrons === null) {
+    return <p className="px-15 pt-10 w-full text-[#545F71]">Loading...</p>;
+  }
+
+  // Firebase has answered and this ID doesn't exist anywhere
+  if (!patron) {
+    return <Navigate to="/404" replace />;
+  }
+
 
   return (
     <div className="px-15 pt-10 w-full">
